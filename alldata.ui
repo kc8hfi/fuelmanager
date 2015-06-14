@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AllData_Base</class>
+ <widget class="QWidget" name="AllData_Base">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>All Data</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <widget class="QPushButton" name="saveChangesButton">
+     <property name="text">
+      <string>Save Changes</string>
+     </property>
+    </widget>
+   </item>
+   <item>
+    <widget class="QTableView" name="dataTable"/>
+   </item>
+   <item>
+    <widget class="QLabel" name="informationLabel">
+     <property name="text">
+      <string/>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+ <slots>
+  <slot>doubleClicked()</slot>
+ </slots>
+</ui>

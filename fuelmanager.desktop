@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=fuelmanager
+GenericName=Fuel Manager
+Comment=Fuel Mileage tracker
+Exec=fuelmanager
+Icon=fuelmanager
+Terminal=false
+Type=Application
+Categories=Office;

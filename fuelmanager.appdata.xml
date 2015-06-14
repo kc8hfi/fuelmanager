@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2014 Charles Amey <kc8hfi@gmail.com> -->
+<application>
+     <id type="desktop">fuelmanager.desktop</id>
+     <metadata_license>CC0-1.0</metadata_license>
+     <project_license>GPL-3.0+</project_license>
+     <description>
+          <p>Ever wonder how much money you spend in fuel?  And how many miles you drive?     
+          This application that keeps track of four things, miles, gallons, cost, and
+          the date of each fill-up.  It generates monthly and yearly summaries of
+          miles driven, cost of fuel,how many gallons, and fuel mileage.  You can add
+          more than one vehicle also.
+          </p>
+          <p>The data can be stored into either a sqlite database (default) or an external
+          mysql server.  Your data is not locked to the program either!  Each vehicle's data can be exported 
+          into a csv file for use elsewhere.  
+          </p>
+     </description>
+     <screenshots>
+          <screenshot type="default" width="870" height="640">http://fuelmanager.sourceforge.net/images/main.png</screenshot>
+          <screenshot width="870" height="640">http://fuelmanager.sourceforge.net/images/data.png</screenshot>
+          <screenshot width="870" height="640">http://fuelmanager.sourceforge.net/images/stats.png</screenshot>
+     </screenshots>
+     <url type="homepage">http://fuelmanager.sourceforge.net</url>
+     <updatecontact>kc8hfi@gmail.com</updatecontact>
+</application>

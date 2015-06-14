@@ -1,0 +1,16 @@
+\contentsline {chapter}{Table of Contents}{1}{chapter*.1}
+\contentsline {chapter}{\numberline {1}Introduction}{2}{chapter.1}
+\contentsline {chapter}{\numberline {2}Setup}{3}{chapter.2}
+\contentsline {section}{\numberline {2.1}Configuration}{3}{section.2.1}
+\contentsline {section}{\numberline {2.2}sqlite}{3}{section.2.2}
+\contentsline {section}{\numberline {2.3}mysql}{4}{section.2.3}
+\contentsline {section}{\numberline {2.4}vehicles}{4}{section.2.4}
+\contentsline {section}{\numberline {2.5}Setup Complete}{4}{section.2.5}
+\contentsline {chapter}{\numberline {3}Choosing a vehicle}{5}{chapter.3}
+\contentsline {chapter}{\numberline {4}Entering Fuel Mileage Data}{6}{chapter.4}
+\contentsline {chapter}{\numberline {5}Display and Edit fuel mileage data}{8}{chapter.5}
+\contentsline {chapter}{\numberline {6}Statistics}{9}{chapter.6}
+\contentsline {section}{\numberline {6.1}Lifetime}{9}{section.6.1}
+\contentsline {section}{\numberline {6.2}Yearly}{10}{section.6.2}
+\contentsline {section}{\numberline {6.3}Monthly}{10}{section.6.3}
+\contentsline {chapter}{\numberline {7}Exporting Data}{12}{chapter.7}

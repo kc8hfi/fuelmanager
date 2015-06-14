@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QtHelpProject version="1.0">
+	<namespace>fuelmanager</namespace>
+	<virtualFolder>doc</virtualFolder>
+	<filterSection>
+		<toc>
+			<section title="Fuel Manager" ref="index.html">
+				<section title="Table of Contents" ref="node1.html">
+				</section>
+				<section title="Introduction" ref="node2.html">
+				</section>
+				<section title="Setup" ref="node3.html">
+					<section title="Configuration" ref="node4.html">
+					</section>
+					<section title="sqlite" ref="node5.html">
+					</section>
+					<section title="mysql" ref="node6.html">
+					</section>
+					<section title="vehicles" ref="node7.html">
+					</section>
+					<section title="Setup Complete" ref="node8.html">
+					</section>
+				</section>
+				<section title="Choosing a vehicle" ref="node9.html">
+				</section>
+				<section title="Entering Fuel Mileage Data" ref="node10.html">
+				</section>
+				<section title="Display/Edit fuel mileage data" ref="node11.html">
+				</section>
+				<section title="Statistics" ref="node12.html">
+					<section title="Lifetime" ref="node13.html">
+					</section>
+					<section title="Yearly" ref="node14.html">
+					</section>
+					<section title="Monthly" ref="node15.html">
+					</section>
+				</section>
+				<section title="Exporting Data" ref="node16.html">
+				</section>
+			</section>
+		</toc>
+		<files>
+			<file>fuelmanager.html</file>
+			<file>index.html</file>
+			<file>node1.html</file>
+			<file>node2.html</file>
+			<file>node3.html</file>
+			<file>node4.html</file>
+			<file>node5.html</file>
+			<file>node6.html</file>
+			<file>node7.html</file>
+			<file>node8.html</file>
+			<file>node9.html</file>
+			<file>node10.html</file>
+			<file>node11.html</file>
+			<file>node12.html</file>
+			<file>node13.html</file>
+			<file>node14.html</file>
+			<file>node15.html</file>
+			<file>node16.html</file>
+			<file>node17.html</file>
+			
+			<file>fuelmanager.css</file>
+			<file>images.aux</file>
+			<file>images.log</file>
+			<file>images.out</file>
+			<file>images.pl</file>
+			<file>images.tex</file>
+			<file>img1.png</file>
+			<file>labels.pl</file>
+			<file>snapshot2.png</file>
+			<file>snapshot3.png</file>
+			<file>snapshot4.png</file>
+			<file>snapshot5.png</file>
+			<file>snapshot6.png</file>
+			<file>snapshot6a.png</file>
+			<file>snapshot6b.png</file>
+			<file>snapshot7.png</file>
+			<file>snapshot7a.png</file>
+			<file>snapshot8.png</file>
+			<file>snapshot9.png</file>
+			<file>snapshot10.png</file>
+			<file>snapshot11.png</file>
+			<file>WARNINGS</file>
+		</files>
+	</filterSection>
+</QtHelpProject>

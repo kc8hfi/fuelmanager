@@ -1,0 +1,52 @@
+<ui version="4.0" >
+ <class>Statistics_Base</class>
+ <widget class="QWidget" name="Statistics_Base" >
+  <property name="geometry" >
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>323</height>
+   </rect>
+  </property>
+  <property name="windowTitle" >
+   <string>Statistics</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout" >
+   <item>
+    <widget class="QTabWidget" name="tabWidget" >
+     <property name="currentIndex" >
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tab" >
+      <attribute name="title" >
+       <string>Tab 1</string>
+      </attribute>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>tabWidget</sender>
+   <signal>currentChanged(int)</signal>
+   <receiver>Statistics_Base</receiver>
+   <slot>refreshTables()</slot>
+   <hints>
+    <hint type="sourcelabel" >
+     <x>199</x>
+     <y>161</y>
+    </hint>
+    <hint type="destinationlabel" >
+     <x>199</x>
+     <y>161</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>refreshTables()</slot>
+ </slots>
+</ui>

@@ -1,0 +1,48 @@
+\documentclass[10pt]{report}
+
+\usepackage{graphicx}
+\usepackage{fullpage}
+\usepackage{amsmath}
+\usepackage{hyperref}
+
+\hypersetup
+{
+    colorlinks,
+    citecolor=black,
+    filecolor=black,
+    linkcolor=black,
+    urlcolor=black
+}
+
+\addtolength{\oddsidemargin}{-.875in}
+\addtolength{\evensidemargin}{-.875in}
+\addtolength{\textwidth}{1.75in}
+
+\addtolength{\topmargin}{-.875in}
+\addtolength{\textheight}{1.75in}
+
+\title{Fuel Manager}
+\author{Charles Amey}
+
+\date{}
+
+\setcounter{page}{-100}
+\pagenumbering{arabic}
+
+\begin{document}
+ 
+ 
+ \tableofcontents
+ 
+ \addcontentsline{toc}{chapter}{Table of Contents}
+ 
+ 
+ \include{introduction}
+ \include{setup}
+ \include{choose_vehicle}
+ \include{data_entry}
+ \include{all_data}
+ \include{statistics}
+ \include{export_data}
+ 
+\end{document}
