@@ -74,7 +74,20 @@ SOURCES += about.cpp \
 
 QT += sql
 
-CONFIG += help
+
+lessThan(QT_MAJOR_VERSION,5)
+{
+     CONFIG += help
+}
+else {
+     QT += help
+}
+
+#this is for qt5
+#QT += help
+
+#this is for qt4
+#CONFIG += help
 
 RESOURCES = resources.qrc
 
