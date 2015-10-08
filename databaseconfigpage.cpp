@@ -17,9 +17,16 @@
  * along with Fuel Manager.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//#include <QtGui>
 #include "databaseconfigpage.h"
 #include "mainwindow.h"
+#include <QPushButton>
+#include <QLineEdit>
+#include <QWidget>
+#include <QSpinBox>
+#include <QRadioButton>
+#include <QGroupBox>
+#include <QFileDialog>
+#include <QMessageBox>
 
 DatabaseConfigPage::DatabaseConfigPage(MainWindow *p)
      :QWidget(p)

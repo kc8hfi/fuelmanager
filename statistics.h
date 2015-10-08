@@ -19,8 +19,8 @@
 
 #ifndef STATISTICS_H
 #define STATISTICS_H
+
 #include <QStringList>
-//#include <QtGui>
 #include <QTableView>
 #include <QtSql>
 #include "mainwindow.h"

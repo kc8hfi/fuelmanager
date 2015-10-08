@@ -29,6 +29,7 @@ class QListWidgetItem;
 class QStackedWidget;
 class QLineEdit;
 class QSpinBox;
+class QPushButton;
 
 class VehicleConfigPage;
 

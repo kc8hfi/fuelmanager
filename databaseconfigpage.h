@@ -20,9 +20,13 @@
 #ifndef DATABASECONFIGPAGE_H
 #define DATABASECONFIGPAGE_H
 
-#include <QtGui>
+#include <QWidget>
 
 class MainWindow;
+class QLineEdit;
+class QSpinBox;
+class QRadioButton;
+class QPushButton;
 
 class DatabaseConfigPage : public QWidget
 {

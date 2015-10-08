@@ -20,10 +20,11 @@
 #ifndef SELECTVEHICLEDIALOG_H
 #define SELECTVEHICLEDIALOG_H
 
-#include <QtGui>
 #include <QtSql>
+#include <QDialog>
 
 class QSqlTableModel;
+class QTableView;
 class MainWindow;
 class VehicleDisplayModel;
 

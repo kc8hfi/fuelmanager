@@ -17,7 +17,6 @@
  * along with Fuel Manager.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//#include <QtGui>
 #include <QDebug>
 #include "datedelegate.h"
 #include "editdate.h"
@@ -25,7 +24,6 @@
 //DateDelegate::DateDelegate(QList< QList<QVariant> > data, QObject *parent)
 DateDelegate::DateDelegate(QObject *parent)
      : QItemDelegate(parent)
-
 {
 }
 

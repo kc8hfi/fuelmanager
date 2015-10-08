@@ -19,13 +19,11 @@
  */
 
 #include <QSettings>
-// #include <QSqlQuery>
-// #include <QSqlError>
-// #include <QVector>
 #include <QDebug>
-// #include <QtGui>
-// #include <QtSql>
-// #include <QIcon>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QDialog>
+#include <QTableView>
 
 #include "about.h"
 #include "alldata.h"

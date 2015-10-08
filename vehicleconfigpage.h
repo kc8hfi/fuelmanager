@@ -20,10 +20,13 @@
 #ifndef VEHICLECONFIGPAGE_H
 #define VEHICLECONFIGPAGE_H
 
-#include <QtGui>
+#include <QWidget>
 
 class MainWindow;
 class VehicleEditModel;
+class QVBoxLayout;
+class QLineEdit;
+class QTableView;
 
 class VehicleConfigPage : public QWidget
 {

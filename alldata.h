@@ -21,7 +21,6 @@
 #define ALLDATA_H
 
 #include <QtSql>
-//#include <QtGui>
 #include "ui_alldata.h"
 #include "mainwindow.h"
 

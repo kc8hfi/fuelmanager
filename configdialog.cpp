@@ -18,9 +18,14 @@
 */
 
 
-//#include <QtGui>
 #include <QSettings>
 #include <QDebug>
+#include <QListWidget>
+#include <QListWidgetItem>
+#include <QStackedWidget>
+#include <QLineEdit>
+#include <QSpinBox>
+#include <QPushButton>
 #include "databaseconfigpage.h"
 #include "configdialog.h"
 #include "vehicleconfigpage.h"

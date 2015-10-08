@@ -17,8 +17,10 @@ You should have received a copy of the GNU General Public License
 along with Fuel Manager.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//#include <QtGui>
 #include <QtSql>
+#include <QDialog>
+#include <QTableView>
+#include <QItemSelectionModel>
 #include "selectvehicledialog.h"
 #include "vehicledisplaymodel.h"
 #include "mainwindow.h"

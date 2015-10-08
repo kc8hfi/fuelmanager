@@ -17,7 +17,6 @@
  * along with Fuel Manager.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-//#include <QtGui>
 #include <QtSql>
 #include <QMessageBox>
 #include "alldata.h"
