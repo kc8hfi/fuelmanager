@@ -75,7 +75,7 @@ SOURCES += about.cpp \
 QT += sql
 
 
-lessThan(QT_MAJOR_VERSION,5); CONFIG += help
+lessThan(QT_MAJOR_VERSION,5): CONFIG += help
 greaterThan(QT_MAJOR_VERSION, 4): QT += help
 
 RESOURCES = resources.qrc
