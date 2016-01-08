@@ -7,7 +7,7 @@ Group:		Applications/Productivity
 License:		GPLv3+
 
 URL:			https://github.com/kc8hfi/fuelmanager
-Source0:		https://github.com/kc8hfi/fuelmanager/fuelmanager-%{version}.tar.bz2
+Source0:		https://github.com/kc8hfi/fuelmanager/archive/fuelmanager-%{version}.tar.gz
 
 BuildRequires:	qt-devel
 BuildRequires:	desktop-file-utils
@@ -77,6 +77,9 @@ fi
 
 
 %changelog
+* Thu Jan 07 2016 kc8hfi <kc8hfi@gmail.com> - 0.4.1-2
+- Build for release 0.4.2
+
 * Sat May 02 2015 Kalev Lember <kalevlember@gmail.com> - 0.4.1-5
 - Rebuilt for GCC 5 C++11 ABI change
 
