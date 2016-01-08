@@ -7,7 +7,7 @@ Group:		Applications/Productivity
 License:		GPLv3+
 
 URL:			https://github.com/kc8hfi/fuelmanager
-Source0:		https://github.com/kc8hfi/fuelmanager/archive/fuelmanager-%{version}.tar.gz
+Source0:		https://github.com/kc8hfi/fuelmanager/archive/%{version}.tar.gz
 
 BuildRequires:	qt-devel
 BuildRequires:	desktop-file-utils
