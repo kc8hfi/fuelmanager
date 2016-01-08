@@ -1,19 +1,19 @@
-Name:		fuelmanager
-Version:		0.4.2
-Release:		5%{?dist}
-Summary:		Manage fuel mileage
+Name:     fuelmanager
+Version:  0.4.2
+Release:  1%{?dist}
+Summary:  Manage fuel mileage
 
-Group:		Applications/Productivity
-License:		GPLv3+
+Group:    Applications/Productivity
+License:  GPLv3+
 
-URL:			https://github.com/kc8hfi/fuelmanager
-Source0:		https://github.com/kc8hfi/fuelmanager/archive/fuelmanager-%{version}.tar.gz
+URL:      https://github.com/kc8hfi/fuelmanager
+Source0:  https://github.com/kc8hfi/fuelmanager/archive/fuelmanager-%{version}.tar.gz
 
-BuildRequires:	qt-devel
-BuildRequires:	desktop-file-utils
+BuildRequires: qt-devel
+BuildRequires: desktop-file-utils
 
-Requires:	hicolor-icon-theme
-Requires:	qt-assistant
+Requires: hicolor-icon-theme
+Requires: qt-assistant
 
 %description
 Application that keeps track of four things, miles, gallons, cost, and 
@@ -77,8 +77,11 @@ fi
 
 
 %changelog
-* Thu Jan 07 2016 kc8hfi <kc8hfi@gmail.com> - 0.4.1-2
+* Thu Jan 07 2016 kc8hfi <kc8hfi@gmail.com> - 0.4.2-1
 - Build for release 0.4.2
+
+* Wed Jun 17 2015 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 0.4.1-6
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_23_Mass_Rebuild
 
 * Sat May 02 2015 Kalev Lember <kalevlember@gmail.com> - 0.4.1-5
 - Rebuilt for GCC 5 C++11 ABI change
