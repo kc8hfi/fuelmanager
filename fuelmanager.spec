@@ -1,13 +1,13 @@
 Name:		fuelmanager
-Version:		0.4.1
+Version:		0.4.2
 Release:		5%{?dist}
 Summary:		Manage fuel mileage
 
 Group:		Applications/Productivity
 License:		GPLv3+
 
-URL:			http://sourceforge.net/projects/fuelmanager/
-Source0:		http://sourceforge.net/projects/fuelmanager/files/fuelmanager-%{version}.tar.bz2
+URL:			https://github.com/kc8hfi/fuelmanager
+Source0:		https://github.com/kc8hfi/fuelmanager/fuelmanager-%{version}.tar.bz2
 
 BuildRequires:	qt-devel
 BuildRequires:	desktop-file-utils
