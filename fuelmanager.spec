@@ -1,6 +1,6 @@
 Name:     fuelmanager
 Version:  0.4.2
-Release:  3%{?dist}
+Release:  4%{?dist}
 Summary:  Manage fuel mileage
 
 Group:    Applications/Productivity
@@ -77,6 +77,9 @@ fi
 
 
 %changelog
+* Fri Sep 09 2016 kc8hfi <kc8hfi@gmail.com> - 0.4.2-4
+- Fixed the source path
+
 * Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 0.4.2-3
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
 
