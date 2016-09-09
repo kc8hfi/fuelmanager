@@ -43,8 +43,7 @@
     
   <url type="bugtracker">http://github.com/kc8hfi/fuelmanager/issues</url>
 
-  <!--FIXME: where to donate to the application-->
-  <url type="donation"><!-- http://www.homepage.com/donation.html --></url>
+  <url type="donation">http://fuelmanager.sourceforge.net</url>
 
   <url type="help">http://fuelmanager.sourceforge.net/documentation/fuelmanager.html</url>
 </component>
