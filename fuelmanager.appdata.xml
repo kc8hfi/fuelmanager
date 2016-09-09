@@ -19,15 +19,15 @@
   <screenshots>
     <screenshot height="640" width="870" type="default">
       <image>http://fuelmanager.sourceforge.net/images/main.png</image>
-      <caption><!-- Describe this screenshot in less than ~10 words --></caption>
+      <caption>The main page is the data entry screen.</caption>
     </screenshot>
     <screenshot height="640" width="870">
       <image>http://fuelmanager.sourceforge.net/images/data.png</image>
-      <caption><!-- Describe this screenshot in less than ~10 words --></caption>
+      <caption>All the data screen</caption>
     </screenshot>
     <screenshot height="640" width="870">
       <image>http://fuelmanager.sourceforge.net/images/stats.png</image>
-      <caption><!-- Describe this screenshot in less than ~10 words --></caption>
+      <caption>Available stats screen</caption>
     </screenshot>
   </screenshots>
   <url type="homepage">http://fuelmanager.sourceforge.net</url>
