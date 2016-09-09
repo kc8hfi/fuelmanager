@@ -1,13 +1,13 @@
 Name:     fuelmanager
 Version:  0.4.2
-Release:  1%{?dist}
+Release:  3%{?dist}
 Summary:  Manage fuel mileage
 
 Group:    Applications/Productivity
 License:  GPLv3+
 
 URL:      https://github.com/kc8hfi/fuelmanager
-Source0:  https://github.com/kc8hfi/fuelmanager/archive/fuelmanager-%{version}.tar.gz
+Source0: https://github.com/kc8hfi/%{name}/archive/%{version}.tar.gz#/%{name}-%{version}.tar.gz
 
 BuildRequires: qt-devel
 BuildRequires: desktop-file-utils
@@ -25,7 +25,7 @@ miles driven, cost of fuel,how many gallons, and fuel mileage.
 
 %build
 
-qmake-qt4 %{name}.pro PREFIX=%{_prefix}
+%{qmake_qt4} %{name}.pro PREFIX=%{_prefix}
 make %{?_smp_mflags}
 
 %install
@@ -77,6 +77,12 @@ fi
 
 
 %changelog
+* Wed Feb 03 2016 Fedora Release Engineering <releng@fedoraproject.org> - 0.4.2-3
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_24_Mass_Rebuild
+
+* Mon Jan 18 2016 Rex Dieter <rdieter@fedoraproject.org> 0.4.2-2
+- Use %%qmake_qt4 macro
+
 * Thu Jan 07 2016 kc8hfi <kc8hfi@gmail.com> - 0.4.2-1
 - Build for release 0.4.2
 
