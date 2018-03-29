@@ -1,16 +1,16 @@
-\BOOKMARK [0][-]{chapter*.1}{Table of Contents}{}
-\BOOKMARK [0][-]{chapter.1}{Introduction}{}
-\BOOKMARK [0][-]{chapter.2}{Setup}{}
-\BOOKMARK [1][-]{section.2.1}{Configuration}{chapter.2}
-\BOOKMARK [1][-]{section.2.2}{sqlite}{chapter.2}
-\BOOKMARK [1][-]{section.2.3}{mysql}{chapter.2}
-\BOOKMARK [1][-]{section.2.4}{vehicles}{chapter.2}
-\BOOKMARK [1][-]{section.2.5}{Setup Complete}{chapter.2}
-\BOOKMARK [0][-]{chapter.3}{Choosing a vehicle}{}
-\BOOKMARK [0][-]{chapter.4}{Entering Fuel Mileage Data}{}
-\BOOKMARK [0][-]{chapter.5}{Display and Edit fuel mileage data}{}
-\BOOKMARK [0][-]{chapter.6}{Statistics}{}
-\BOOKMARK [1][-]{section.6.1}{Lifetime}{chapter.6}
-\BOOKMARK [1][-]{section.6.2}{Yearly}{chapter.6}
-\BOOKMARK [1][-]{section.6.3}{Monthly}{chapter.6}
-\BOOKMARK [0][-]{chapter.7}{Exporting Data}{}
+\BOOKMARK [0][-]{chapter*.1}{Table of Contents}{}% 1
+\BOOKMARK [0][-]{chapter.1}{1 Introduction}{}% 2
+\BOOKMARK [0][-]{chapter.2}{2 Setup}{}% 3
+\BOOKMARK [1][-]{section.2.1}{2.1 Configuration}{chapter.2}% 4
+\BOOKMARK [1][-]{section.2.2}{2.2 sqlite}{chapter.2}% 5
+\BOOKMARK [1][-]{section.2.3}{2.3 mysql}{chapter.2}% 6
+\BOOKMARK [1][-]{section.2.4}{2.4 vehicles}{chapter.2}% 7
+\BOOKMARK [1][-]{section.2.5}{2.5 Setup Complete}{chapter.2}% 8
+\BOOKMARK [0][-]{chapter.3}{3 Choosing a vehicle}{}% 9
+\BOOKMARK [0][-]{chapter.4}{4 Entering Fuel Mileage Data}{}% 10
+\BOOKMARK [0][-]{chapter.5}{5 Display and Edit fuel mileage data}{}% 11
+\BOOKMARK [0][-]{chapter.6}{6 Statistics}{}% 12
+\BOOKMARK [1][-]{section.6.1}{6.1 Lifetime}{chapter.6}% 13
+\BOOKMARK [1][-]{section.6.2}{6.2 Yearly}{chapter.6}% 14
+\BOOKMARK [1][-]{section.6.3}{6.3 Monthly}{chapter.6}% 15
+\BOOKMARK [0][-]{chapter.7}{7 Exporting Data}{}% 16

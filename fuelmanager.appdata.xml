@@ -1,32 +1,49 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Copyright 2014 Charles Amey <kc8hfi@gmail.com> -->
-<application>
-     <id type="desktop">fuelmanager.desktop</id>
-     <metadata_license>CC0-1.0</metadata_license>
-     <project_license>GPL-3.0+</project_license>
-     <description>
-          <p>Ever wonder how much money you spend in fuel?  And how many miles you drive?     
+<component type="desktop">
+  <id>fuelmanager.desktop</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0+</project_license>
+  <description>
+    <p>Ever wonder how much money you spend in fuel?  And how many miles you drive?     
           This application that keeps track of four things, miles, gallons, cost, and
           the date of each fill-up.  It generates monthly and yearly summaries of
           miles driven, cost of fuel,how many gallons, and fuel mileage.  You can add
           more than one vehicle also.
           </p>
-          <p>The data can be stored into either a sqlite database (default) or an external
+    <p>The data can be stored into either a sqlite database (default) or an external
           mysql server.  Your data is not locked to the program either!  Each vehicle's data can be exported 
           into a csv file for use elsewhere.  
           </p>
-     </description>
-     <screenshots>
-          <screenshot type="default" width="870" height="640">http://fuelmanager.sourceforge.net/images/main.png</screenshot>
-          <screenshot width="870" height="640">http://fuelmanager.sourceforge.net/images/data.png</screenshot>
-          <screenshot width="870" height="640">http://fuelmanager.sourceforge.net/images/stats.png</screenshot>
-     </screenshots>
-     <url type="homepage">http://fuelmanager.sourceforge.net</url>
-     <updatecontact>kc8hfi@gmail.com</updatecontact>
-     <keywords>
-          <keyword>gas</keyword>
-          <keyword>fuel</keyword>
-          <keyword>mileage</keyword>
-          <keyword>mpg</keyword>
-     </keywords>
-</application>
+  </description>
+  <screenshots>
+    <screenshot height="640" width="870" type="default">
+      <image>http://fuelmanager.sourceforge.net/images/main.png</image>
+      <caption>The main page is the data entry screen.</caption>
+    </screenshot>
+    <screenshot height="640" width="870">
+      <image>http://fuelmanager.sourceforge.net/images/data.png</image>
+      <caption>All the data screen</caption>
+    </screenshot>
+    <screenshot height="640" width="870">
+      <image>http://fuelmanager.sourceforge.net/images/stats.png</image>
+      <caption>Available stats screen</caption>
+    </screenshot>
+  </screenshots>
+  <url type="homepage">http://fuelmanager.sourceforge.net</url>
+  <update_contact>kc8hfi@gmail.com</update_contact>
+  <keywords>
+    <keyword>gas</keyword>
+    <keyword>fuel</keyword>
+    <keyword>mileage</keyword>
+    <keyword>mpg</keyword>
+  </keywords>
+
+    <developer_name>Charles Amey</developer_name>
+    
+  <url type="bugtracker">http://github.com/kc8hfi/fuelmanager/issues</url>
+
+  <url type="donation">http://fuelmanager.sourceforge.net</url>
+
+  <url type="help">http://fuelmanager.sourceforge.net/documentation/fuelmanager.html</url>
+</component>
