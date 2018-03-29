@@ -69,6 +69,19 @@
          <bool>true</bool>
         </property>
        </widget>
+       <widget class="QPushButton" name="pushButton">
+        <property name="geometry">
+         <rect>
+          <x>110</x>
+          <y>340</y>
+          <width>89</width>
+          <height>25</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>PushButton</string>
+        </property>
+       </widget>
       </widget>
      </widget>
     </item>
@@ -80,7 +93,7 @@
      <x>0</x>
      <y>0</y>
      <width>868</width>
-     <height>21</height>
+     <height>22</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuHelp">
@@ -142,7 +155,7 @@
   </action>
   <action name="actionConfigure_Fuel_Manager">
    <property name="text">
-    <string>Configure Fuel Manager...</string>
+    <string>&amp;Configure Fuel Manager...</string>
    </property>
   </action>
   <action name="actionSelect_Vehicle">
@@ -155,17 +168,17 @@
   </action>
   <action name="actionExport_Data">
    <property name="text">
-    <string>Export Data</string>
+    <string>&amp;Export Data</string>
    </property>
   </action>
   <action name="actionAboutQt">
    <property name="text">
-    <string>About Qt</string>
+    <string>About &amp;Qt</string>
    </property>
   </action>
   <action name="actionHelp">
    <property name="text">
-    <string>Contents</string>
+    <string>&amp;Contents</string>
    </property>
    <property name="shortcut">
     <string>F1</string>
@@ -286,6 +299,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindowBase</receiver>
+   <slot>openConfigureDialog()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>165</x>
+     <y>442</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>433</x>
+     <y>304</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>login()</slot>
@@ -294,5 +323,6 @@
   <slot>about()</slot>
   <slot>selectVehicle()</slot>
   <slot>exportData()</slot>
+  <slot>openConfigureDialog()</slot>
  </slots>
 </ui>

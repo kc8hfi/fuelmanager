@@ -47,6 +47,7 @@ class MainWindow : public QMainWindow, private Ui_MainWindowBase
           void selectVehicle();
           void exportData();
           void help();
+          void openConfigureDialog();
      private:
           void showEverything();
           void writeData(QString f);

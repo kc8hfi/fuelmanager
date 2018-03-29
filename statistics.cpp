@@ -79,6 +79,7 @@ Statistics::Statistics(MainWindow *p)
      lifetime->setLayout(lifetimeLayout);
 
      //add the lifetime tab
+     qWarning()<<"at the beginning, lifetime's title is: "<<lifetime->windowTitle();
      statsBase.tabWidget->addTab(lifetime,lifetime->windowTitle());
 
      //add the yearly tab
@@ -88,6 +89,7 @@ Statistics::Statistics(MainWindow *p)
      QVBoxLayout *yearlyLayout = new QVBoxLayout;
      yearlyLayout->addWidget(yearlyTable);
      yearly->setLayout(yearlyLayout);
+     qWarning()<<"at the beginning, yearly's title is: "<<yearly->windowTitle();
      statsBase.tabWidget->addTab(yearly,yearly->windowTitle());
 
      //add the monthly tab
@@ -97,8 +99,15 @@ Statistics::Statistics(MainWindow *p)
      QVBoxLayout *monthlyLayout = new QVBoxLayout;
      monthlyLayout->addWidget(monthlyTable);
      monthly->setLayout(monthlyLayout);
+     qWarning()<<"at the beginning, monthly's title is: "<<monthly->windowTitle();
      statsBase.tabWidget->addTab(monthly,monthly->windowTitle());
 
+     
+     //add a tab just to play...
+     QWidget *test = new QWidget();
+     test->setWindowTitle("test title");
+     statsBase.tabWidget->addTab(test,test->windowTitle());
+     
      model = new MyModel;
 
 } //end constructor
@@ -112,6 +121,7 @@ Statistics::~Statistics()
 //lifetime statistics
 void Statistics::lifetimeStats ()
 {
+     qWarning()<<"inside lifetime stats";
      QSqlDatabase c = parent->getConnection();
 
      QSqlRecord r = parent->getVehicleRecord();
@@ -201,6 +211,7 @@ void Statistics::lifetimeStats ()
 //stats for each year
 void Statistics::yearlyStats()
 {
+     qWarning()<<"yearly stats";
      QSqlDatabase c = parent->getConnection();
 
      //vehicle id and description is here
@@ -244,7 +255,7 @@ void Statistics::yearlyStats()
                order by tyear \
                ";
           }
-          
+          qWarning()<<q;
           query.prepare(q);
           query.bindValue(":id",r.value("id").toInt());
           if(query.exec())
@@ -546,12 +557,12 @@ void Statistics::monthlyStats()
 //slot to refresh whichever tab was clicked on
 void Statistics::refreshTables()
 {
-     //qDebug()<<"which tab: "<<statsBase.tabWidget->tabText(statsBase.tabWidget->currentIndex());
+     qDebug()<<"which tab: "<<statsBase.tabWidget->tabText(statsBase.tabWidget->currentIndex());
 
-     if(statsBase.tabWidget->tabText(statsBase.tabWidget->currentIndex()) == "Lifetime")
+     if(statsBase.tabWidget->tabText(statsBase.tabWidget->currentIndex()) == "&Lifetime")
           lifetimeStats();
-     if(statsBase.tabWidget->tabText(statsBase.tabWidget->currentIndex()) == "Yearly")
+     if(statsBase.tabWidget->tabText(statsBase.tabWidget->currentIndex()) == "&Yearly")
           yearlyStats();
-     if(statsBase.tabWidget->tabText(statsBase.tabWidget->currentIndex()) == "Monthly")
+     if(statsBase.tabWidget->tabText(statsBase.tabWidget->currentIndex()) == "&Monthly")
           monthlyStats();
 }

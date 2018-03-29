@@ -36,6 +36,8 @@
 #include "statistics.h"
 #include "assistant.h"
 
+#include "configure.h"
+
 MainWindow::MainWindow(QMainWindow *parent)
      :QMainWindow(parent)
 {
@@ -73,7 +75,10 @@ MainWindow::MainWindow(QMainWindow *parent)
      connect(mw.actionHelp,SIGNAL(triggered()), this, SLOT(help()));
      
      assistant = new Assistant;
-     
+
+
+     qDebug()<<"this is a qdebug";
+     qWarning()<<"this is a qwarning";
      
 }//end constructor
 
@@ -417,3 +422,16 @@ void MainWindow::writeData(QString f)
           
      }//query was executed
 }//end writeData
+
+
+void MainWindow::openConfigureDialog()
+{
+    qDebug()<<"taht button was pressed";
+
+
+    Configure c;
+    c.exec();
+
+
+
+}

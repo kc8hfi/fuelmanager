@@ -57,6 +57,7 @@ AllData::~AllData()
 //gets called if the tab gets clicked on
 void AllData::refreshTable()
 {
+     qDebug()<<"inside refreshTable, size:"<<model->getSize();
      //QSqlDatabase c = QSqlDatabase::database(parent->getConnectionName());
      QSqlDatabase c = parent->getConnection();
      QSqlRecord r = parent->getVehicleRecord();

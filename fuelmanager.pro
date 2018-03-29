@@ -40,7 +40,8 @@ HEADERS += about.h \
            statistics.h \
            vehicleconfigpage.h \
            vehicledisplaymodel.h \
-           vehicleeditmodel.h
+           vehicleeditmodel.h \
+    configure.h
            
            
 FORMS +=  about.ui \
@@ -48,7 +49,10 @@ FORMS +=  about.ui \
           loginbase.ui \
           entryform.ui \
           mainwindowbase.ui \
-          statistics.ui
+          statistics.ui \
+    configurebase.ui \
+    configure_database.ui \
+    configure_vehicle.ui
 
 SOURCES += about.cpp \
            alldata.cpp \
@@ -69,7 +73,8 @@ SOURCES += about.cpp \
            statistics.cpp \
            vehicleconfigpage.cpp \
            vehicledisplaymodel.cpp \
-           vehicleeditmodel.cpp
+           vehicleeditmodel.cpp \
+    configure.cpp
            
 
 QT += sql
