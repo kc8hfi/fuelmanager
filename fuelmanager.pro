@@ -41,7 +41,8 @@ HEADERS += about.h \
            vehicleconfigpage.h \
            vehicledisplaymodel.h \
            vehicleeditmodel.h \
-    configure.h
+    configure.h \
+    configurevehicle.h
            
            
 FORMS +=  about.ui \
@@ -51,8 +52,7 @@ FORMS +=  about.ui \
           mainwindowbase.ui \
           statistics.ui \
     configurebase.ui \
-    configure_database.ui \
-    configure_vehicle.ui
+    configurevehiclebase.ui
 
 SOURCES += about.cpp \
            alldata.cpp \
@@ -74,7 +74,8 @@ SOURCES += about.cpp \
            vehicleconfigpage.cpp \
            vehicledisplaymodel.cpp \
            vehicleeditmodel.cpp \
-    configure.cpp
+    configure.cpp \
+    configurevehicle.cpp
            
 
 QT += sql
