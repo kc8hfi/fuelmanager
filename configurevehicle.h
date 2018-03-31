@@ -2,7 +2,10 @@
 #define CONFIGUREVEHICLE_H
 
 #include <QWidget>
-#include "ui_configurevehicle.h"
+#include <QSqlTableModel>
+#include "mainwindow.h"
+#include "vehicledisplaymodel.h"
+#include "ui_configurevehiclebase.h"
 
 
 class ConfigureVehicle : public QWidget,private Ui_configureVehicleBase
@@ -14,10 +17,15 @@ public:
 signals:
 
 public slots:
+    void saveVehicle();
 
 
 private:
     Ui_configureVehicleBase vehicleBase;
+    MainWindow *owner;
+    VehicleDisplayModel *model;
+
+
 };
 
 #endif // CONFIGUREVEHICLE_H

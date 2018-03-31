@@ -4,12 +4,20 @@
 #include <QGroupBox>
 #include <QButtonGroup>
 #include <QHBoxLayout>
+#include <QFileDialog>
+#include <QSettings>
+#include <QMessageBox>
 
-Configure::Configure()
+Configure::Configure(MainWindow*o)
 {
     base.setupUi(this);
 
-    vehicleui = new ConfigureVehicle();
+    p = o;
+
+    qDebug()<<"who is my parent?"<<this->objectName();
+
+
+    vehicleui = new ConfigureVehicle(p);
     vehicleui->hide();
 
     //create the select database widget
@@ -19,7 +27,7 @@ Configure::Configure()
     mariadbButton = new QRadioButton();
     mariadbButton->setText(tr("mariadb"));
 
-    QButtonGroup *bgrp = new QButtonGroup();
+    bgrp = new QButtonGroup();
     bgrp->addButton(sqliteButton);
     bgrp->addButton(mariadbButton);
 
@@ -43,6 +51,7 @@ Configure::Configure()
     locationLabel->setText(tr("Location:"));
     setLocationButton = new QPushButton();
     setLocationButton->setText(tr("Select..."));
+    connect(setLocationButton,SIGNAL(clicked()), this, SLOT(selectDirectory()));
 
     QGridLayout *layout = new QGridLayout();
     layout->addWidget(locationLabel,0,0);
@@ -91,11 +100,6 @@ Configure::Configure()
     //add the vehicle add/edit stuff
     base.gridLayout->addWidget(vehicleui,0,1);
 
-
-
-
-
-
     //add a signal to the sqlite radio button
     connect(sqliteButton, SIGNAL(clicked()), this, SLOT(selectSqlite()));
     //add signal to the mariadb radio button
@@ -103,10 +107,22 @@ Configure::Configure()
     //add a signal to the list widget on the left
     connect(base.listWidget,SIGNAL(itemClicked(QListWidgetItem*)),this,SLOT(switchPage(QListWidgetItem*)));
 
+    //add a handler for the ok/apply/cancel button
+    connect(base.buttonBox->button(QDialogButtonBox::Apply),SIGNAL(clicked()),this,SLOT(buttonBoxApply()));
+    connect(base.buttonBox->button(QDialogButtonBox::Ok),SIGNAL(clicked()),this,SLOT(buttonBoxOk()));
 
     //select the first item
     base.listWidget->setCurrentItem(base.listWidget->item(0));
     switchPage(base.listWidget->item(0));
+
+
+    //check the current settings if there are any
+    checkSettings();
+}
+
+Configure::~Configure()
+{
+    delete this;
 }
 
 void Configure::selectSqlite()
@@ -135,6 +151,103 @@ void Configure::switchPage(QListWidgetItem* current)
     {
         dbaseSelection->hide();
         vehicleui->show();
+    }
+
+}
+
+void Configure::selectDirectory()
+{
+    QString dirname = QFileDialog::getExistingDirectory(this, tr("Choose a directory"),
+    "",QFileDialog::ShowDirsOnly|QFileDialog::DontResolveSymlinks);
+    location->setText(dirname);
+}
+
+
+void Configure::buttonBoxApply()
+{
+    //qDebug()<<"apply was clicked";
+    saveChanges();
+}
+
+void Configure::buttonBoxOk()
+{
+    //qDebug()<<"ok was clicked";
+    saveChanges();
+}
+
+void Configure::saveChanges()
+{
+    QSettings settings;
+    //which box is visible?
+    if (sqliteButton->isChecked())
+    {
+        if (location->text()!="" && filename->text()!="")
+        {
+            settings.clear();
+            settings.setValue("config/databasetype", "sqlite");
+            settings.setValue("config/location",location->text());
+            settings.setValue("config/filename",filename->text());
+        }
+        else
+        {
+            //qDebug()<<"show dialog box for whatever field is empty";
+            QMessageBox message;
+            QString t = "Please fill out the following:\n";
+            if (location->text()=="")
+                t += "* Location\n";
+            if (filename->text()=="")
+                t += "* Filename\n";
+            message.setText(t);
+            message.exec();
+        }
+        //qDebug()<<"save the sqlite info";
+    }
+    else if (mariadbButton->isChecked())
+    {
+        qDebug()<<"save the mariadb stuff";
+        if (hostname->text()!= "" && database->text()!= "")
+        {
+            settings.clear();
+            settings.setValue("config/databasetype","mariadb");
+            settings.setValue("config/hostname",hostname->text());
+            settings.setValue("config/database",database->text());
+            settings.setValue("config/port",port->text());
+        }
+        else
+        {
+            QMessageBox message;
+            QString t = "Please fill out the following:\n";
+            if (hostname->text()=="")
+                t += "* Hostname\n";
+            if (database->text()=="")
+                t += "* Database\n";
+            message.setText(t);
+            message.exec();
+            //qDebug()<<"dialog box for the empty fields";
+        }
+    }
+    //need to refresh the parent since the settings have changed
+    //parent->checkSettings();
+}
+
+void Configure::checkSettings()
+{
+    QSettings settings;
+    QString databaseType = settings.value("config/databasetype").toString();
+    if(databaseType == "sqlite")
+    {
+        sqliteButton->setChecked(true);
+        filename->setText(settings.value("config/filename").toString());
+        location->setText(settings.value("config/location").toString());
+        sqliteWidget->show();
+    }
+    else if (databaseType == "mariadb")
+    {
+        mariadbButton->setChecked(true);
+        hostname->setText(settings.value("config/hostname").toString());
+        database->setText(settings.value("config/database").toString());
+        port->setValue(settings.value("config/port").toInt());
+        mariadbWidget->show();
     }
 
 }

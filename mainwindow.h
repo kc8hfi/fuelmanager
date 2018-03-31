@@ -22,11 +22,11 @@
 
 #include <QtSql>
 #include "ui_mainwindowbase.h"
-#include "databasequery.h"
+#include "query.h"
 
-class AllData;
-class Statistics;
-class Assistant;
+//class AllData;
+//class Statistics;
+//class Assistant;
 
 class MainWindow : public QMainWindow, private Ui_MainWindowBase
 {
@@ -35,37 +35,49 @@ class MainWindow : public QMainWindow, private Ui_MainWindowBase
           MainWindow(QMainWindow *parent=0);
           ~MainWindow();
           void checkSettings();
-          QSqlDatabase getConnection();
-          QSqlRecord getVehicleRecord();
-          DatabaseQuery* getQueries();
+
+          Query* getConnection();
+          void setVehicleName(QString);
+
+          //QSqlDatabase getConnection();
+          //QSqlRecord getVehicleRecord();
+          //DatabaseQuery* getQueries();
 
      private slots:
           void configure();
-          void about();
-          bool login ();
-          void updateAllData ();
           void selectVehicle();
-          void exportData();
-          void help();
-          void openConfigureDialog();
+
+          //void about();
+          //bool login ();
+          //void updateAllData ();
+          //void selectVehicle();
+          //void exportData();
+          //void help();
      private:
-          void showEverything();
-          void writeData(QString f);
+          void showTabs();
+          void vehicleName(int);
+          //void showEverything();
+          //void writeData(QString f);
+            Ui_MainWindowBase mw;
+            Query *con;
 
-          QSqlDatabase connection;
-          DatabaseQuery *queries;
-          QString whichDatabase;
-          QString username;
-          QString password;
-          bool alreadyLoggedIn;
 
-          QSqlRecord record;
 
-          AllData *everything;
-          Statistics *stats;
+
+          //QSqlDatabase connection;
+          //DatabaseQuery *queries;
+//          QString whichDatabase;
+//          QString username;
+//          QString password;
+//          bool alreadyLoggedIn;
+
+//          QSqlRecord record;
+
+//          AllData *everything;
+//          Statistics *stats;
           
-          Assistant *assistant;
-          Ui_MainWindowBase mw;
+//          Assistant *assistant;
+
 };
 
 #endif  //MAINWINDOW_H

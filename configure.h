@@ -9,22 +9,33 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QRadioButton>
+#include "mainwindow.h"
 
 class Configure : public QDialog, private Ui_configureBase
 {
 Q_OBJECT
 public:
-    Configure();
+    Configure(MainWindow *);
+    ~Configure();
+    void saveChanges();
+    //MainWindow* getParent();
 public slots:
     void switchPage(QListWidgetItem*);
     void selectSqlite();
     void selectMariadb();
+    void selectDirectory();
+    void buttonBoxApply();
+    void buttonBoxOk();
 private:
+    void checkSettings();
     Ui_configureBase base;
 
     ConfigureVehicle *vehicleui;
 
+    MainWindow *p;
+
     QWidget *dbaseSelection;
+    QButtonGroup *bgrp;
     QRadioButton *sqliteButton;
     QRadioButton *mariadbButton;
 

@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>EntryFormBase</class>
- <widget class="QWidget" name="EntryFormBase">
+ <class>EntryForm</class>
+ <widget class="QWidget" name="EntryForm">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>495</width>
-    <height>324</height>
+    <width>448</width>
+    <height>389</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Data Entry</string>
+   <string>Entry Form</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -19,138 +19,77 @@
      <item row="0" column="0">
       <widget class="QLabel" name="milesLabel">
        <property name="text">
-        <string>Miles</string>
+        <string>Miles:</string>
        </property>
       </widget>
      </item>
      <item row="0" column="1">
-      <widget class="QLineEdit" name="miles"/>
+      <widget class="QLineEdit" name="milesLineEdit"/>
      </item>
      <item row="1" column="0">
       <widget class="QLabel" name="gallonsLabel">
        <property name="text">
-        <string>Gallons</string>
+        <string>Gallons:</string>
        </property>
       </widget>
      </item>
      <item row="1" column="1">
-      <widget class="QLineEdit" name="gallons"/>
+      <widget class="QLineEdit" name="gallonsLineEdit"/>
      </item>
      <item row="2" column="0">
       <widget class="QLabel" name="costLabel">
        <property name="text">
-        <string>Cost</string>
+        <string>Cost:</string>
        </property>
       </widget>
      </item>
      <item row="2" column="1">
-      <widget class="QLineEdit" name="cost"/>
+      <widget class="QLineEdit" name="costLineEdit"/>
      </item>
     </layout>
    </item>
    <item>
-    <layout class="QGridLayout" name="gridLayout">
-     <item row="1" column="0">
-      <widget class="QComboBox" name="month"/>
-     </item>
-     <item row="1" column="1">
-      <widget class="QComboBox" name="day"/>
-     </item>
-     <item row="1" column="2">
-      <widget class="QComboBox" name="year"/>
-     </item>
-     <item row="0" column="1">
-      <widget class="QLabel" name="dateLabel">
-       <property name="text">
-        <string>Date</string>
-       </property>
-       <property name="alignment">
-        <set>Qt::AlignCenter</set>
-       </property>
-      </widget>
-     </item>
-    </layout>
+    <widget class="QCalendarWidget" name="calendarWidget"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QPushButton" name="okButton">
-       <property name="text">
-        <string>Ok</string>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Cancel|QDialogButtonBox::Ok</set>
        </property>
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="cancelButton">
-       <property name="text">
-        <string>Cancel</string>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
        </property>
-      </widget>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
      </item>
     </layout>
-   </item>
-   <item>
-    <spacer name="verticalSpacer">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>20</width>
-       <height>108</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
-   <item>
-    <widget class="QLabel" name="message">
-     <property name="text">
-      <string/>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignCenter</set>
-     </property>
-    </widget>
    </item>
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>okButton</sender>
-   <signal>clicked()</signal>
-   <receiver>EntryFormBase</receiver>
-   <slot>okClicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>125</x>
-     <y>267</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>247</x>
-     <y>161</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>cancelButton</sender>
-   <signal>clicked()</signal>
-   <receiver>EntryFormBase</receiver>
-   <slot>cancelClicked()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>369</x>
-     <y>267</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>247</x>
-     <y>161</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
- <slots>
-  <slot>okClicked()</slot>
-  <slot>cancelClicked()</slot>
- </slots>
+ <connections/>
 </ui>
