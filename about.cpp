@@ -1,91 +1,96 @@
-/*!
- * Copyright 2008-2014 Charles Amey
- * 
- * This file is part of Fuel Manager.
- * 
- * Fuel Manager is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * Fuel Manager is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with Fuel Manager.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-#include <QDebug>
-#include <QDialog>
-#include <QFile>
 #include "about.h"
+#include "ui_about.h"
+#include "mainwindow.h"
+#include <QFile>
+#include <QDebug>
+#include <QPushButton>
 
-//constructor
-About::About()
+About::About(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::About)
 {
-     aboutBase.setupUi(this);
-     QString programName = "Fuel Manager";
-     QString version = QApplication::applicationVersion();
+    ui->setupUi(this);
+    owner = (MainWindow*)parent;
 
-     QString licenseFileName = "COPYING";
-     QString path = "/usr/share/doc/fuelmanager-";
+    QString name = "Fuel Manager";
+    version = QApplication::applicationVersion();
 
-     QString info = "";
-     QString author = "";
-     aboutBase.programName->setText(programName + " " + version);
+    ui->programName->setText(name+" - " + version);
+    ui->programLocation->setText("https://github.com/kc8hfi/fuelmanager");
 
-     //open up the authors file,  copyright info
-     QFile authorsFile("authors");
-     if (authorsFile.exists())
-     {
-          //open the authors file
-          if(authorsFile.open(QIODevice::ReadOnly))
-          {
-               QTextStream ts (&authorsFile);
-               author = author + ts.readAll();
-               author = author + "\n";
-          }
-          aboutBase.author->setText(author);
-     }
-     //open up the GPL license file
-     QFile license(licenseFileName);
-     
-     QFile docpathlicense(path+version+"/"+licenseFileName);
-     //make sure the file is there
-     if (license.exists())  
-     {
-          //open the gpl license file
-          if (license.open(QIODevice::ReadOnly))
-          {
-               QTextStream ts (&license);
-               info += ts.readAll();
-          }
-          else
-          {
-               info = "Please see \"http://www.gnu.org/licenses\" for the license to this program.";
-          }
-     }
-     else if (docpathlicense.exists())
-     {
-          if (docpathlicense.open(QIODevice::ReadOnly))
-          {
-               QTextStream t(&docpathlicense);
-               info = info + t.readAll();
-          }
-          else
-               info = "Please see \"http://www.gnu.org/licenses\" for the license to this program.";
-     }
-     else
-     {
-          info = "Please see \"http://www.gnu.org/licenses\" for the license to this program.";
-     }
-     //put the text into the box
-     aboutBase.license->setText(info);
-} //end about constructor
+    QString author = getAuthor();
+    ui->programAuthor->setText(author);
 
-//destructor
+    QString license = getLicense();
+    ui->textBrowser->setText(license);
+
+    connect(ui->buttonBox->button(QDialogButtonBox::Ok),SIGNAL(clicked()),this,SLOT(okClicked()));
+}
+
 About::~About()
 {
+    delete ui;
+}
+
+
+QString About::getAuthor()
+{
+    QString a = "";
+    QFile file1("authors");
+    QFile file2("/usr/share/doc/fuelmanager/authors");
+    if (file1.exists())
+    {
+        if(file1.open(QIODevice::ReadOnly))
+        {
+            QTextStream ts(&file1);
+            a += ts.readAll();
+        }
+    }
+    else if (file2.exists())
+    {
+        if(file2.open(QIODevice::ReadOnly))
+        {
+            QTextStream ts(&file2);
+            a += ts.readAll();
+        }
+    }
+    else
+    {
+        a = "Charles Amey";
+    }
+    return a;
+}
+
+QString About::getLicense()
+{
+    QString l = "";
+    QFile file1("COPYING");
+    QFile file2("/usr/share/doc/fuelmanager/COPYING");
+    if (file1.exists())
+    {
+        qDebug()<<"license file1 is there";
+        if(file1.open(QIODevice::ReadOnly))
+        {
+            QTextStream ts(&file1);
+            l += ts.readAll();
+        }
+    }
+    else if (file2.exists())
+    {
+        if(file2.open(QIODevice::ReadOnly))
+        {
+            QTextStream ts(&file2);
+            l += ts.readAll();
+        }
+    }
+    else
+    {
+        l = "Please see \"http://www.gnu.org/licenses\" for the license to this program.";
+    }
+    return l;
+}
+
+void About::okClicked()
+{
+    About::close();
 }

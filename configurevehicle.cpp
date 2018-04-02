@@ -22,7 +22,6 @@ ConfigureVehicle::ConfigureVehicle(QWidget *parent) : QWidget(parent)
     }
 
     connect(vehicleBase.saveButton,SIGNAL(clicked()),this,SLOT(saveVehicle()));
-
 }
 
 void ConfigureVehicle::saveVehicle()

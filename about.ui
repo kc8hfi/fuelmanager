@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>About_Base</class>
- <widget class="QWidget" name="About_Base">
+ <class>About</class>
+ <widget class="QDialog" name="About">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>579</width>
-    <height>425</height>
+    <width>532</width>
+    <height>480</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>About Fuel Manager</string>
+   <string>Dialog</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <item>
@@ -22,10 +22,7 @@
       </font>
      </property>
      <property name="text">
-      <string>program name</string>
-     </property>
-     <property name="textFormat">
-      <enum>Qt::RichText</enum>
+      <string>name</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -40,7 +37,7 @@
       </font>
      </property>
      <property name="text">
-      <string>http://sourceforge.net/projects/fuelmanager</string>
+      <string>location</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -48,9 +45,14 @@
     </widget>
    </item>
    <item>
-    <widget class="QLabel" name="author">
+    <widget class="QLabel" name="programAuthor">
+     <property name="font">
+      <font>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
      <property name="text">
-      <string>TextLabel</string>
+      <string>author</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>
@@ -58,11 +60,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QTextEdit" name="license">
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-    </widget>
+    <widget class="QTextBrowser" name="textBrowser"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -73,16 +71,16 @@
        </property>
        <property name="sizeHint" stdset="0">
         <size>
-         <width>298</width>
+         <width>228</width>
          <height>20</height>
         </size>
        </property>
       </spacer>
      </item>
      <item>
-      <widget class="QPushButton" name="closeButton">
-       <property name="text">
-        <string>Close</string>
+      <widget class="QDialogButtonBox" name="buttonBox">
+       <property name="standardButtons">
+        <set>QDialogButtonBox::Ok</set>
        </property>
       </widget>
      </item>
@@ -91,22 +89,5 @@
   </layout>
  </widget>
  <resources/>
- <connections>
-  <connection>
-   <sender>closeButton</sender>
-   <signal>clicked()</signal>
-   <receiver>About_Base</receiver>
-   <slot>close()</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>443</x>
-     <y>333</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>241</x>
-     <y>176</y>
-    </hint>
-   </hints>
-  </connection>
- </connections>
+ <connections/>
 </ui>

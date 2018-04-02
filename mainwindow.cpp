@@ -28,8 +28,9 @@
 #include "configure.h"
 #include "selectvehicle.h"
 #include "entryform.h"
+#include "about.h"
+#include "alldata.h"
 
-//#include "about.h"
 //#include "alldata.h"
 //#include "configdialog.h"
 //#include "databasequery.h"
@@ -44,7 +45,7 @@
 #include "sqlite.h"
 
 
-#include "testwidget.h"
+//#include "testwidget.h"
 
 MainWindow::MainWindow(QMainWindow *parent)
      :QMainWindow(parent)
@@ -288,7 +289,28 @@ void MainWindow::showTabs()
 {
     EntryForm *entry = new EntryForm(this);
     mw.tabWidget->addTab(entry,entry->windowTitle());
+
+    AllData *alldata = new AllData(this);
+    mw.tabWidget->addTab(alldata,alldata->windowTitle());
 }
+
+//show the about dialog
+void MainWindow::about()
+{
+    About *a = new About(this);
+    a->show();
+
+}
+
+//void MainWindow::about()
+//{
+
+
+//     About about;
+//     about.exec();
+//}
+
+
 
 // 
 
@@ -341,12 +363,6 @@ void MainWindow::showTabs()
 //}
 
 
-//show the about dialog
-//void MainWindow::about()
-//{
-//     About about;
-//     about.exec();
-//}
 
 //void MainWindow::help()
 //{

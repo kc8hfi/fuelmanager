@@ -99,10 +99,5 @@ void EntryForm::okClicked()
             msg.exec();
         }
     }
-
-
-
-
-
 }
 

@@ -46,6 +46,7 @@ class MainWindow : public QMainWindow, private Ui_MainWindowBase
      private slots:
           void configure();
           void selectVehicle();
+          void about();
 
           //void about();
           //bool login ();

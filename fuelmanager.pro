@@ -29,7 +29,10 @@ HEADERS += configure.h \
     testwidget.h \
     vehicledisplaymodel.h \
     selectvehicle.h \
-    entryform.h
+    entryform.h \
+    about.h \
+    alldata.h \
+    alldatamodel.h
 
 
 FORMS += configurebase.ui \
@@ -37,7 +40,9 @@ FORMS += configurebase.ui \
     mainwindowbase.ui \
     testwidget.ui \
     selectvehicle.ui \
-    entryform.ui
+    entryform.ui \
+    about.ui \
+    alldata.ui
 
 
 SOURCES += configure.cpp \
@@ -49,7 +54,10 @@ SOURCES += configure.cpp \
     testwidget.cpp \
     vehicledisplaymodel.cpp \
     selectvehicle.cpp \
-    entryform.cpp
+    entryform.cpp \
+    about.cpp \
+    alldata.cpp \
+    alldatamodel.cpp
            
 QT += sql testlib
 

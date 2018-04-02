@@ -6,6 +6,8 @@
 #include <QString>
 
 class MainWindow;
+class AllDataModel;
+
 class Sqlite : public Query
 {
 public:
@@ -17,6 +19,8 @@ public:
     bool insertFuelMileage(int,double,double,double,QString);
 
     QString getVehicleDescription(int);
+
+    bool selectFuelMileage(int, AllDataModel*);
 private:
     MainWindow *owner;
 };
