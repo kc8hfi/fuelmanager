@@ -48,6 +48,12 @@ class MainWindow : public QMainWindow, private Ui_MainWindowBase
           void selectVehicle();
           void about();
 
+
+          void login();
+          void updateAllData();
+          void exportData();
+
+
           //void about();
           //bool login ();
           //void updateAllData ();

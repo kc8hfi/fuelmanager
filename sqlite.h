@@ -4,9 +4,10 @@
 #include "query.h"
 #include <QSqlDatabase>
 #include <QString>
+#include "alldatamodel.h"
 
 class MainWindow;
-class AllDataModel;
+
 
 class Sqlite : public Query
 {

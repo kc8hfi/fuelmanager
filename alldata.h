@@ -20,6 +20,7 @@ public:
 
     void refreshTable();
 
+
 private:
     Ui::AllData *ui;
 

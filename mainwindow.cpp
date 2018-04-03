@@ -302,6 +302,32 @@ void MainWindow::about()
 
 }
 
+
+
+
+
+
+
+
+
+
+void MainWindow::login()
+{
+
+}
+void MainWindow::updateAllData()
+{
+
+}
+
+void MainWindow::exportData()
+{
+
+}
+
+
+
+
 //void MainWindow::about()
 //{
 

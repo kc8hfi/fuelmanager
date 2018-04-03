@@ -87,13 +87,18 @@ QString Sqlite::getVehicleDescription(int i)
     QString s = "select description from vehicles where id = :id";
     //QSqlQuery q(s);
     QSqlQuery q(QSqlDatabase::database());
+    qDebug()<<"i'm guessing theres no database connection here";
     q.prepare(s);
     q.bindValue(":id",i);
     QString desc = "";
     if (q.exec())
     {
-        q.next();
-        desc = q.value(0).toString();
+        if (q.next())
+        {
+            qDebug()<<"next failed here";
+            desc = q.value(0).toString();
+            qDebug()<<"crashed right before this";
+        }
     }
     else
     {
@@ -101,6 +106,7 @@ QString Sqlite::getVehicleDescription(int i)
         //QMessageBox message(QMessageBox::Critical,"Problem!",error,QMessageBox::Ok,this,Qt::Dialog);
         //message.exec();
     }
+    qDebug()<<"returning:"<<desc;
     return desc;
 }
 
@@ -137,6 +143,7 @@ bool Sqlite::selectFuelMileage(int vehicleId, AllDataModel *model)
             from fuel_mileage \
             where vehicle_id = :id \
             order by fillup_date desc ";
+
     QSqlQuery query(QSqlDatabase::database());
     query.prepare(s);
     query.bindValue(":id",vehicleId);
@@ -144,65 +151,37 @@ bool Sqlite::selectFuelMileage(int vehicleId, AllDataModel *model)
     if (query.exec())
     {
         ok = true;
-
-
-        QColor one = Qt::lightGray;
-        QColor two = Qt::darkCyan;
-
-        one = Qt::white;
-        two = Qt::lightGray;
-        if (query.next())
-        {
-            Mileage m;
-            m.id = query.value(0).toInt();
-            m.miles = query.value(1).toDouble();
-            m.gallons = query.value(2).toDouble();
-            m.cost = query.value(3).toDouble();
-            m.date = QDate::fromString(query.value(4).toString(), "yyyy-MM-dd");
-        }
-
-
-//        qDebug()<<"id:"<<query.value(0).toDouble();
-//        qDebug()<<"miles:"<<query.value(1).toDouble();
-//        qDebug()<<"gallons:"<<query.value(2).toDouble();
-//        qDebug()<<"cost:"<<query.value(3).toDouble();
-//        qDebug()<<"date:"<<query.value(4).toString();
-
-        //model->setModelData(m,one);
-
-        int whichColor = 1;
-        //now loop through the records
         while(query.next())
         {
-//            qDebug()<<"this is the second row";
-//            qDebug()<<"id:"<<query.value(0).toDouble();
-//            qDebug()<<"miles:"<<query.value(1).toDouble();
-//            qDebug()<<"gallons:"<<query.value(2).toDouble();
-//            qDebug()<<"cost:"<<query.value(3).toDouble();
-//            qDebug()<<"date:"<<query.value(4).toString();
             Mileage m;
             m.id = query.value(0).toInt();
             m.miles = query.value(1).toDouble();
             m.gallons = query.value(2).toDouble();
             m.cost = query.value(3).toDouble();
             m.date = QDate::fromString(query.value(4).toString(), "yyyy-MM-dd");
-            if (whichColor == 1)
-            {
-                whichColor = 2;
-                //model->setModelData(m,two);
-            }
-            else if (whichColor == 2)
-            {
-                whichColor = 1;
-                //model->setModelData(m,one);
-            }
+
+            model->insertRows(0,1,QModelIndex());
+            QModelIndex index = model->index(0,0,QModelIndex());
+            model->setData(index,m.id,Qt::EditRole);
+
+            index = model->index(0,1,QModelIndex());
+            model->setData(index,m.miles,Qt::EditRole);
+
+            index = model->index(0,2,QModelIndex());
+            model->setData(index,m.gallons,Qt::EditRole);
+
+            index = model->index(0,3,QModelIndex());
+            model->setData(index,m.cost,Qt::EditRole);
+
+            index = model->index(0,4,QModelIndex());
+            model->setData(index,m.date,Qt::EditRole);
+
         }
     }
     else
     {
-        QString error = "selectFuelMileage\n"+query.lastError().text();
-        QMessageBox message(QMessageBox::Critical,"Problem!",error,QMessageBox::Ok,(QWidget*)owner,Qt::Dialog);
-        message.exec();
+        qDebug()<<"problemhere:"<<query.lastError().text();
     }
+    //qDebug()<<"selectFuelMileage, how many records"<<d.size();
     return ok;
 }
