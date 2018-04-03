@@ -34,7 +34,7 @@ AllData::~AllData()
 void AllData::refreshTable()
 {
     //clear the model
-    model->clear();
+    //model->clear();
 
     //get vehicle id
     QSettings settings;

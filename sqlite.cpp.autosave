@@ -144,8 +144,6 @@ bool Sqlite::selectFuelMileage(int vehicleId, AllDataModel *model)
     if (query.exec())
     {
         ok = true;
-
-
         QColor one = Qt::lightGray;
         QColor two = Qt::darkCyan;
 
