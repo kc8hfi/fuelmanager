@@ -44,7 +44,11 @@ QVariant AllDataModel::data(const QModelIndex &index, int role) const
         else if(index.column() == 3)
             return m.cost;
         else if (index.column() == 4)
+        {
+            return m.date.toString("MMMM d, yyyy");
+            qDebug()<<m.date;
             return m.date;
+        }
     }
     return QVariant();
 }
@@ -74,16 +78,20 @@ QVariant AllDataModel::headerData(int section, Qt::Orientation orientation, int 
     return QVariant();
 }
 
-bool AllDataModel::insertRows(int position, int rows, const QModelIndex &index)
+bool AllDataModel::insertRow(int position, int rows, const QModelIndex &index,Mileage m)
 {
+    qDebug()<<"inside insertRow";
     Q_UNUSED(index);
     beginInsertRows(QModelIndex(), position, position + rows -1);
-    for (int row=0; row< rows; rows++)
-    {
-        //theData.insert(position, {int,double,double,double,QDate()});
-        Mileage m;
-        theData.insert(position,m);
-    }
+//    qDebug()<<"afterbegininsertrows";
+//    for (int row=0; row< rows; rows++)
+//    {
+//        //theData.insert(position, {int,double,double,double,QDate()});
+//        Mileage m;
+//        theData.insert(position,m);
+//    }
+//    qDebug()<<"after the loop";
+    theData.append(m);
     endInsertRows();
     return true;
 }

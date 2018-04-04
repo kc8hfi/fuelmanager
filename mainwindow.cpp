@@ -156,7 +156,7 @@ void MainWindow::selectVehicle()
 void MainWindow::setVehicleName(QString s)
 {
     mw.vehicleLabel->setText(s);
-    qDebug()<<"set the vehicle label to "<<s;
+    //qDebug()<<"set the vehicle label to "<<s;
 }
 
 void MainWindow::vehicleName(int i)
@@ -325,6 +325,10 @@ void MainWindow::exportData()
 
 }
 
+void MainWindow::help()
+{
+
+}
 
 
 

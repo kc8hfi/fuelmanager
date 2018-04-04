@@ -87,7 +87,7 @@ QString Sqlite::getVehicleDescription(int i)
     QString s = "select description from vehicles where id = :id";
     //QSqlQuery q(s);
     QSqlQuery q(QSqlDatabase::database());
-    qDebug()<<"i'm guessing theres no database connection here";
+    //qDebug()<<"i'm guessing theres no database connection here";
     q.prepare(s);
     q.bindValue(":id",i);
     QString desc = "";
@@ -95,9 +95,9 @@ QString Sqlite::getVehicleDescription(int i)
     {
         if (q.next())
         {
-            qDebug()<<"next failed here";
+            //qDebug()<<"next failed here";
             desc = q.value(0).toString();
-            qDebug()<<"crashed right before this";
+            //qDebug()<<"crashed right before this";
         }
     }
     else
@@ -106,7 +106,7 @@ QString Sqlite::getVehicleDescription(int i)
         //QMessageBox message(QMessageBox::Critical,"Problem!",error,QMessageBox::Ok,this,Qt::Dialog);
         //message.exec();
     }
-    qDebug()<<"returning:"<<desc;
+    //qDebug()<<"returning:"<<desc;
     return desc;
 }
 
@@ -128,7 +128,7 @@ bool Sqlite::insertFuelMileage(int id,double miles,double gallons,double cost,QS
     }
     else
     {
-        qDebug()<<"insertFuelMileage:"<<query.lastError().text();
+        //qDebug()<<"insertFuelMileage:"<<query.lastError().text();
         QString error = "insertFuelMileage\n"+query.lastError().text();
         QMessageBox message(QMessageBox::Critical,"Problem!",error,QMessageBox::Ok,(QWidget*)owner,Qt::Dialog);
         message.exec();
@@ -145,9 +145,12 @@ bool Sqlite::selectFuelMileage(int vehicleId, AllDataModel *model)
             order by fillup_date desc ";
 
     QSqlQuery query(QSqlDatabase::database());
+
     query.prepare(s);
     query.bindValue(":id",vehicleId);
     bool ok = false;
+
+    qDebug()<<"row count:"<<model->rowCount(QModelIndex());
     if (query.exec())
     {
         ok = true;
@@ -160,21 +163,22 @@ bool Sqlite::selectFuelMileage(int vehicleId, AllDataModel *model)
             m.cost = query.value(3).toDouble();
             m.date = QDate::fromString(query.value(4).toString(), "yyyy-MM-dd");
 
-            model->insertRows(0,1,QModelIndex());
-            QModelIndex index = model->index(0,0,QModelIndex());
-            model->setData(index,m.id,Qt::EditRole);
+            qDebug()<<m.id<<m.miles<<m.gallons<<m.cost<<m.date;
+//            model->insertRows(0,1,QModelIndex());
+//            QModelIndex index = model->index(0,0,QModelIndex());
+//            model->setData(index,m.id,Qt::EditRole);
 
-            index = model->index(0,1,QModelIndex());
-            model->setData(index,m.miles,Qt::EditRole);
+//            index = model->index(0,1,QModelIndex());
+//            model->setData(index,m.miles,Qt::EditRole);
 
-            index = model->index(0,2,QModelIndex());
-            model->setData(index,m.gallons,Qt::EditRole);
+//            index = model->index(0,2,QModelIndex());
+//            model->setData(index,m.gallons,Qt::EditRole);
 
-            index = model->index(0,3,QModelIndex());
-            model->setData(index,m.cost,Qt::EditRole);
+//            index = model->index(0,3,QModelIndex());
+//            model->setData(index,m.cost,Qt::EditRole);
 
-            index = model->index(0,4,QModelIndex());
-            model->setData(index,m.date,Qt::EditRole);
+//            index = model->index(0,4,QModelIndex());
+//            model->setData(index,m.date,Qt::EditRole);
 
         }
     }

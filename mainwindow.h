@@ -52,6 +52,7 @@ class MainWindow : public QMainWindow, private Ui_MainWindowBase
           void login();
           void updateAllData();
           void exportData();
+          void help();
 
 
           //void about();
