@@ -24,7 +24,7 @@
 #include "ui_mainwindowbase.h"
 #include "query.h"
 
-//class AllData;
+class AllData;
 //class Statistics;
 //class Assistant;
 
@@ -38,6 +38,8 @@ class MainWindow : public QMainWindow, private Ui_MainWindowBase
 
           Query* getConnection();
           void setVehicleName(QString);
+
+          void refreshAllData();
 
           //QSqlDatabase getConnection();
           //QSqlRecord getVehicleRecord();
@@ -68,7 +70,7 @@ class MainWindow : public QMainWindow, private Ui_MainWindowBase
           //void writeData(QString f);
             Ui_MainWindowBase mw;
             Query *con;
-
+            AllData *alldata;
 
 
 

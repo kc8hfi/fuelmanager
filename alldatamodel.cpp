@@ -1,5 +1,6 @@
 #include "alldatamodel.h"
 #include <QDebug>
+#include <QMessageBox>
 
 AllDataModel::AllDataModel(QObject *parent)
     : QAbstractTableModel(parent)
@@ -14,6 +15,42 @@ AllDataModel::AllDataModel(QList<Mileage> theData, QObject *parent)
 
 }
 
+void AllDataModel::addColor(QColor c)
+{
+    theColor.append(c);
+}
+
+int AllDataModel::sizeColor()
+{
+    return theColor.size();
+}
+
+void AllDataModel::clearColor()
+{
+    theColor.clear();
+}
+
+int AllDataModel::showMessage(QString from, QString to)
+{
+    QMessageBox box;
+    int returnValue = QMessageBox::No;
+    if(QString::compare(from,to,Qt::CaseInsensitive))
+    {
+        QString message = "Are you really sure you want to replace\n";
+        message += from;
+        message += "\nwith\n";
+        message += to + "?";
+        box.setWindowTitle("Are you sure?");
+        box.setIcon(QMessageBox::Question);
+        box.setText(message);
+        box.setStandardButtons(QMessageBox::Yes|QMessageBox::No);
+        returnValue = box.exec();
+    }
+    return returnValue;
+}
+
+
+
 int AllDataModel::rowCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
@@ -23,7 +60,7 @@ int AllDataModel::rowCount(const QModelIndex &parent) const
 int AllDataModel::columnCount(const QModelIndex &parent) const
 {
     Q_UNUSED(parent);
-    return 5;
+    return 6;
 }
 
 QVariant AllDataModel::data(const QModelIndex &index, int role) const
@@ -38,17 +75,23 @@ QVariant AllDataModel::data(const QModelIndex &index, int role) const
         if (index.column() == 0)
             return m.id;
         else if (index.column() == 1)
-            return m.miles;
-        else if (index.column() == 2)
-            return m.gallons;
-        else if(index.column() == 3)
-            return m.cost;
-        else if (index.column() == 4)
         {
             return m.date.toString("MMMM d, yyyy");
-            qDebug()<<m.date;
-            return m.date;
         }
+        else if (index.column() == 2)
+            return m.miles;
+        else if(index.column() == 3)
+            return m.gallons;
+        else if (index.column() == 4)
+            return m.cost;
+        else if (index.column() == 5)
+            return m.mpg;
+
+    }
+    if(role == Qt::BackgroundColorRole)
+    {
+        QColor c = theColor.at(index.row());
+        return c;
     }
     return QVariant();
 }
@@ -64,13 +107,15 @@ QVariant AllDataModel::headerData(int section, Qt::Orientation orientation, int 
             case 0:
                 return tr("Id");
             case 1:
-                return tr("Miles");
-            case 2:
-                return tr("Gallons");
-            case 3:
-                return tr("Cost");
-            case 4:
                 return tr("Date");
+            case 2:
+                return tr("Miles");
+            case 3:
+                return tr("Gallons");
+            case 4:
+                return tr("Cost");
+            case 5:
+                return tr("MPG");
             default:
                 return QVariant();
         }
@@ -80,7 +125,6 @@ QVariant AllDataModel::headerData(int section, Qt::Orientation orientation, int 
 
 bool AllDataModel::insertRow(int position, int rows, const QModelIndex &index,Mileage m)
 {
-    qDebug()<<"inside insertRow";
     Q_UNUSED(index);
     beginInsertRows(QModelIndex(), position, position + rows -1);
 //    qDebug()<<"afterbegininsertrows";
@@ -101,7 +145,9 @@ bool AllDataModel::removeRows(int position, int rows, const QModelIndex &index)
     Q_UNUSED(index);
     beginRemoveRows(QModelIndex(),position,position+rows-1);
     for (int row = 0; row<rows; ++row)
+    //for (int row = 0; row<theData.size(); ++row)
         theData.removeAt(position);
+
     endRemoveRows();
     return true;
 }
@@ -115,13 +161,31 @@ bool AllDataModel::setData(const QModelIndex &index, const QVariant &value, int 
         if(index.column()== 0)
             m.id = value.toInt();
         else if(index.column()==1)
-            m.miles = value.toDouble();
-        else if(index.column()==2)
-            m.gallons = value.toDouble();
-        else if(index.column()==3)
-            m.cost = value.toDouble();
-        else if (index.column()==4)
             m.date = value.toDate();
+        else if(index.column()==2)
+        {
+            //this part works fine
+            //m.miles = value.toDouble();
+            int returnVal = showMessage(QString::number(m.miles),value.toString());
+            switch (returnVal)
+            {
+                case QMessageBox::Yes:
+                    m.miles = value.toDouble();
+                    if (m.gallons !=0)
+                        m.mpg = m.miles/m.gallons;
+                    else
+                        m.mpg = 0;
+                break;
+            default:
+                break;
+            };
+        }
+        else if(index.column()==3)
+            m.gallons = value.toDouble();
+        else if (index.column()==4)
+            m.cost = value.toDouble();
+        else if (index.column()==5)
+            m.mpg = value.toDouble();
         else
             return false;
         theData.replace(row,m);

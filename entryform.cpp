@@ -91,6 +91,8 @@ void EntryForm::okClicked()
                 ui->milesLineEdit->setText("");
                 ui->gallonsLineEdit->setText("");
                 ui->costLineEdit->setText("");
+                qDebug()<<"refresh the alldata table";
+                owner->refreshAllData();
             }
         }
         else

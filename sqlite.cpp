@@ -139,7 +139,7 @@ bool Sqlite::insertFuelMileage(int id,double miles,double gallons,double cost,QS
 }
 bool Sqlite::selectFuelMileage(int vehicleId, AllDataModel *model)
 {
-    QString s = "select id,miles,gallons,cost,fillup_date \
+    QString s = "select id,fillup_date,miles,gallons,cost,miles/gallons as mpg \
             from fuel_mileage \
             where vehicle_id = :id \
             order by fillup_date desc ";
@@ -150,42 +150,79 @@ bool Sqlite::selectFuelMileage(int vehicleId, AllDataModel *model)
     query.bindValue(":id",vehicleId);
     bool ok = false;
 
-    qDebug()<<"row count:"<<model->rowCount(QModelIndex());
+    //qDebug()<<"row count:"<<model->rowCount(QModelIndex());
     if (query.exec())
     {
         ok = true;
+
+        //need a couple colors to switch between
+        QColor one = Qt::white;
+        QColor two = Qt::lightGray;
+        int whichColor=0;
+
+        //hold the old month and year for comparison
+        int oldmonth = 0;
+        int oldyear = 0;
+
+        //get the first row
+        if (query.next())
+        {
+            Mileage f;
+            f.id = query.value(0).toInt();
+            f.date = QDate::fromString(query.value(1).toString(), "yyyy-MM-dd");
+            f.miles = query.value(2).toDouble();
+            f.gallons = query.value(3).toDouble();
+            f.cost = query.value(4).toDouble();
+            f.mpg = query.value(5).toDouble();
+
+            oldmonth = f.date.month();
+            oldyear = f.date.year();
+
+            model->insertRow(model->rowCount(QModelIndex()),1,QModelIndex(),f);
+            model->addColor(one);
+        }
         while(query.next())
         {
             Mileage m;
             m.id = query.value(0).toInt();
-            m.miles = query.value(1).toDouble();
-            m.gallons = query.value(2).toDouble();
-            m.cost = query.value(3).toDouble();
-            m.date = QDate::fromString(query.value(4).toString(), "yyyy-MM-dd");
+            m.date = QDate::fromString(query.value(1).toString(), "yyyy-MM-dd");
+            m.miles = query.value(2).toDouble();
+            m.gallons = query.value(3).toDouble();
+            m.cost = query.value(4).toDouble();
+            m.mpg = query.value(5).toDouble();
 
-            qDebug()<<m.id<<m.miles<<m.gallons<<m.cost<<m.date;
-//            model->insertRows(0,1,QModelIndex());
-//            QModelIndex index = model->index(0,0,QModelIndex());
-//            model->setData(index,m.id,Qt::EditRole);
+            //qDebug()<<m.id<<m.miles<<m.gallons<<m.cost<<m.date<<m.mpg;
+            model->insertRow(model->rowCount(QModelIndex()),1,QModelIndex(),m);
 
-//            index = model->index(0,1,QModelIndex());
-//            model->setData(index,m.miles,Qt::EditRole);
-
-//            index = model->index(0,2,QModelIndex());
-//            model->setData(index,m.gallons,Qt::EditRole);
-
-//            index = model->index(0,3,QModelIndex());
-//            model->setData(index,m.cost,Qt::EditRole);
-
-//            index = model->index(0,4,QModelIndex());
-//            model->setData(index,m.date,Qt::EditRole);
-
-        }
+            //figure out what color this row is supposed to be
+            if (oldmonth == m.date.month() && oldyear == m.date.year())
+            {
+                if(whichColor == 0)
+                    model->addColor(one);
+                else
+                    model->addColor(two);
+            }
+            else
+            {
+                if(whichColor == 1)
+                {
+                    whichColor = 0;
+                    model->addColor(one);
+                }
+                else
+                {
+                    whichColor = 1;
+                    model->addColor(two);
+                }
+            }
+            //keep the month and year for the next iteration
+            oldmonth = m.date.month();
+            oldyear = m.date.year();
+        }//end while
     }
     else
     {
         qDebug()<<"problemhere:"<<query.lastError().text();
     }
-    //qDebug()<<"selectFuelMileage, how many records"<<d.size();
     return ok;
 }

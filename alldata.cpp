@@ -25,12 +25,12 @@ AllData::AllData(QWidget *parent) :
     //see if the data shows up now
     ui->tableView->setModel(model);
 
-//    qDebug()<<"the model has how many rows: "<<model->rowCount(QModelIndex());
+    //resize the date column
+    QHeaderView *hview = ui->tableView->horizontalHeader();
+    hview->resizeSection(1,200);
 
-//    qDebug()<<"right before refreshTable()";
-    //refreshTable();
-
-    //qDebug()<<"after refreshTable, the model has how many rows: "<<model->rowCount(QModelIndex());
+    //hide the first column
+    ui->tableView->setColumnHidden(0,true);
 }
 
 AllData::~AllData()
@@ -73,86 +73,18 @@ void AllData::refreshTable()
     //get vehicle id
     QSettings settings;
     int vehicleId = settings.value("config/vehicle").toInt();
-
-    QString s = "select id,miles,gallons,cost,fillup_date \
-            from fuel_mileage \
-            where vehicle_id = :id \
-            order by fillup_date desc ";
-
-    QSqlQuery query(QSqlDatabase::database());
-
-    query.prepare(s);
-    query.bindValue(":id",vehicleId);
-    //bool ok = false;
-
-    qDebug()<<"row count:"<<model->rowCount(QModelIndex());
-    if (query.exec())
+    if(settings.value("config/databasetype").toString() == "sqlite")
     {
-        //ok = true;
-        while(query.next())
+        Sqlite* c = (Sqlite*)owner->getConnection();
+        //empty the model first
+        model->removeRows(0,model->rowCount(QModelIndex()));
+        //empty the colors first
+        model->clearColor();
+        if(!c->selectFuelMileage(vehicleId,model))
         {
-            Mileage m;
-            m.id = query.value(0).toInt();
-            m.miles = query.value(1).toDouble();
-            m.gallons = query.value(2).toDouble();
-            m.cost = query.value(3).toDouble();
-            m.date = QDate::fromString(query.value(4).toString(), "yyyy-MM-dd");
-            qDebug()<<"adding a row";
-            model->insertRow(model->rowCount(QModelIndex()),1,QModelIndex(),m);
-            qDebug()<<"not get here";
+            qDebug()<<"didn't get the fuel mileage data";
         }
-    }
-    else
-    {
-        qDebug()<<"query did not execute";
+        //qDebug()<<"records:"<<model->rowCount(QModelIndex());
+        //qDebug()<<"colors:"<<model->sizeColor();
     }
 }
-
-//void AllData::refreshTable()
-//{
-//    //clear the model
-//    //model->clear();
-
-//    //get vehicle id
-//    QSettings settings;
-//    int vehicleId = settings.value("config/vehicle").toInt();
-//    QString dbaseType = settings.value("config/databasetype").toString();
-//    //QList<Mileage>*m = new QList();
-//    QList<Mileage>m;
-//    if (dbaseType == "sqlite")
-//    {
-//        Sqlite *c = (Sqlite*)owner->getConnection();
-//        if (c->selectFuelMileage(vehicleId,model))
-//        {
-//            //do something here
-//            qDebug()<<"selecting the fuelmileage";
-//            qDebug()<<"how many records:"<<m.size();
-//        }
-//        else
-//        {
-//            QMessageBox msg(QMessageBox::Critical,"Can't get Data","something happened with selecFuelMileage" ,QMessageBox::Ok,this);
-//            msg.exec();
-//        }
-//    }
-////    qDebug()<<"the list is crashing...";
-////    //put the list into the model
-////    for(int i=0;i<m.size();i++)
-////    {
-////        model->insertRows(0,1,QModelIndex());
-////        QModelIndex index = model->index(0,0,QModelIndex());
-////        model->setData(index,m.at(i).id,Qt::EditRole);
-
-////        index = model->index(0,1,QModelIndex());
-////        model->setData(index,m.at(i).miles,Qt::EditRole);
-
-////        index = model->index(0,2,QModelIndex());
-////        model->setData(index,m.at(i).gallons,Qt::EditRole);
-
-////        index = model->index(0,3,QModelIndex());
-////        model->setData(index,m.at(i).cost,Qt::EditRole);
-
-////        index = model->index(0,4,QModelIndex());
-////        model->setData(index,m.at(i).date,Qt::EditRole);
-
-////    }
-//}

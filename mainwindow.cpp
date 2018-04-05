@@ -290,7 +290,7 @@ void MainWindow::showTabs()
     EntryForm *entry = new EntryForm(this);
     mw.tabWidget->addTab(entry,entry->windowTitle());
 
-    AllData *alldata = new AllData(this);
+    alldata = new AllData(this);
     mw.tabWidget->addTab(alldata,alldata->windowTitle());
 }
 
@@ -302,7 +302,10 @@ void MainWindow::about()
 
 }
 
-
+void MainWindow::refreshAllData()
+{
+    alldata->refreshTable();
+}
 
 
 
