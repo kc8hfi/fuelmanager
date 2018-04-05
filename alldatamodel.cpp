@@ -181,11 +181,37 @@ bool AllDataModel::setData(const QModelIndex &index, const QVariant &value, int 
             };
         }
         else if(index.column()==3)
-            m.gallons = value.toDouble();
+        {
+            //m.gallons = value.toDouble();
+            int returnVal = showMessage(QString::number(m.gallons),value.toString());
+            switch (returnVal)
+            {
+                case QMessageBox::Yes:
+                    m.gallons = value.toDouble();
+                    if (m.gallons !=0)
+                        m.mpg = m.miles/m.gallons;
+                    else
+                        m.mpg = 0;
+                break;
+            default:
+                break;
+            };
+        }
         else if (index.column()==4)
-            m.cost = value.toDouble();
-        else if (index.column()==5)
-            m.mpg = value.toDouble();
+        {
+            //m.cost = value.toDouble();
+            int returnVal = showMessage(QString::number(m.cost),value.toString());
+            switch (returnVal)
+            {
+                case QMessageBox::Yes:
+                    m.cost = value.toDouble();
+                break;
+            default:
+                break;
+            };
+        }
+        //else if (index.column()==5)
+            //m.mpg = value.toDouble();
         else
             return false;
         theData.replace(row,m);
