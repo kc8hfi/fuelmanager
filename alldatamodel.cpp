@@ -2,6 +2,7 @@
 #include <QDebug>
 #include <QMessageBox>
 
+
 AllDataModel::AllDataModel(QObject *parent)
     : QAbstractTableModel(parent)
 {
@@ -83,7 +84,10 @@ QVariant AllDataModel::data(const QModelIndex &index, int role) const
         else if(index.column() == 3)
             return m.gallons;
         else if (index.column() == 4)
-            return m.cost;
+        {
+            //return m.cost;
+            return QLocale().toCurrencyString(m.cost);
+        }
         else if (index.column() == 5)
             return m.mpg;
 
@@ -210,8 +214,8 @@ bool AllDataModel::setData(const QModelIndex &index, const QVariant &value, int 
                 break;
             };
         }
-        //else if (index.column()==5)
-            //m.mpg = value.toDouble();
+        else if (index.column()==5)
+            m.mpg = value.toDouble();
         else
             return false;
         theData.replace(row,m);
@@ -224,9 +228,15 @@ bool AllDataModel::setData(const QModelIndex &index, const QVariant &value, int 
 
 Qt::ItemFlags AllDataModel::flags(const QModelIndex &index) const
 {
-    if(!index.isValid())
+    Qt::ItemFlags flag = QAbstractTableModel::flags(index);
+    if (!index.isValid())
         return Qt::ItemIsEnabled;
-    return QAbstractTableModel::flags(index) | Qt::ItemIsEditable;
+    if(index.column()==5)
+        flag &= ~Qt::ItemIsEditable;
+    else
+        flag = Qt::ItemIsEditable|Qt::ItemIsEnabled;
+    return flag;
+
 }
 
 
