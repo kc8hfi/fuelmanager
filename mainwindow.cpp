@@ -105,7 +105,7 @@ MainWindow::MainWindow(QMainWindow *parent)
 
      //check the settings
      checkSettings();
-     
+
      //link up the about qt button
      connect(mw.actionAboutQt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
      

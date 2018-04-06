@@ -32,7 +32,7 @@ private:
 
     ConfigureVehicle *vehicleui;
 
-    MainWindow *p;
+    MainWindow *owner;
 
     QWidget *dbaseSelection;
     QButtonGroup *bgrp;

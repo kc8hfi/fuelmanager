@@ -12,12 +12,9 @@ Configure::Configure(MainWindow*o)
 {
     base.setupUi(this);
 
-    p = o;
+    owner = o;
 
-    qDebug()<<"who is my parent?"<<this->objectName();
-
-
-    vehicleui = new ConfigureVehicle(p);
+    vehicleui = new ConfigureVehicle(owner);
     vehicleui->hide();
 
     //create the select database widget
@@ -141,7 +138,7 @@ void Configure::selectMariadb()
 
 void Configure::switchPage(QListWidgetItem* current)
 {
-    qDebug()<<current->text();
+    //qDebug()<<current->text();
     if (current->text() == "Setup Database")
     {
         dbaseSelection->show();
@@ -151,6 +148,8 @@ void Configure::switchPage(QListWidgetItem* current)
     {
         dbaseSelection->hide();
         vehicleui->show();
+        qDebug()<<"need to refresh the vehicles from the add/edit vehicles";
+        vehicleui->refreshTable();
     }
 
 }

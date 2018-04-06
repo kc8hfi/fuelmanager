@@ -64,23 +64,23 @@ void Sqlite::createMileageTable()
     }
 }
 
-bool Sqlite::insertVehicle(QString n)
-{
-    QString str = "insert into vehicles (description) values (:description)";
-    QSqlQuery q(QSqlDatabase::database());
-    q.prepare(str);
-    q.bindValue(":description",n);
-    bool ok = false;
-    if (q.exec())
-    {
-        ok = true;
-    }
-    else
-    {
-        qDebug()<<q.lastError().text();
-    }
-    return ok;
-}
+//bool Sqlite::insertVehicle(QString n)
+//{
+//    QString str = "insert into vehicles (description) values (:description)";
+//    QSqlQuery q(QSqlDatabase::database());
+//    q.prepare(str);
+//    q.bindValue(":description",n);
+//    bool ok = false;
+//    if (q.exec())
+//    {
+//        ok = true;
+//    }
+//    else
+//    {
+//        qDebug()<<q.lastError().text();
+//    }
+//    return ok;
+//}
 
 QString Sqlite::getVehicleDescription(int i)
 {

@@ -32,7 +32,8 @@ HEADERS += configure.h \
     entryform.h \
     about.h \
     alldata.h \
-    alldatamodel.h
+    alldatamodel.h \
+    vehiclemodel.h
 
 
 FORMS += configurebase.ui \
@@ -57,7 +58,8 @@ SOURCES += configure.cpp \
     entryform.cpp \
     about.cpp \
     alldata.cpp \
-    alldatamodel.cpp
+    alldatamodel.cpp \
+    vehiclemodel.cpp
            
 QT += sql testlib
 
