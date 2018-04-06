@@ -64,6 +64,7 @@ int AllDataModel::columnCount(const QModelIndex &parent) const
     return 6;
 }
 
+//this gets data from the model
 QVariant AllDataModel::data(const QModelIndex &index, int role) const
 {
     if (!index.isValid())
@@ -161,6 +162,7 @@ bool AllDataModel::removeRows(int position, int rows, const QModelIndex &index)
     return true;
 }
 
+//changes data in the model
 bool AllDataModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if(index.isValid() && role == Qt::EditRole)

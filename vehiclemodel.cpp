@@ -1,24 +1,38 @@
 #include "vehiclemodel.h"
 #include <QDebug>
+#include <QMessageBox>
 
 VehicleModel::VehicleModel()
 {
 
 }
 
-int VehicleModel::sizeColor()
-{
-    return theColor.size();
-}
+//int VehicleModel::sizeColor()
+//{
+//    return theColor.size();
+//}
 
-void VehicleModel::addColor(QColor c)
+//void VehicleModel::clearColor()
+//{
+//    theColor.clear();
+//}
+int VehicleModel::showMessage(QString from, QString to)
 {
-    theColor.append(c);
-}
-
-void VehicleModel::clearColor()
-{
-    theColor.clear();
+    QMessageBox box;
+    int returnValue = QMessageBox::No;
+    if(QString::compare(from,to,Qt::CaseInsensitive))
+    {
+        QString message = "Are you really sure you want to replace\n";
+        message += from;
+        message += "\nwith\n";
+        message += to + "?";
+        box.setWindowTitle("Are you sure?");
+        box.setIcon(QMessageBox::Question);
+        box.setText(message);
+        box.setStandardButtons(QMessageBox::Yes|QMessageBox::No);
+        returnValue = box.exec();
+    }
+    return returnValue;
 }
 
 
@@ -35,6 +49,7 @@ int VehicleModel::columnCount(const QModelIndex &parent) const
     return 2;
 }
 
+//gets data from the model
 QVariant VehicleModel::data(const QModelIndex &index, int role) const
 {
     if(!index.isValid())
@@ -47,7 +62,11 @@ QVariant VehicleModel::data(const QModelIndex &index, int role) const
         if(index.column() ==0)
             return v.id;
         else if (index.column() == 1)
+        {
             return v.description;
+        }
+        else
+            return QVariant();
     }
     if(role== Qt::BackgroundColorRole)
     {
@@ -75,7 +94,8 @@ QVariant VehicleModel::headerData(int section, Qt::Orientation orientation, int 
     }
     if(orientation == Qt::Vertical)
     {
-        qDebug()<<"this is where we put the vertical headers,  the row numbers for vehicles";
+        //qDebug()<<"this is where we put the vertical headers,  the row numbers for vehicles";
+        return section + 1;
     }
     return QVariant();
 }
@@ -110,7 +130,15 @@ bool VehicleModel::setData(const QModelIndex &index, const QVariant &value, int 
             v.id = value.toInt();
         else if (index.column() ==1 )
         {
-            v.description = value.toString();
+            int returnVal = showMessage(v.description,value.toString());
+            switch(returnVal)
+            {
+                case QMessageBox::Yes:
+                    v.description = value.toString();
+                break;
+            default:
+                break;
+            };
         }
         else
             return false;

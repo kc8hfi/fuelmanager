@@ -15,11 +15,10 @@ ConfigureVehicle::ConfigureVehicle(QWidget *parent) : QWidget(parent)
     model = new VehicleModel();
 
     vehicleBase.tableView->setModel(model);
-    //model->setTable("vehicles");
-    //model->select();
 
-    //vehicleBase.tableView->setColumnHidden(0,true);
-    //vehicleBase.tableView->resizeColumnsToContents();
+    //hide the first column since its the id
+    vehicleBase.tableView->setColumnHidden(0,true);
+    vehicleBase.tableView->resizeColumnsToContents();
 
 
     //refreshTable();
@@ -80,7 +79,10 @@ void ConfigureVehicle::refreshTable()
         qDebug()<<"config file type:"<<type;
         if (type == "sqlite")
         {
+            QString location = settings.value("config/location").toString();
+            QString filename = settings.value("config/filename").toString();
             db = QSqlDatabase::addDatabase("QSQLITE");
+            db.setDatabaseName(location+"/"+filename);
         }
 
         db = QSqlDatabase::database();
