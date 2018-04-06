@@ -1,6 +1,7 @@
 #ifndef QUERY_H
 #define QUERY_H
 
+#include "vehiclemodel.h"
 
 class QString;
 
@@ -13,6 +14,9 @@ public:
     virtual void createMileageTable(){};
 
     bool insertVehicle(QString);
+    bool selectVehicle(VehicleModel*);
+
+
 };
 
 #endif // QUERY_H

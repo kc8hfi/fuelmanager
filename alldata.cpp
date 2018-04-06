@@ -75,16 +75,16 @@ void AllData::refreshTable()
     int vehicleId = settings.value("config/vehicle").toInt();
     if(settings.value("config/databasetype").toString() == "sqlite")
     {
-        Sqlite* c = (Sqlite*)owner->getConnection();
-        //empty the model first
-        model->removeRows(0,model->rowCount(QModelIndex()));
-        //empty the colors first
-        model->clearColor();
-        if(!c->selectFuelMileage(vehicleId,model))
-        {
-            qDebug()<<"didn't get the fuel mileage data";
-        }
-        //qDebug()<<"records:"<<model->rowCount(QModelIndex());
-        //qDebug()<<"colors:"<<model->sizeColor();
+//        Sqlite* c = (Sqlite*)owner->getConnection();
+//        //empty the model first
+//        model->removeRows(0,model->rowCount(QModelIndex()));
+//        //empty the colors first
+//        model->clearColor();
+//        if(!c->selectFuelMileage(vehicleId,model))
+//        {
+//            qDebug()<<"didn't get the fuel mileage data";
+//        }
+//        //qDebug()<<"records:"<<model->rowCount(QModelIndex());
+//        //qDebug()<<"colors:"<<model->sizeColor();
     }
 }

@@ -80,26 +80,26 @@ void EntryForm::okClicked()
     QString type = s.value("config/databasetype").toString();
     if (type =="sqlite")
     {
-        Sqlite* c = (Sqlite*)owner->getConnection();
-        if (milesok && gallonsok && costok)
-        {
-            if (c->insertFuelMileage(vehicleId,miles,gallons,cost,date))
-            {
-                owner->statusBar()->showMessage(date);
+//        Sqlite* c = (Sqlite*)owner->getConnection();
+//        if (milesok && gallonsok && costok)
+//        {
+//            if (c->insertFuelMileage(vehicleId,miles,gallons,cost,date))
+//            {
+//                owner->statusBar()->showMessage(date);
 
-                //clear the fields
-                ui->milesLineEdit->setText("");
-                ui->gallonsLineEdit->setText("");
-                ui->costLineEdit->setText("");
-                qDebug()<<"refresh the alldata table";
-                owner->refreshAllData();
-            }
-        }
-        else
-        {
-            QMessageBox msg(QMessageBox::Critical,"Missing Data",message,QMessageBox::Ok,this);
-            msg.exec();
-        }
+//                //clear the fields
+//                ui->milesLineEdit->setText("");
+//                ui->gallonsLineEdit->setText("");
+//                ui->costLineEdit->setText("");
+//                qDebug()<<"refresh the alldata table";
+//                owner->refreshAllData();
+//            }
+//        }
+//        else
+//        {
+//            QMessageBox msg(QMessageBox::Critical,"Missing Data",message,QMessageBox::Ok,this);
+//            msg.exec();
+//        }
     }
 }
 

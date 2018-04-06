@@ -6,6 +6,21 @@ VehicleModel::VehicleModel()
 
 }
 
+int VehicleModel::sizeColor()
+{
+    return theColor.size();
+}
+
+void VehicleModel::addColor(QColor c)
+{
+    theColor.append(c);
+}
+
+void VehicleModel::clearColor()
+{
+    theColor.clear();
+}
+
 
 
 int VehicleModel::rowCount(const QModelIndex &parent) const

@@ -128,7 +128,7 @@ MainWindow::~MainWindow()
      //delete assistant;
 }
 
-Query* MainWindow::getConnection()
+Query* MainWindow::getQuery()
 {
     return con;
 }
@@ -175,17 +175,17 @@ void MainWindow::checkSettings()
 {
      QSettings settings;
      QString databaseType = settings.value("config/databasetype").toString();
-     if (databaseType == "sqlite")
-     {
-         //disable the login action
-         mw.actionLogin->setEnabled(false);
-         con = new Sqlite(this);
-         vehicleName(settings.value("config/vehicle").toInt());
-     }
-     else if (databaseType == "mariadb")
-     {
-         mw.actionLogin->setEnabled(true);
-     }
+//     if (databaseType == "sqlite")
+//     {
+//         //disable the login action
+//         mw.actionLogin->setEnabled(false);
+//         con = new Sqlite(this);
+//         vehicleName(settings.value("config/vehicle").toInt());
+//     }
+//     else if (databaseType == "mariadb")
+//     {
+//         mw.actionLogin->setEnabled(true);
+//     }
      showTabs();
 
 //     QString savedVehicleId = settings.value("config/vehicle").toString();

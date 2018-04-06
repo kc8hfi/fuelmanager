@@ -15,6 +15,9 @@ class VehicleModel : public QAbstractTableModel
 public:
     VehicleModel();
 
+    int sizeColor();
+    void addColor(QColor);
+    void clearColor();
 
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;

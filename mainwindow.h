@@ -36,7 +36,7 @@ class MainWindow : public QMainWindow, private Ui_MainWindowBase
           ~MainWindow();
           void checkSettings();
 
-          Query* getConnection();
+          Query* getQuery();
           void setVehicleName(QString);
 
           void refreshAllData();

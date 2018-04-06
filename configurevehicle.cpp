@@ -54,13 +54,13 @@ void ConfigureVehicle::saveVehicle()
         if(t == "sqlite")
         {
             //Sqlite *con = (Sqlite*)owner->getConnection();
-            if (owner->getConnection()->insertVehicle(vehicleBase.description->text()))
-            {
-                vehicleBase.description->setText("");
-                qDebug()<<"inserted a new record";
-                refreshTable();
+//            if (owner->getConnection()->insertVehicle(vehicleBase.description->text()))
+//            {
+//                vehicleBase.description->setText("");
+//                qDebug()<<"inserted a new record";
+//                refreshTable();
 
-            }
+//            }
         }
         //qDebug()<<this->parentWidget()->objectName();
         //first parent is configurebase
@@ -71,7 +71,61 @@ void ConfigureVehicle::saveVehicle()
 void ConfigureVehicle::refreshTable()
 {
     qDebug()<<"gonna call select";
-    //model->setTable("vehicles");
-    //model->clear();
-    //model->select();
+    //reread the config file
+    QSqlDatabase db;
+    QSettings settings;
+    QString type = settings.value("config/databasetype").toString();
+    if(type != "")
+    {
+        qDebug()<<"config file type:"<<type;
+        if (type == "sqlite")
+        {
+            db = QSqlDatabase::addDatabase("QSQLITE");
+        }
+
+        db = QSqlDatabase::database();
+        qDebug()<<"driver name:"<<db.driverName();
+        qDebug()<<"connection name:"<<db.connectionName();
+        if (!db.isOpen())
+        {
+            db.open();
+            qDebug()<<db.lastError().text();
+        }
+        if (db.isOpen())
+        {
+            if(!owner->getQuery()->selectVehicle(model))
+            {
+                qDebug()<<"couldn't get the vehicles!";
+            }
+        }
+
+    }
+
+
+//    if (!owner->getConnection()->selectVehicle(model))
+//    {
+
+//    }
+
+
+
+//    //get vehicle id
+//    QSettings settings;
+//    int vehicleId = settings.value("config/vehicle").toInt();
+//    if(settings.value("config/databasetype").toString() == "sqlite")
+//    {
+//        Sqlite* c = (Sqlite*)owner->getConnection();
+//        //empty the model first
+//        model->removeRows(0,model->rowCount(QModelIndex()));
+//        //empty the colors first
+//        model->clearColor();
+//        if(!c->selectFuelMileage(vehicleId,model))
+//        {
+//            qDebug()<<"didn't get the fuel mileage data";
+//        }
+//        //qDebug()<<"records:"<<model->rowCount(QModelIndex());
+//        //qDebug()<<"colors:"<<model->sizeColor();
+//    }
+
+
 }
