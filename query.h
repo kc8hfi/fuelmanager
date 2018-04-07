@@ -2,6 +2,7 @@
 #define QUERY_H
 
 #include "vehiclemodel.h"
+#include "alldatamodel.h"
 
 class QString;
 
@@ -16,6 +17,7 @@ public:
     bool insertVehicle(QString);
     bool selectVehicle(VehicleModel*);
 
+    bool selectFuelMileage(int, AllDataModel *);
 
 };
 

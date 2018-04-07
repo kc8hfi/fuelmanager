@@ -25,6 +25,7 @@
 #include <QDialog>
 #include <QTableView>
 #include <QDesktopWidget>
+#include <QSqlDatabase>
 #include "configure.h"
 #include "selectvehicle.h"
 #include "entryform.h"
@@ -175,6 +176,21 @@ void MainWindow::checkSettings()
 {
      QSettings settings;
      QString databaseType = settings.value("config/databasetype").toString();
+     if (databaseType == "sqlite")
+     {
+         //do we have a datase connection?
+         QSqlDatabase db;
+         if (db.driverName() == "")
+         {
+             QString location = settings.value("config/location").toString();
+             QString filename = settings.value("config/filename").toString();
+             db = QSqlDatabase::addDatabase("QSQLITE");
+             db.setDatabaseName(location+"/"+filename);
+             db.open();
+         }
+        //qDebug()<<"dbase driver name: "<<db.driverName();
+
+     }
 //     if (databaseType == "sqlite")
 //     {
 //         //disable the login action
@@ -188,7 +204,8 @@ void MainWindow::checkSettings()
 //     }
      showTabs();
 
-//     QString savedVehicleId = settings.value("config/vehicle").toString();
+     QString savedVehicleId = settings.value("config/vehicle").toString();
+     setVehicleName(savedVehicleId);
      
 //     //qDebug()<<databaseType<<" "<<savedVehicleId;
 //     whichDatabase = databaseType;

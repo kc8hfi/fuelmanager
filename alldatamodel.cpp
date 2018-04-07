@@ -128,7 +128,8 @@ QVariant AllDataModel::headerData(int section, Qt::Orientation orientation, int 
     if(orientation == Qt::Vertical)
     {
         //@here,  this is where we put the vertical headers,  the row numbers.
-        qDebug()<<"headerData section:"<<section;
+        //qDebug()<<"headerData section:"<<section;
+        return section +1;
     }
     return QVariant();
 }

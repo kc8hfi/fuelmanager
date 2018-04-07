@@ -120,6 +120,7 @@ bool VehicleModel::removeRows(int position, int rows, const QModelIndex &index)
     return true;
 }
 
+//edits the data in the model
 bool VehicleModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
     if(index.isValid() && role == Qt::EditRole)

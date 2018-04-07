@@ -73,6 +73,15 @@ void AllData::refreshTable()
     //get vehicle id
     QSettings settings;
     int vehicleId = settings.value("config/vehicle").toInt();
+    //clean out the model first
+    model->removeRows(0,model->rowCount(QModelIndex()));
+    model->clearColor();
+    if (!owner->getQuery()->selectFuelMileage(vehicleId,model))
+    {
+        qDebug()<<"couldn't get the fuel mileage data";
+    }
+
+
     if(settings.value("config/databasetype").toString() == "sqlite")
     {
 //        Sqlite* c = (Sqlite*)owner->getConnection();

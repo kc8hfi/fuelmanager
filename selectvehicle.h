@@ -3,6 +3,7 @@
 
 #include <QDialog>
 #include "vehicledisplaymodel.h"
+#include "mainwindow.h"
 
 namespace Ui {
 class SelectVehicle;
