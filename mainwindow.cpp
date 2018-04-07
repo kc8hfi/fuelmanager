@@ -129,10 +129,10 @@ MainWindow::~MainWindow()
      //delete assistant;
 }
 
-Query* MainWindow::getQuery()
-{
-    return con;
-}
+//Query* MainWindow::getQuery()
+//{
+//    return con;
+//}
 
 //configuration
 void MainWindow::configure()
@@ -166,8 +166,8 @@ void MainWindow::vehicleName(int i)
     QString t = settings.value("config/databasetype").toString();
     if (t == "sqlite")
     {
-        Sqlite *c = (Sqlite*)con;
-        QString name = c->getVehicleDescription(i);
+        //Sqlite *c = (Sqlite*)con;
+        QString name = con->getVehicleDescription(i);
         setVehicleName(name);
     }
 }
@@ -204,8 +204,10 @@ void MainWindow::checkSettings()
 //     }
      showTabs();
 
-     QString savedVehicleId = settings.value("config/vehicle").toString();
-     setVehicleName(savedVehicleId);
+     int savedVehicleId = settings.value("config/vehicle").toInt();
+     //setVehicleName(savedVehicleId);
+     QString name = getQuery()->getVehicleDescription(savedVehicleId);
+     setVehicleName(name);
      
 //     //qDebug()<<databaseType<<" "<<savedVehicleId;
 //     whichDatabase = databaseType;

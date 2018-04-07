@@ -1,14 +1,15 @@
 #ifndef QUERY_H
 #define QUERY_H
 
+
 #include "vehiclemodel.h"
 #include "alldatamodel.h"
+#include "mainwindow.h"
 
-class QString;
 
 class Query
 {
-
+Q_OBJECT
 public:
     Query();
     virtual void createVehicleTable(){};
@@ -17,8 +18,15 @@ public:
     bool insertVehicle(QString);
     bool selectVehicle(VehicleModel*);
 
-    bool selectFuelMileage(int, AllDataModel *);
+    QString getVehicleDescription(int);
 
+    bool selectFuelMileage(int, AllDataModel *);
+    bool insertFuelMileage(int,double,double,double,QString);
+
+
+private:
+    //MainWindow *owner;
 };
 
-#endif // QUERY_H
+
+#endif //QUERY_H

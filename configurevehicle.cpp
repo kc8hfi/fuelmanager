@@ -95,10 +95,10 @@ void ConfigureVehicle::refreshTable()
         }
         if (db.isOpen())
         {
-            if(!owner->getQuery()->selectVehicle(model))
-            {
-                qDebug()<<"couldn't get the vehicles!";
-            }
+//            if(!owner->getQuery()->selectVehicle(model))
+//            {
+//                qDebug()<<"couldn't get the vehicles!";
+//            }
         }
 
     }

@@ -18,7 +18,7 @@ public:
     Configure(MainWindow *);
     ~Configure();
     void saveChanges();
-    //MainWindow* getParent();
+
 public slots:
     void switchPage(QListWidgetItem*);
     void selectSqlite();

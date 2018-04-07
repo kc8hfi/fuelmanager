@@ -16,12 +16,12 @@ public:
     void createVehicleTable();
     void createMileageTable();
 
-    bool insertVehicle(QString);
-    bool insertFuelMileage(int,double,double,double,QString);
+    //bool insertVehicle(QString);
+    //bool insertFuelMileage(int,double,double,double,QString);
 
-    QString getVehicleDescription(int);
+    //QString getVehicleDescription(int);
 
-    bool selectFuelMileage(int, AllDataModel*);
+    //bool selectFuelMileage(int, AllDataModel*);
 private:
     MainWindow *owner;
 };

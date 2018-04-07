@@ -3,6 +3,7 @@
 #include <QSqlQuery>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QMessageBox>
 #include <QDebug>
 
 Query::Query()
@@ -162,6 +163,70 @@ bool Query::selectFuelMileage(int vehicleId, AllDataModel *model)
     else
     {
         qDebug()<<"problemhere:"<<query.lastError().text();
+    }
+    return ok;
+}
+
+QString Query::getVehicleDescription(int i)
+{
+
+//    QSqlQuery query(QSqlDatabase::database());
+
+//    query.prepare(s);
+//    query.bindValue(":id",vehicleId);
+//    bool ok = false;
+
+    QString s = "select description from vehicles where id = :id";
+    //QSqlQuery q(s);
+    QSqlQuery q(QSqlDatabase::database());
+    //qDebug()<<"i'm guessing theres no database connection here";
+    q.prepare(s);
+    q.bindValue(":id",i);
+    QString desc = "";
+    if (q.exec())
+    {
+        if (q.next())
+        {
+            //qDebug()<<"next failed here";
+            desc = q.value(0).toString();
+            //qDebug()<<"crashed right before this";
+        }
+    }
+    else
+    {
+        QString error = q.lastError().text();
+        //QMessageBox message(QMessageBox::Critical,"Problem!",error,QMessageBox::Ok,this,Qt::Dialog);
+        //message.exec();
+    }
+    //qDebug()<<"returning:"<<desc;
+    return desc;
+}
+
+
+bool Query::insertFuelMileage(int id,double miles,double gallons,double cost,QString date)
+{
+    QString s = "insert into fuel_mileage (miles,gallons,cost,fillup_date,vehicle_id)\
+        values(:miles,:gallons,:cost,:date,:id) ";
+    QSqlQuery query(QSqlDatabase::database());
+    query.prepare(s);
+    query.bindValue(":id",id);
+    query.bindValue(":miles",miles);
+    query.bindValue(":gallons",gallons);
+    query.bindValue(":cost",cost);
+    query.bindValue(":date",date);
+    bool ok = false;
+    if(query.exec())
+    {
+        ok = true;
+    }
+    else
+    {
+        //qDebug()<<"insertFuelMileage:"<<query.lastError().text();
+        QString error = "insertFuelMileage\n"+query.lastError().text();
+        QMessageBox message(QMessageBox::Critical,"Problem!",error,QMessageBox::Ok,(QWidget*)owner,Qt::Dialog);
+        message.exec();
+        //QMessageBox::warning(owner,"getVehidledesc","something bad",QMessageBox::Ok);
+
     }
     return ok;
 }
