@@ -8,13 +8,11 @@
 #include <QSettings>
 #include <QMessageBox>
 
-Configure::Configure(MainWindow*o)
+Configure::Configure()
 {
     base.setupUi(this);
 
-    owner = o;
-
-    vehicleui = new ConfigureVehicle(owner);
+    vehicleui = new ConfigureVehicle();
     vehicleui->hide();
 
     //create the select database widget

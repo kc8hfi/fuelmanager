@@ -1,15 +1,11 @@
 #ifndef QUERY_H
 #define QUERY_H
 
-
 #include "vehiclemodel.h"
 #include "alldatamodel.h"
-#include "mainwindow.h"
-
 
 class Query
 {
-Q_OBJECT
 public:
     Query();
     virtual void createVehicleTable(){};
@@ -25,7 +21,7 @@ public:
 
 
 private:
-    //MainWindow *owner;
+
 };
 
 

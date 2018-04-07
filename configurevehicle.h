@@ -3,7 +3,6 @@
 
 #include <QWidget>
 #include <QSqlTableModel>
-#include "mainwindow.h"
 #include "vehicledisplaymodel.h"
 #include "vehiclemodel.h"
 #include "ui_configurevehiclebase.h"
@@ -25,9 +24,7 @@ public slots:
 
 private:
     Ui_configureVehicleBase vehicleBase;
-    MainWindow *owner;
     VehicleModel *model;
-
 
 };
 

@@ -139,7 +139,7 @@ void MainWindow::configure()
 {
 //    Configure c;
 //    c.exec();
-    Configure *c = new Configure(this);
+    Configure *c = new Configure();
     c->show();
 
 //    TestWidget *t = new TestWidget();
@@ -167,7 +167,9 @@ void MainWindow::vehicleName(int i)
     if (t == "sqlite")
     {
         //Sqlite *c = (Sqlite*)con;
-        QString name = con->getVehicleDescription(i);
+        Query q;
+        QString name = q.getVehicleDescription(i);
+        //QString name = con->getVehicleDescription(i);
         setVehicleName(name);
     }
 }
@@ -206,7 +208,8 @@ void MainWindow::checkSettings()
 
      int savedVehicleId = settings.value("config/vehicle").toInt();
      //setVehicleName(savedVehicleId);
-     QString name = getQuery()->getVehicleDescription(savedVehicleId);
+     Query q;
+     QString name = q.getVehicleDescription(savedVehicleId);
      setVehicleName(name);
      
 //     //qDebug()<<databaseType<<" "<<savedVehicleId;

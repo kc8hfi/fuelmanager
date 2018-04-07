@@ -2,11 +2,13 @@
 //#include "query.h"
 #include "sqlite.h"
 #include <QDebug>
+#include <QSettings>
+#include <QSqlError>
+#include <QMessageBox>
 
 ConfigureVehicle::ConfigureVehicle(QWidget *parent) : QWidget(parent)
 {
     vehicleBase.setupUi(this);
-    owner = (MainWindow*)parent;
 
     QSettings settings;
     QString t = settings.value("config/databasetype").toString();
@@ -95,10 +97,13 @@ void ConfigureVehicle::refreshTable()
         }
         if (db.isOpen())
         {
-//            if(!owner->getQuery()->selectVehicle(model))
-//            {
-//                qDebug()<<"couldn't get the vehicles!";
-//            }
+            Query q;
+            if(!q.selectVehicle(model))
+            {
+                QString error = "Couldn't get the vehicles!";
+                QMessageBox message(QMessageBox::Critical,"Problem!",error,QMessageBox::Ok,this,Qt::Dialog);
+                message.exec();
+            }
         }
 
     }

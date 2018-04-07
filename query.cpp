@@ -3,7 +3,6 @@
 #include <QSqlQuery>
 #include <QSqlDatabase>
 #include <QSqlError>
-#include <QMessageBox>
 #include <QDebug>
 
 Query::Query()
@@ -222,9 +221,9 @@ bool Query::insertFuelMileage(int id,double miles,double gallons,double cost,QSt
     else
     {
         //qDebug()<<"insertFuelMileage:"<<query.lastError().text();
-        QString error = "insertFuelMileage\n"+query.lastError().text();
-        QMessageBox message(QMessageBox::Critical,"Problem!",error,QMessageBox::Ok,(QWidget*)owner,Qt::Dialog);
-        message.exec();
+//        QString error = "insertFuelMileage\n"+query.lastError().text();
+//        QMessageBox message(QMessageBox::Critical,"Problem!",error,QMessageBox::Ok,(QWidget*)owner,Qt::Dialog);
+//        message.exec();
         //QMessageBox::warning(owner,"getVehidledesc","something bad",QMessageBox::Ok);
 
     }

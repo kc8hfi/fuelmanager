@@ -76,7 +76,8 @@ void AllData::refreshTable()
     //clean out the model first
     model->removeRows(0,model->rowCount(QModelIndex()));
     model->clearColor();
-    if (!owner->getQuery()->selectFuelMileage(vehicleId,model))
+    Query queries;
+    if (!queries.selectFuelMileage(vehicleId,model))
     {
         qDebug()<<"couldn't get the fuel mileage data";
     }

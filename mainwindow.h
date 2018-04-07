@@ -69,7 +69,6 @@ class MainWindow : public QMainWindow, private Ui_MainWindowBase
           //void showEverything();
           //void writeData(QString f);
             Ui_MainWindowBase mw;
-            Query *con;
             AllData *alldata;
 
 
