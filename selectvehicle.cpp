@@ -15,7 +15,7 @@ SelectVehicle::SelectVehicle(QWidget *parent) :
     //QSettings settings;
     //QString t = settings.value("config/databasetype").toString();
 
-    QSqlDatabase db = QSqlDatabase::database();
+    //QSqlDatabase db = QSqlDatabase::database();
     //qDebug()<<"selectvehicle constructor driver name:"<<db.driverName();
 
     model = new VehicleDisplayModel();

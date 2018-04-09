@@ -44,7 +44,6 @@
 
 
 #include "mainwindow.h"
-#include "sqlite.h"
 
 
 //#include "testwidget.h"

@@ -7,7 +7,6 @@
 #include "ui_alldata.h"
 #include "alldatamodel.h"
 #include "mainwindow.h"
-#include "sqlite.h"
 //#include "alldatamodel.h"
 
 AllData::AllData(QWidget *parent) :

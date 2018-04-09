@@ -1,5 +1,4 @@
 #include "entryform.h"
-#include "sqlite.h"
 #include "ui_entryform.h"
 #include <QDebug>
 #include <QPushButton>

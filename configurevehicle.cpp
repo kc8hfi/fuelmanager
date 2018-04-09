@@ -1,6 +1,5 @@
 #include "configurevehicle.h"
-//#include "query.h"
-#include "sqlite.h"
+#include "query.h"
 #include <QDebug>
 #include <QSettings>
 #include <QSqlError>

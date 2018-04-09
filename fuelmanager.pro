@@ -25,7 +25,6 @@ HEADERS += configure.h \
     configurevehicle.h \
     mainwindow.h \
     query.h \
-    sqlite.h \
     testwidget.h \
     vehicledisplaymodel.h \
     selectvehicle.h \
@@ -53,7 +52,6 @@ SOURCES += configure.cpp \
     main.cpp \
     mainwindow.cpp \
     query.cpp \
-    sqlite.cpp \
     testwidget.cpp \
     vehicledisplaymodel.cpp \
     selectvehicle.cpp \
