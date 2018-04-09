@@ -16,10 +16,7 @@ SelectVehicle::SelectVehicle(QWidget *parent) :
     //QString t = settings.value("config/databasetype").toString();
 
     QSqlDatabase db = QSqlDatabase::database();
-//    qDebug()<<"driver name:"<<db.driverName();
-//    if (db.isOpen())
-//        qDebug()<<"databse is open";
-
+    //qDebug()<<"selectvehicle constructor driver name:"<<db.driverName();
 
     model = new VehicleDisplayModel();
     ui->tableView->setModel(model);
@@ -43,7 +40,6 @@ SelectVehicle::~SelectVehicle()
 
 void SelectVehicle::clickme()
 {
-    //qDebug()<<"clicked an item";
     QItemSelectionModel *selection = ui->tableView->selectionModel();
     QModelIndex current = selection->currentIndex();
 
@@ -62,7 +58,5 @@ void SelectVehicle::clickme()
 
     //refresh the alldata table
     owner->refreshAllData();
-    qDebug()<<"refreshalldata should have been called";
-
     emit accept();
 }

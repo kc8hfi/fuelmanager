@@ -31,6 +31,7 @@
 #include "entryform.h"
 #include "about.h"
 #include "alldata.h"
+#include "login.h"
 
 //#include "alldata.h"
 //#include "configdialog.h"
@@ -53,6 +54,13 @@ MainWindow::MainWindow(QMainWindow *parent)
 {
      mw.setupUi(this);
 
+     mw.actionLogin->setEnabled(false);
+     mw.actionSelect_Vehicle->setEnabled(false);
+
+
+
+     entry = new EntryForm(this);
+     alldata = new AllData();
 
      QDesktopWidget *desktop = QApplication::desktop();
 
@@ -75,8 +83,6 @@ MainWindow::MainWindow(QMainWindow *parent)
 
      // move window to desired coordinates
      move ( x, y );
-
-
 
 
 
@@ -116,8 +122,8 @@ MainWindow::MainWindow(QMainWindow *parent)
      //assistant = new Assistant;
 
 
-     qDebug()<<"this is a qdebug";
-     qWarning()<<"this is a qwarning";
+     //qDebug()<<"this is a qdebug";
+     //qWarning()<<"this is a qwarning";
      
 }//end constructor
 
@@ -139,7 +145,7 @@ void MainWindow::configure()
 {
 //    Configure c;
 //    c.exec();
-    Configure *c = new Configure();
+    Configure *c = new Configure(this);
     c->show();
 
 //    TestWidget *t = new TestWidget();
@@ -147,9 +153,26 @@ void MainWindow::configure()
 //    t->show();
 } //end configuration
 
+void MainWindow::updateInterface()
+{
+    //qDebug()<<"update interface since ok was clicked";
+    QSettings settings;
+    QString dbaseType = settings.value("config/databasetype").toString();
+    if (dbaseType == "sqlite")
+    {
+        mw.actionLogin->setEnabled(false);
+        mw.actionSelect_Vehicle->setEnabled(true);
+    }
+    else if(dbaseType =="mariadb")
+    {
+        mw.actionLogin->setEnabled(true);
+        mw.actionSelect_Vehicle->setEnabled(true);
+    }
+}
+
 void MainWindow::selectVehicle()
 {
-    qDebug()<<"show the select vehicle dialog box";
+    //qDebug()<<"show the select vehicle dialog box";
     SelectVehicle *s = new SelectVehicle(this);
     s->show();
 }
@@ -176,34 +199,64 @@ void MainWindow::vehicleName(int i)
 //read the config file
 void MainWindow::checkSettings()
 {
-     QSettings settings;
-     QString databaseType = settings.value("config/databasetype").toString();
-     if (databaseType == "sqlite")
-     {
-         //do we have a datase connection?
-         QSqlDatabase db;
-         if (db.driverName() == "")
-         {
-             QString location = settings.value("config/location").toString();
-             QString filename = settings.value("config/filename").toString();
-             db = QSqlDatabase::addDatabase("QSQLITE");
-             db.setDatabaseName(location+"/"+filename);
-             db.open();
-         }
-        //qDebug()<<"dbase driver name: "<<db.driverName();
 
-     }
-//     if (databaseType == "sqlite")
-//     {
-//         //disable the login action
-//         mw.actionLogin->setEnabled(false);
-//         con = new Sqlite(this);
-//         vehicleName(settings.value("config/vehicle").toInt());
-//     }
-//     else if (databaseType == "mariadb")
-//     {
-//         mw.actionLogin->setEnabled(true);
-//     }
+    QSettings settings;
+    QString databaseType = settings.value("config/databasetype").toString();
+    QSqlDatabase db = QSqlDatabase::database();
+    if (databaseType == "sqlite")
+    {
+        mw.actionLogin->setEnabled(false);
+        //do we have a datase connection?
+        if (db.driverName() == "")
+        {
+            QString location = settings.value("config/location").toString();
+            QString filename = settings.value("config/filename").toString();
+            db = QSqlDatabase::addDatabase("QSQLITE");
+            db.setDatabaseName(location+"/"+filename);
+            db.open();
+        }
+        //qDebug()<<"dbase driver name: "<<db.driverName();
+    }
+    else if (databaseType == "mariadb")
+    {
+        mw.actionLogin->setEnabled(true);
+        db = QSqlDatabase::addDatabase("QMYSQL");
+        db.setHostName(settings.value("config/hostname").toString());
+        db.setDatabaseName(settings.value("config/database").toString());
+        db.setPort(settings.value("config/port").toInt());
+        Login login;
+        if (login.exec())
+        {
+            db.setUserName(login.getUsername());
+            db.setPassword(login.getPassword());
+            if (!db.open())
+            {
+                qDebug()<<"couldn't open the database in mainwindow";
+                qDebug()<<db.lastError().text();
+            }
+            else
+            {
+                Query q;
+                q.createVehicleTable();
+                q.createMileageTable();
+            }
+        }
+    }
+
+
+
+
+
+         //do we have a datase connection?
+//         if (db.driverName() == "")
+//         {
+//             //QString location = settings.value("config/location").toString();
+//             //QString filename = settings.value("config/filename").toString();
+//             db = QSqlDatabase::addDatabase("QMYSQL");
+//             //db.setDatabaseName(location+"/"+filename);
+//             db.open();
+//         }
+
      showTabs();
 
      int savedVehicleId = settings.value("config/vehicle").toInt();
@@ -212,6 +265,13 @@ void MainWindow::checkSettings()
      QString name = q.getVehicleDescription(savedVehicleId);
      setVehicleName(name);
      
+     //fix up the interface, enabling some of the actions
+     updateInterface();
+
+     //qDebug()<<"the mainwindow constructor, alldata refresh";
+     alldata->refreshTable();
+
+
 //     //qDebug()<<databaseType<<" "<<savedVehicleId;
 //     whichDatabase = databaseType;
 //     //check to see which database is selected
@@ -309,11 +369,26 @@ void MainWindow::checkSettings()
 
 void MainWindow::showTabs()
 {
-    EntryForm *entry = new EntryForm(this);
-    mw.tabWidget->addTab(entry,entry->windowTitle());
-
-    alldata = new AllData(this);
-    mw.tabWidget->addTab(alldata,alldata->windowTitle());
+    //show the tabs only if they have a selected vehicle
+    QSettings settings;
+    QString savedVehicleId = settings.value("config/vehicle").toString();
+    if (savedVehicleId != "")
+    {
+        //get all the tabs
+        for (int i=0;i<mw.tabWidget->count();i++)
+        {
+            QWidget *t = mw.tabWidget->widget(i);
+            if (t->objectName()=="instructionsTab")
+            {
+                //hide the instructions tab
+                mw.tabWidget->removeTab(mw.tabWidget->indexOf(t));
+                break;
+            }
+        }
+        //add the tabs
+        mw.tabWidget->addTab(entry,entry->windowTitle());
+        mw.tabWidget->addTab(alldata,alldata->windowTitle());
+    }
 }
 
 //show the about dialog
@@ -326,6 +401,23 @@ void MainWindow::about()
 
 void MainWindow::refreshAllData()
 {
+    //remove the instructionstab
+    //get all the tabs
+    for (int i=0;i<mw.tabWidget->count();i++)
+    {
+        QWidget *t = mw.tabWidget->widget(i);
+        if (t->objectName()=="instructionsTab")
+        {
+            //hide the instructions tab
+            mw.tabWidget->removeTab(mw.tabWidget->indexOf(t));
+            break;
+        }
+    }
+    //add the tabs back
+    mw.tabWidget->addTab(entry,entry->windowTitle());
+    mw.tabWidget->addTab(alldata,alldata->windowTitle());
+
+    //refresh the all data table
     alldata->refreshTable();
 }
 

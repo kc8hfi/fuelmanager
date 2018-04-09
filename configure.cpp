@@ -7,10 +7,14 @@
 #include <QFileDialog>
 #include <QSettings>
 #include <QMessageBox>
+#include <QSqlDatabase>
+#include "login.h"
 
-Configure::Configure()
+Configure::Configure(MainWindow *p)
 {
     base.setupUi(this);
+
+    owner = p;
 
     vehicleui = new ConfigureVehicle();
     vehicleui->hide();
@@ -146,7 +150,7 @@ void Configure::switchPage(QListWidgetItem* current)
     {
         dbaseSelection->hide();
         vehicleui->show();
-        qDebug()<<"need to refresh the vehicles from the add/edit vehicles";
+        //qDebug()<<"need to refresh the vehicles from the add/edit vehicles";
         vehicleui->refreshTable();
     }
 
@@ -201,7 +205,7 @@ void Configure::saveChanges()
     }
     else if (mariadbButton->isChecked())
     {
-        qDebug()<<"save the mariadb stuff";
+        //qDebug()<<"save the mariadb stuff";
         if (hostname->text()!= "" && database->text()!= "")
         {
             settings.clear();
@@ -209,6 +213,7 @@ void Configure::saveChanges()
             settings.setValue("config/hostname",hostname->text());
             settings.setValue("config/database",database->text());
             settings.setValue("config/port",port->text());
+
         }
         else
         {
@@ -223,8 +228,9 @@ void Configure::saveChanges()
             //qDebug()<<"dialog box for the empty fields";
         }
     }
-    //need to refresh the parent since the settings have changed
-    //parent->checkSettings();
+    //enable the select vehicle action
+    //update the interface
+    owner->updateInterface();
 }
 
 void Configure::checkSettings()
@@ -245,6 +251,26 @@ void Configure::checkSettings()
         database->setText(settings.value("config/database").toString());
         port->setValue(settings.value("config/port").toInt());
         mariadbWidget->show();
-    }
 
+        //login first?
+        //go ahead and login
+        QSettings settings;
+        QSqlDatabase db = QSqlDatabase::database();
+        if (db.driverName()== "QMYSQL")
+        {
+            if (!db.isOpen())
+            {
+                Login login;
+                if (login.exec())
+                {
+                    db.setUserName(login.getUsername());
+                    db.setPassword(login.getPassword());
+                    if (!db.open())
+                    {
+                        qDebug()<<"couldn't open the database in configure checksettingss";
+                    }
+                }
+            }
+        }
+    }
 }

@@ -2,9 +2,11 @@
 #define ALLDATA_H
 
 #include <QWidget>
+#include "alldatamodel.h"
 
 class MainWindow;
-class AllDataModel;
+//class AllDataModel;
+
 
 namespace Ui {
 class AllData;
@@ -19,13 +21,18 @@ public:
     ~AllData();
 
     void refreshTable();
-
     void testData();
+
+public slots:
+    void changedItem(const QModelIndex &, const QModelIndex &);
+    void saveData();
 private:
     Ui::AllData *ui;
 
     AllDataModel *model;
     MainWindow *owner;
+
+    QList <Mileage> changedItems;
 };
 
 #endif // ALLDATA_H

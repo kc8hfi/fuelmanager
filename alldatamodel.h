@@ -29,6 +29,7 @@ public:
     void addColor(QColor);
     void clearColor();
     int showMessage(QString,QString);
+    Mileage getItem(int index);
 
     int rowCount(const QModelIndex &parent) const override;
     int columnCount(const QModelIndex &parent) const override;

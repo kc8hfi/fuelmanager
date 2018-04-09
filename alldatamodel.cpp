@@ -50,7 +50,12 @@ int AllDataModel::showMessage(QString from, QString to)
     return returnValue;
 }
 
-
+Mileage AllDataModel::getItem(int index)
+{
+    //if (index >= && index <)
+    //if(index.row() >= theData.size() || index.row()<0)
+    return theData.at(index);
+}
 
 int AllDataModel::rowCount(const QModelIndex &parent) const
 {
@@ -91,7 +96,27 @@ QVariant AllDataModel::data(const QModelIndex &index, int role) const
         }
         else if (index.column() == 5)
             return m.mpg;
-
+    }
+    if (role == Qt::EditRole)
+    {
+        const auto &m = theData.at(index.row());
+        if (index.column() == 0)
+            return m.id;
+        else if (index.column() == 1)
+        {
+            return m.date.toString("MMMM d, yyyy");
+        }
+        else if (index.column() == 2)
+            return m.miles;
+        else if(index.column() == 3)
+            return m.gallons;
+        else if (index.column() == 4)
+        {
+            //return m.cost;
+            return QLocale().toCurrencyString(m.cost);
+        }
+        else if (index.column() == 5)
+            return m.mpg;
     }
     if(role == Qt::BackgroundColorRole)
     {

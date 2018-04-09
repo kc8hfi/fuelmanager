@@ -5,6 +5,7 @@
 #include <QSettings>
 #include <QSqlError>
 #include <QMessageBox>
+#include "login.h"
 
 ConfigureVehicle::ConfigureVehicle(QWidget *parent) : QWidget(parent)
 {
@@ -12,7 +13,7 @@ ConfigureVehicle::ConfigureVehicle(QWidget *parent) : QWidget(parent)
 
     QSettings settings;
     QString t = settings.value("config/databasetype").toString();
-    qDebug()<<t;
+    //qDebug()<<t;
 
     model = new VehicleModel();
 
@@ -48,12 +49,22 @@ void ConfigureVehicle::saveVehicle()
 {
     if (vehicleBase.description->text() != "")
     {
-        //qDebug()<<"save me:"<<vehicleBase.description->text();
-
-        QSettings settings;
-        QString t = settings.value("config/databasetype").toString();
-        if(t == "sqlite")
+        qDebug()<<"save me:"<<vehicleBase.description->text();
+        Query q;
+        if(q.insertVehicle(vehicleBase.description->text()))
         {
+            refreshTable();
+            vehicleBase.description->setText("");
+        }
+        else
+        {
+            qDebug()<<"saveVehicle couldn't save";
+        }
+
+        //QSettings settings;
+        //QString t = settings.value("config/databasetype").toString();
+        //if(t == "sqlite")
+        //{
             //Sqlite *con = (Sqlite*)owner->getConnection();
 //            if (owner->getConnection()->insertVehicle(vehicleBase.description->text()))
 //            {
@@ -62,7 +73,7 @@ void ConfigureVehicle::saveVehicle()
 //                refreshTable();
 
 //            }
-        }
+        //}
         //qDebug()<<this->parentWidget()->objectName();
         //first parent is configurebase
         //second parent is
@@ -71,31 +82,57 @@ void ConfigureVehicle::saveVehicle()
 
 void ConfigureVehicle::refreshTable()
 {
-    qDebug()<<"gonna call select";
+    //qDebug()<<"gonna call select";
     //reread the config file
-    QSqlDatabase db;
+    QSqlDatabase db = QSqlDatabase::database();
     QSettings settings;
     QString type = settings.value("config/databasetype").toString();
     if(type != "")
     {
-        qDebug()<<"config file type:"<<type;
+        //qDebug()<<"config file type:"<<type;
         if (type == "sqlite")
         {
             QString location = settings.value("config/location").toString();
             QString filename = settings.value("config/filename").toString();
             db = QSqlDatabase::addDatabase("QSQLITE");
             db.setDatabaseName(location+"/"+filename);
+//            if (db.open())
+//            {
+//                Query q;
+//                if(!q.selectVehicle(model))
+//                {
+//                    QString error = "Couldn't get the vehicles!";
+//                    QMessageBox message(QMessageBox::Critical,"Problem!",error,QMessageBox::Ok,this,Qt::Dialog);
+//                    message.exec();
+//                }
+//            }
         }
-
-        db = QSqlDatabase::database();
-        qDebug()<<"driver name:"<<db.driverName();
-        qDebug()<<"connection name:"<<db.connectionName();
-        if (!db.isOpen())
+        else if (type == "mariadb")
         {
-            db.open();
-            qDebug()<<db.lastError().text();
+            QString hostname = settings.value("config/hostname").toString();
+            QString dbaseName = settings.value("config/dbasename").toString();
+            int port = settings.value("config/port").toInt();
+
+            //qDebug()<<"database name:"<<db.databaseName();
+            //qDebug()<<"driver name:"<<db.driverName();
+            if (db.driverName()!="QMYSQL")
+            {
+                db = QSqlDatabase::addDatabase("QMYSQL");
+                db.setHostName(hostname);
+                db.setDatabaseName(dbaseName);
+                db.setPort(port);
+                qDebug()<<"need to show the login dialog box and do all that good stuff here";
+                Login login;
+                if (login.exec())
+                {
+                    db.setUserName(login.getUsername());
+                    db.setPassword(login.getPassword());
+                    if (db.open())
+                        qDebug()<<"database is now open";
+                }
+            }
         }
-        if (db.isOpen())
+        if (db.open())
         {
             Query q;
             if(!q.selectVehicle(model))
@@ -104,7 +141,48 @@ void ConfigureVehicle::refreshTable()
                 QMessageBox message(QMessageBox::Critical,"Problem!",error,QMessageBox::Ok,this,Qt::Dialog);
                 message.exec();
             }
+
         }
+//            {
+//                Query q;
+//                if(!q.selectVehicle(model))
+//                {
+//                    QString error = "Couldn't get the vehicles!";
+//                    QMessageBox message(QMessageBox::Critical,"Problem!",error,QMessageBox::Ok,this,Qt::Dialog);
+//                    message.exec();
+//                }
+
+//            }
+
+//            else if (!db.isOpen())
+//            {
+//                db.open();
+//            }
+
+
+
+
+
+
+
+//        db = QSqlDatabase::database();
+//        qDebug()<<"driver name:"<<db.driverName();
+//        qDebug()<<"connection name:"<<db.connectionName();
+//        if (!db.isOpen())
+//        {
+//            db.open();
+//            qDebug()<<db.lastError().text();
+//        }
+//        if (db.isOpen())
+//        {
+//            Query q;
+//            if(!q.selectVehicle(model))
+//            {
+//                QString error = "Couldn't get the vehicles!";
+//                QMessageBox message(QMessageBox::Critical,"Problem!",error,QMessageBox::Ok,this,Qt::Dialog);
+//                message.exec();
+//            }
+//        }
 
     }
 

@@ -1,6 +1,7 @@
 #include "vehiclemodel.h"
 #include <QDebug>
 #include <QMessageBox>
+#include "query.h"
 
 VehicleModel::VehicleModel()
 {
@@ -73,6 +74,12 @@ QVariant VehicleModel::data(const QModelIndex &index, int role) const
         QColor c = theColor.at(index.row());
         return c;
     }
+    if (role == Qt::EditRole)
+    {
+        const auto &v = theData.at(index.row());
+        if(index.column() == 1)
+            return v.description;
+    }
     return QVariant();
 }
 
@@ -112,12 +119,25 @@ bool VehicleModel::insertRow(int position, int rows, const QModelIndex &index,Ve
 
 bool VehicleModel::removeRows(int position, int rows, const QModelIndex &index)
 {
+//    Q_UNUSED(index);
+//    beginRemoveRows(QModelIndex(), position, position+rows-1);
+//    theData.removeAt(position);
+//    theColor.removeAt(position);
+//    endRemoveRows();
+//    return true;
+
     Q_UNUSED(index);
-    beginRemoveRows(QModelIndex(), position, position+rows-1);
-    theData.removeAt(position);
-    theColor.removeAt(position);
+    beginRemoveRows(QModelIndex(),position,position+rows-1);
+    for (int row = 0; row<rows; ++row)
+    {
+        theData.removeAt(position);
+        theColor.removeAt(position);
+    }
+
     endRemoveRows();
     return true;
+
+
 }
 
 //edits the data in the model
@@ -144,6 +164,8 @@ bool VehicleModel::setData(const QModelIndex &index, const QVariant &value, int 
         else
             return false;
         theData.replace(row,v);
+        Query q;
+        q.updateVehicle((Vehicle)v);
         emit(dataChanged(index,index));
         return true;
     }

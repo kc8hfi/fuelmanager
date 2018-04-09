@@ -20,10 +20,9 @@ EntryForm::EntryForm(QWidget *parent) :
     ui->gallonsLineEdit->setValidator(validator);
     ui->costLineEdit->setValidator(validator);
 
-
+    ui->milesLineEdit->setFocus();
     //handlers for the ok and cancel buttons
     connect(ui->buttonBox->button(QDialogButtonBox::Ok),SIGNAL(clicked()),this,SLOT(okClicked()));
-    //connect(ui->buttonBox->button(QDialogButtonBox::Ok),SIGNAL(cl)
 
 
 }
@@ -71,35 +70,37 @@ void EntryForm::okClicked()
     {
         message += "Cost\n";
     }
-
-    //double gallons = ui->gallonsLineEdit->text().toDouble();
-    //double cost = ui->costLineEdit->text().toDouble();
-
     QSettings s;
     int vehicleId = s.value("config/vehicle").toInt();
-    QString type = s.value("config/databasetype").toString();
-    if (type =="sqlite")
-    {
-//        Sqlite* c = (Sqlite*)owner->getConnection();
-//        if (milesok && gallonsok && costok)
-//        {
-//            if (c->insertFuelMileage(vehicleId,miles,gallons,cost,date))
-//            {
-//                owner->statusBar()->showMessage(date);
 
-//                //clear the fields
-//                ui->milesLineEdit->setText("");
-//                ui->gallonsLineEdit->setText("");
-//                ui->costLineEdit->setText("");
-//                qDebug()<<"refresh the alldata table";
-//                owner->refreshAllData();
-//            }
-//        }
-//        else
-//        {
-//            QMessageBox msg(QMessageBox::Critical,"Missing Data",message,QMessageBox::Ok,this);
-//            msg.exec();
-//        }
+    if (milesok && gallonsok && costok)
+    {
+        Query c;
+        c.insertFuelMileage(vehicleId,miles,gallons,cost,date);
+
+        double mpg = 0.0;
+        if (gallons != 0.0)
+        {
+            mpg = miles/gallons;
+        }
+        QString message = "Date: " + d.toString("MMMM d, yyyy") + " ";
+        message += "Miles: " + QString::number(miles) + " ";
+        message += "Gallons: " + QString::number(gallons) + " ";
+        message += "Cost: " + QString::number(cost) + " ";
+        message += "MPG: " + QString::number(mpg) + " ";
+
+        ui->messageLabel->setText(message);
+
+        //clear the fields
+        ui->milesLineEdit->clear();
+        ui->gallonsLineEdit->clear();
+        ui->costLineEdit->clear();
+        ui->milesLineEdit->setFocus();
+
+
+        qDebug()<<"refresh the alldata table";
+        owner->refreshAllData();
+
     }
 }
 

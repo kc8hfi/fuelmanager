@@ -9,12 +9,13 @@
 #include <QPushButton>
 #include <QSpinBox>
 #include <QRadioButton>
+#include "mainwindow.h"
 
 class Configure : public QDialog, private Ui_configureBase
 {
 Q_OBJECT
 public:
-    Configure();
+    Configure(MainWindow *p);
     ~Configure();
     void saveChanges();
 
@@ -28,6 +29,8 @@ public slots:
 private:
     void checkSettings();
     Ui_configureBase base;
+
+    MainWindow *owner;
 
     ConfigureVehicle *vehicleui;
 

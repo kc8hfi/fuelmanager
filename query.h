@@ -8,11 +8,14 @@ class Query
 {
 public:
     Query();
-    virtual void createVehicleTable(){};
-    virtual void createMileageTable(){};
+    void createVehicleTable();
+    void createMileageTable();
 
     bool insertVehicle(QString);
     bool selectVehicle(VehicleModel*);
+    void updateVehicle(Vehicle);
+
+    bool updateFuelMileage(QList<Mileage>t);
 
     QString getVehicleDescription(int);
 

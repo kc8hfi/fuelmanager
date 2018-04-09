@@ -8,7 +8,7 @@
 #include "alldatamodel.h"
 #include "mainwindow.h"
 #include "sqlite.h"
-#include "alldatamodel.h"
+//#include "alldatamodel.h"
 
 AllData::AllData(QWidget *parent) :
     QWidget(parent),
@@ -31,6 +31,14 @@ AllData::AllData(QWidget *parent) :
 
     //hide the first column
     ui->tableView->setColumnHidden(0,true);
+
+    //clear out the list of changed items
+    changedItems.clear();
+
+    //connect the datachanged from the model
+    connect(model,SIGNAL(dataChanged(QModelIndex,QModelIndex)),this,SLOT(changedItem(const QModelIndex &,const QModelIndex &)));
+
+    connect(ui->saveButton,SIGNAL(clicked(bool)),this,SLOT(saveData()));
 }
 
 AllData::~AllData()
@@ -77,24 +85,55 @@ void AllData::refreshTable()
     model->removeRows(0,model->rowCount(QModelIndex()));
     model->clearColor();
     Query queries;
-    if (!queries.selectFuelMileage(vehicleId,model))
+    queries.selectFuelMileage(vehicleId,model);
+
+    //set the information field
+    ui->informationLabel->setText(QString::number(model->rowCount(QModelIndex())) + " records.");
+
+}
+
+void AllData::changedItem(const QModelIndex& topLeft, const QModelIndex &bottomRight)
+{
+    Q_UNUSED(bottomRight);
+    auto m = model->getItem(topLeft.row());
+    //qDebug()<<"id:"<<m.id<<" miles:"<<m.miles<<" gallons:"<<m.gallons;
+
+    //find out of m.id is already in there
+    //if it is,  modify it
+    //otherwise, append it
+    bool found = false;
+    int index = 0;
+    for(int i=0;i<changedItems.size();i++)
     {
-        qDebug()<<"couldn't get the fuel mileage data";
+        Mileage t = changedItems.at(i);
+        if (t.id == m.id)
+        {
+            index = i;
+            found = true;
+            break;
+        }
     }
+    if (found)
+        changedItems.replace(index,m);
+    else
+        changedItems.append(m);
 
+    ui->saveButton->setEnabled(true);
+}
 
-    if(settings.value("config/databasetype").toString() == "sqlite")
+void AllData::saveData()
+{
+//    qDebug()<<"save these items";
+//    for(int i=0;i<changedItems.size();i++)
+//    {
+//        auto m = changedItems.at(i);
+//        qDebug()<<"id:"<<m.id<<" miles:"<<m.miles<<" gallons:"<<m.gallons;
+//    }
+    Query q;
+    if (q.updateFuelMileage(changedItems))
     {
-//        Sqlite* c = (Sqlite*)owner->getConnection();
-//        //empty the model first
-//        model->removeRows(0,model->rowCount(QModelIndex()));
-//        //empty the colors first
-//        model->clearColor();
-//        if(!c->selectFuelMileage(vehicleId,model))
-//        {
-//            qDebug()<<"didn't get the fuel mileage data";
-//        }
-//        //qDebug()<<"records:"<<model->rowCount(QModelIndex());
-//        //qDebug()<<"colors:"<<model->sizeColor();
+        //save was ok, clear the list
+        changedItems.clear();
+        ui->saveButton->setEnabled(false);
     }
 }
