@@ -7,7 +7,7 @@ EditDate::EditDate(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    connect(ui->buttonBox->button(QDialogButtonBox::Ok),SIGNAL(clicked()),this,SLOT(okClicked()));
+    connect(ui->buttonBox->button(QDialogButtonBox::Ok),SIGNAL(accepted()),this,SLOT(okClicked()));
 
 }
 
