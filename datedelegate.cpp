@@ -6,6 +6,7 @@
 #include <QApplication>
 #include <QSize>
 #include <QRect>
+#include <QCalendarWidget>
 
 DateDelegate::DateDelegate(QWidget *parent):QStyledItemDelegate(parent)
 {
@@ -23,35 +24,38 @@ QWidget *DateDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem 
 //    QDialog *d = new QDialog(parent);
 //    d->move(450,450);
 //    return d;
-    EditDate *edit = new EditDate();
+//    EditDate *edit = new EditDate();
+//    QDesktopWidget *d = QApplication::desktop();
 
+//    int screenWidth, width;
+//    int screenHeight, height;
 
-    QDesktopWidget *d = QApplication::desktop();
+//    screenWidth = d->width();
+//    screenHeight = d->height();
 
-    int screenWidth, width;
-    int screenHeight, height;
+//    QSize windowSize;
 
-    screenWidth = d->width();
-    screenHeight = d->height();
+//    windowSize = parent->size();
+//    width = windowSize.width();
+//    height = windowSize.height();
 
-    QSize windowSize;
+//    int x,y;
+//    x = (screenWidth-width)/2;
+//    y = (screenHeight-height)/2;
 
-    windowSize = parent->size();
-    width = windowSize.width();
-    height = windowSize.height();
-
-    int x,y;
-    x = (screenWidth-width)/2;
-    y = (screenHeight-height)/2;
-
-    qDebug()<<"width:"<<x<<" height:"<<y;
+//    qDebug()<<"width:"<<x<<" height:"<<y;
 
     //QRect r(100,100,300,300);
     //edit->setGeometry(r);
     //edit->move(x,y);
 
 
-    return edit;
+//    return edit;
+    QCalendarWidget *c = new QCalendarWidget();
+    c->resize(300,300);
+
+    return c;
+
 }
 
 void DateDelegate::commitAndCloseEditor()
