@@ -121,8 +121,8 @@ MainWindow::MainWindow(QMainWindow *parent)
      //assistant = new Assistant;
 
 
-     //qDebug()<<"this is a qdebug";
-     //qWarning()<<"this is a qwarning";
+     qDebug()<<"this is a qdebug";
+     qWarning()<<"this is a qwarning";
      
 }//end constructor
 
