@@ -7,7 +7,10 @@
 #include "ui_alldata.h"
 #include "alldatamodel.h"
 #include "mainwindow.h"
-//#include "alldatamodel.h"
+#include "datedelegate.h"
+
+
+
 
 AllData::AllData(QWidget *parent) :
     QWidget(parent),
@@ -30,6 +33,9 @@ AllData::AllData(QWidget *parent) :
 
     //hide the first column
     ui->tableView->setColumnHidden(0,true);
+
+    //set a delegate for the date column
+    ui->tableView->setItemDelegateForColumn(1,new DateDelegate(owner));
 
     //clear out the list of changed items
     changedItems.clear();

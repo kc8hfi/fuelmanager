@@ -3,23 +3,34 @@
 
 #include <QWidget>
 #include <QStyleOptionViewItem>
+#include <QStyledItemDelegate>
 
 
-clas EditDate;
+class EditDate;
 
-class DateDelegate : public QItemDelegate
+
+class DateDelegate : public QStyledItemDelegate
 {
+    Q_OBJECT
 public:
-    DateDelegate();
-    ~DateDelegate();
+    DateDelegate(QWidget *parent=0);
+    //~DateDelegate();
 
-    QWidget* createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
+    void paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
-    void setEditorData (QWidget *editor, const QModelIndex &index) const;
-    void setModelData (QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const;
+    QSize sizeHint(const QStyleOptionViewItem &option, const QModelIndex &index) const override;
 
-private:
-    EditDate *edit;
+
+
+
+
+    QWidget *createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const override;
+
+    void setEditorData (QWidget *editor, const QModelIndex &index) const override;
+    void setModelData (QWidget *editor, QAbstractItemModel *model, const QModelIndex &index) const override;
+
+private slots:
+    void commitAndCloseEditor();
 
 };
 

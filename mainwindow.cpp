@@ -46,6 +46,9 @@
 #include "mainwindow.h"
 
 
+#include "editdate.h"
+
+
 //#include "testwidget.h"
 
 MainWindow::MainWindow(QMainWindow *parent)
@@ -124,6 +127,9 @@ MainWindow::MainWindow(QMainWindow *parent)
      qDebug()<<"this is a qdebug";
      qWarning()<<"this is a qwarning";
      
+
+     //this is test code, get rid of it
+     connect(mw.pushButton,SIGNAL(clicked(bool)),this,SLOT(testbutton()));
 }//end constructor
 
 //destructor
@@ -668,3 +674,12 @@ void MainWindow::help()
           
 //     }//query was executed
 //}//end writeData
+
+void MainWindow::testbutton()
+{
+    qDebug()<<"pushbutton";
+    EditDate *t = new EditDate();
+    t->show();
+
+
+}
