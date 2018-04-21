@@ -61,7 +61,7 @@ MainWindow::MainWindow(QMainWindow *parent)
 
 
 
-     entry = new EntryForm(this);
+     entry = new EntryForm();
      alldata = new AllData();
 
      QDesktopWidget *desktop = QApplication::desktop();

@@ -5,13 +5,15 @@
 #include <QDate>
 #include <QDoubleValidator>
 #include <QMessageBox>
+#include <QSettings>
+#include "query.h"
+#include "mainwindow.h"
 
 EntryForm::EntryForm(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::EntryForm)
 {
     ui->setupUi(this);
-    owner = (MainWindow*)parent;
 
     //only allow doubles into the text fields
     QDoubleValidator* validator = new QDoubleValidator(this);
@@ -98,7 +100,8 @@ void EntryForm::okClicked()
 
 
         qDebug()<<"refresh the alldata table";
-        owner->refreshAllData();
+        MainWindow *w = qobject_cast<MainWindow*>(QApplication::activeWindow());
+        w->refreshAllData();
 
     }
 }

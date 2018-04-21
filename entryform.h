@@ -2,7 +2,6 @@
 #define ENTRYFORM_H
 
 #include <QWidget>
-#include "mainwindow.h"
 
 namespace Ui {
 class EntryForm;
@@ -19,7 +18,6 @@ public:
 
 private:
     Ui::EntryForm *ui;
-    MainWindow *owner;
 };
 
 #endif // ENTRYFORM_H

@@ -35,7 +35,7 @@ AllData::AllData(QWidget *parent) :
     ui->tableView->setColumnHidden(0,true);
 
     //set a delegate for the date column
-    ui->tableView->setItemDelegateForColumn(1,new DateDelegate(this));
+    ui->tableView->setItemDelegateForColumn(1,new DateDelegate(parent));
 
     //clear out the list of changed items
     changedItems.clear();
@@ -140,5 +140,6 @@ void AllData::saveData()
         //save was ok, clear the list
         changedItems.clear();
         ui->saveButton->setEnabled(false);
+        refreshTable();
     }
 }

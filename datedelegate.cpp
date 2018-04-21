@@ -1,32 +1,8 @@
-/*!
- * Copyright 2008-2014 Charles Amey
- *
- * This file is part of Fuel Manager.
- *
- * Fuel Manager is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * Fuel Manager is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with Fuel Manager.  If not, see <http://www.gnu.org/licenses/>.
-*/
-
-
+#include <QApplication>
 #include <QDate>
 #include <QDebug>
 #include "datedelegate.h"
 #include "editdate.h"
-
-#include <QDesktopWidget>
-#include <QApplication>
-#include <QRect>
-
 
 //DateDelegate::DateDelegate(QList< QList<QVariant> > data, QObject *parent)
 DateDelegate::DateDelegate(QObject *parent) : QStyledItemDelegate(parent)
@@ -40,40 +16,7 @@ QWidget *DateDelegate::createEditor(QWidget *parent,const QStyleOptionViewItem &
     Q_UNUSED(option);
     Q_UNUSED(index);
 
-     EditDate *edit = new EditDate(parent);
-
-//    QDesktopWidget *d = QApplication::desktop();
-
-//    int screenWidth, width;
-//    int screenHeight, height;
-
-//    screenWidth = d->width();
-//    screenHeight = d->height();
-
-//    QSize windowSize;
-
-//    windowSize = parent->size();
-//    width = windowSize.width();
-//    height = windowSize.height();
-
-//    int x,y;
-//    x = (screenWidth-width)/2;
-//    y = (screenHeight-height)/2;
-
-//    qDebug()<<"width:"<<x<<" height:"<<y;
-
-//    QRect r(100,100,300,300);
-//    //edit->setGeometry(r);
-//    //edit->move(x,y);
-
-//    edit->resize(800,600);
-
-//     if (parent != NULL)
-//     {
-//         qDebug()<<"gonna move";
-//         edit->move(300,300);
-//     }
-
+    EditDate *edit = new EditDate(parent);
     edit->setModal(true);
     return edit;
 }//end createEditor
@@ -93,12 +36,38 @@ void DateDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, cons
           EditDate *d = qobject_cast<EditDate *>(editor);
           if (d->getChangeme() == 1)
           {
-               qDebug()<<"change the date to this: "<<d->selectedDate();
+               //qDebug()<<"change the date to this: "<<d->selectedDate();
                model->setData(index,d->selectedDate());
           }
 
      }//end index was valid
 }//end setModelData
+
+void DateDelegate::updateEditorGeometry(QWidget *editor, const QStyleOptionViewItem &option, const QModelIndex &index) const
+{
+    Q_UNUSED(option);
+    Q_UNUSED(index);
+    EditDate *d = qobject_cast<EditDate*>(editor);
+
+    //qDebug()<<d->window()->objectName();
+    //qDebug()<<QApplication::activeWindow()->objectName();
+
+    int locx = QApplication::activeWindow()->x();
+    int locy = QApplication::activeWindow()->y();
+
+
+    int newx = locx + 190;
+    int newy = locy + 190;
+
+    //this puts the editor in the center of the application
+    //int height = QApplication::activeWindow()->size().height();
+    //int width = QApplication::activeWindow()->size().width();
+    //newx = locx + (width/2);
+    //newy = locy + (height/2);
+
+    d->move(newx,newy);
+
+}
 
 
 //void DateDelegate::paint(QPainter *painter, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -110,10 +79,6 @@ void DateDelegate::setModelData(QWidget *editor, QAbstractItemModel *model, cons
 //{
 //    qDebug()<<"inside sizehint";
 //}
-
-
-
-
 
 
 
