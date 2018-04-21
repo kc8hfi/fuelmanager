@@ -79,14 +79,26 @@ QVariant AllDataModel::data(const QModelIndex &index, int role) const
     if(role == Qt::DisplayRole)
     {
         const auto &m = theData.at(index.row());
+//        qDebug()<<"alldatamodel data:";
+//        qDebug()<<m.id;
+//        qDebug()<<m.miles;
+//        qDebug()<<m.gallons;
+//        qDebug()<<m.cost;
+//        qDebug()<<m.date.toString("MMMM d, yyyy");
+        //qDebug()<<"index.column:"<<index.column();
         if (index.column() == 0)
             return m.id;
         else if (index.column() == 1)
         {
+            //qDebug()<<"date column"<<m.date.toString();
+            //return m.miles;
             return m.date.toString("MMMM d, yyyy");
         }
         else if (index.column() == 2)
+        {
+            //qDebug()<<"miles column"<<m.miles;
             return m.miles;
+        }
         else if(index.column() == 3)
             return m.gallons;
         else if (index.column() == 4)
@@ -104,6 +116,10 @@ QVariant AllDataModel::data(const QModelIndex &index, int role) const
             return m.id;
         else if (index.column() == 1)
         {
+//            qDebug()<<"alldatamodel data, the date column";
+//            qDebug()<<m.date.toString();
+//            return m.date.toString();
+
             return m.date.toString("MMMM d, yyyy");
         }
         else if (index.column() == 2)
@@ -191,14 +207,22 @@ bool AllDataModel::removeRows(int position, int rows, const QModelIndex &index)
 //changes data in the model
 bool AllDataModel::setData(const QModelIndex &index, const QVariant &value, int role)
 {
+
     if(index.isValid() && role == Qt::EditRole)
     {
+        //qDebug()<<"gotta add something in the alldatamodel";
         int row = index.row();
         auto m = theData.value(row);
         if(index.column()== 0)
             m.id = value.toInt();
         else if(index.column()==1)
+        {
+            //qDebug()<<"right here, the date column";
+            //qDebug()<<value;
             m.date = value.toDate();
+            //qDebug()<<"ok, after m.date was assigned, it is: ";
+            //qDebug()<<m.date.toString();
+        }
         else if(index.column()==2)
         {
             //this part works fine

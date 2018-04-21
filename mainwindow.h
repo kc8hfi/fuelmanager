@@ -60,7 +60,7 @@ class MainWindow : public QMainWindow, private Ui_MainWindowBase
           void help();
 
 
-          void testbutton();
+          //void testbutton();
 
           //void about();
           //bool login ();

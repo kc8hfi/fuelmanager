@@ -129,7 +129,7 @@ MainWindow::MainWindow(QMainWindow *parent)
      
 
      //this is test code, get rid of it
-     connect(mw.pushButton,SIGNAL(clicked(bool)),this,SLOT(testbutton()));
+     //connect(mw.pushButton,SIGNAL(clicked(bool)),this,SLOT(testbutton()));
 }//end constructor
 
 //destructor
@@ -675,11 +675,9 @@ void MainWindow::help()
 //     }//query was executed
 //}//end writeData
 
-void MainWindow::testbutton()
-{
-    qDebug()<<"pushbutton";
-    EditDate *t = new EditDate();
-    t->show();
-
-
-}
+//void MainWindow::testbutton()
+//{
+//    qDebug()<<"pushbutton";
+//    EditDate *t = new EditDate(this);
+//    t->exec();
+//}

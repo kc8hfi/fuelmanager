@@ -19,8 +19,12 @@ EditDate::EditDate(QWidget *parent) :
 //            this,
 //            SLOT(okClicked())
 //            );
+    //connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(ok)
+
+    //connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(okClicked()));
 
 
+    connect(ui->buttonBox,SIGNAL(accepted()),this,SLOT(accept()));
 }
 
 EditDate::~EditDate()
@@ -28,7 +32,42 @@ EditDate::~EditDate()
     delete ui;
 }
 
-void EditDate::okClicked()
+
+//QPushButton *EditDate::getOkButton()
+//{
+//    return ui->buttonBox->button(QDialogButtonBox::Ok);
+//}
+
+QDate EditDate::selectedDate()
 {
-    qDebug()<<"date ok was clicked";
+    return ui->calendarWidget->selectedDate();
 }
+
+void EditDate::setDate(QDate d)
+{
+    ui->calendarWidget->setSelectedDate(d);
+}
+
+int EditDate::getChangeme()
+{
+     return changeme;
+}
+
+
+void EditDate::accept()
+{
+    changeme = 1;
+    close();
+}
+
+
+//void EditDate::okClicked()
+//{
+    //qDebug()<<"ok was clicked to accept the editdate dialog box";
+    //emit(accepted());
+//}
+
+//void EditDate::okClicked()
+//{
+//    //qDebug()<<"in the edit date, ok was clicked";
+//}

@@ -197,7 +197,8 @@ bool Query::selectFuelMileage(int vehicleId, AllDataModel *model)
 
             //need a couple colors to switch between
             QColor one = Qt::white;
-            QColor two = Qt::lightGray;
+            //QColor two = Qt::lightGray;
+            QColor two(215, 238, 247);
             int whichColor=0;
 
             //hold the old month and year for comparison
@@ -338,11 +339,13 @@ bool Query::updateFuelMileage(QList<Mileage>t)
 {
     bool ok = false;
 
-    QString q = "update fuel_mileage set miles = :miles, \
-            gallons = :gallons, \
-            cost = :cost, \
-            fillup_date = :date \
-            where id = :id";
+    QString q = "update fuel_mileage set  \
+                       miles = :miles, \
+                       gallons = :gallons, \
+                       cost = :cost, \
+                       fillup_date = :fillup_date \
+                       where id = :id \
+                       ";
 
     QSqlDatabase db = QSqlDatabase::database();
     QSqlQuery query(db);
@@ -352,7 +355,7 @@ bool Query::updateFuelMileage(QList<Mileage>t)
         for(int i=0;i<t.size();i++)
         {
             auto m = t.at(i);
-            qDebug()<<"id:"<<m.id<<" miles:"<<m.miles<<" gallons:"<<m.gallons;
+            //qDebug()<<"id:"<<m.id<<" miles:"<<m.miles<<" gallons:"<<m.gallons;
             query.bindValue(":id",m.id);
             query.bindValue(":miles",m.miles);
             query.bindValue(":gallons",m.gallons);
@@ -360,6 +363,10 @@ bool Query::updateFuelMileage(QList<Mileage>t)
             query.bindValue(":fillup_date",m.date.toString("yyyy-MM-dd"));
             if (!query.exec())
                 qDebug()<<query.lastError().text();
+//            else
+//            {
+//                qDebug()<<"id:"<<m.id<<" miles:"<<m.miles<<" gallons:"<<m.gallons<<" cost:"<<m.cost<<" date:"<<m.date.toString("yyyy-MM-dd");
+//            }
         }
         ok = true;
     }
