@@ -32,6 +32,7 @@
 #include "about.h"
 #include "alldata.h"
 #include "login.h"
+#include "statistics.h"
 
 //#include "alldata.h"
 //#include "configdialog.h"
@@ -63,6 +64,7 @@ MainWindow::MainWindow(QMainWindow *parent)
 
      entry = new EntryForm();
      alldata = new AllData();
+     stats = new Statistics();
 
      QDesktopWidget *desktop = QApplication::desktop();
 
@@ -393,6 +395,7 @@ void MainWindow::showTabs()
         //add the tabs
         mw.tabWidget->addTab(entry,entry->windowTitle());
         mw.tabWidget->addTab(alldata,alldata->windowTitle());
+        mw.tabWidget->addTab(stats,stats->windowTitle());
     }
 }
 
@@ -421,6 +424,7 @@ void MainWindow::refreshAllData()
     //add the tabs back
     mw.tabWidget->addTab(entry,entry->windowTitle());
     mw.tabWidget->addTab(alldata,alldata->windowTitle());
+    mw.tabWidget->addTab(stats,stats->windowTitle());
 
     //refresh the all data table
     alldata->refreshTable();

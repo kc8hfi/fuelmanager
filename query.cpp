@@ -3,6 +3,7 @@
 #include <QSqlQuery>
 #include <QSqlDatabase>
 #include <QSqlError>
+#include <QSqlRecord>
 #include <QSettings>
 #include <QDebug>
 
@@ -375,4 +376,69 @@ bool Query::updateFuelMileage(QList<Mileage>t)
         qDebug()<<"something wrong in updateFuelMileage";
     }
     return ok;
+}
+
+QList<QVariant> Query::lifetimeStats(int id)
+{
+    QList<QVariant> stuff;
+    QString q = "select sum(miles), \
+            sum(gallons), \
+            sum(cost) \
+            from fuel_mileage \
+            where vehicle_id = :id";
+    QSqlDatabase db = QSqlDatabase::database();
+    QSqlQuery query(db);
+    if (!db.isOpen())
+    {
+        qDebug()<<"database not open, so open it up";
+        if (!db.open())
+            qDebug()<<"lifetimestats query:"<<query.lastError().text();
+    }
+    if (db.isOpen())
+    {
+        qDebug()<<"db is open";
+        query.prepare(q);
+        query.bindValue(":id",id);
+        if (query.exec())
+        {
+            qDebug()<<"exec was ok";
+            query.next();
+            QSqlRecord record = query.record();
+            for (int i=0; i<record.count();i++)
+            {
+                stuff.append(record.value(i));
+                qDebug()<<record.value(i);
+            }
+
+            if (stuff.at(1).toDouble() !=0.0)
+                stuff.append(stuff.at(0).toDouble()/stuff.at(1).toDouble());  //mpg
+            //miles,gallons,cost,mpg
+        }
+        else
+            qDebug()<<query.lastError().text();
+
+        q = "select count(*)\
+            from fuel_mileage \
+            where vehicle_id = :id";
+        query.prepare(q);
+        query.bindValue(":id",id);
+        if (query.exec())
+        {
+            qDebug()<<"get the count exec ok";
+            stuff.prepend(query.value(0));
+        }
+    }
+    else
+    {
+        qDebug()<<"database is not open...";
+    }
+    for(int i=0;i<stuff.size();i++)
+    {
+        qDebug()<<stuff.at(i);
+    }
+
+    //fillups,miles,gallons,cost,mpg
+    return stuff;
+
+
 }

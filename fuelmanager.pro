@@ -35,7 +35,8 @@ HEADERS += configure.h \
     vehiclemodel.h \
     login.h \
     editdate.h \
-    datedelegate.h
+    datedelegate.h \
+    statistics.h
 
 
 FORMS += configurebase.ui \
@@ -47,7 +48,8 @@ FORMS += configurebase.ui \
     about.ui \
     alldata.ui \
     login.ui \
-    editdate.ui
+    editdate.ui \
+    statistics.ui
 
 
 SOURCES += configure.cpp \
@@ -65,7 +67,8 @@ SOURCES += configure.cpp \
     vehiclemodel.cpp \
     login.cpp \
     editdate.cpp \
-    datedelegate.cpp
+    datedelegate.cpp \
+    statistics.cpp
            
 QT += sql testlib
 

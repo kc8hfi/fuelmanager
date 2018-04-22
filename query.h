@@ -22,6 +22,7 @@ public:
     bool selectFuelMileage(int, AllDataModel *);
     bool insertFuelMileage(int,double,double,double,QString);
 
+    QList<QVariant> lifetimeStats(int);
 
 private:
 

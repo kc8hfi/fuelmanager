@@ -26,7 +26,7 @@
 
 class AllData;
 class EntryForm;
-//class Statistics;
+class Statistics;
 //class Assistant;
 
 class MainWindow : public QMainWindow, private Ui_MainWindowBase
@@ -74,8 +74,11 @@ class MainWindow : public QMainWindow, private Ui_MainWindowBase
           //void showEverything();
           //void writeData(QString f);
            Ui_MainWindowBase mw;
+
            EntryForm *entry;
            AllData *alldata;
+
+           Statistics *stats;
 
 
 
