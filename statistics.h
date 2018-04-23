@@ -3,6 +3,8 @@
 
 #include <QWidget>
 
+class QStandardItemModel;
+
 namespace Ui {
 class Statistics;
 }
@@ -16,9 +18,15 @@ public:
     ~Statistics();
 
     void lifetimeStats();
+    void yearlyStats();
+
+    void refreshAllStats();
 
 private:
     Ui::Statistics *ui;
+    QStandardItemModel *lifetimeModel;
+
+    QStandardItemModel *yearlyModel;
 };
 
 #endif // STATISTICS_H

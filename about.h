@@ -3,7 +3,6 @@
 
 #include <QDialog>
 
-class MainWindow;
 namespace Ui {
 class About;
 }
@@ -21,7 +20,6 @@ public slots:
     void okClicked();
 private:
     Ui::About *ui;
-    MainWindow *owner;
 
     QString version;
 };

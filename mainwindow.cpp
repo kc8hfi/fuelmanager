@@ -55,83 +55,112 @@
 MainWindow::MainWindow(QMainWindow *parent)
      :QMainWindow(parent)
 {
-     mw.setupUi(this);
 
-     mw.actionLogin->setEnabled(false);
-     mw.actionSelect_Vehicle->setEnabled(false);
+    mw.setupUi(this);
 
+    //set up the basic info for qsettings
+    QCoreApplication::setOrganizationName("fuelmanager");
+    //QCoreApplication::setOrganizationDomain("homelinux.com");
+    QCoreApplication::setApplicationName("fuelmanager");
 
+    //set the icon
+    //QString filename = "/usr/share/icons/hicolor/scalable/apps/fuelmanager.svg";
+    QString filename = ":fuelmanager.svg";
 
-     entry = new EntryForm();
-     alldata = new AllData();
-     stats = new Statistics();
+    QFileInfo iconFilename(filename);
+    if (iconFilename.exists())
+    {
+      QIcon icon(filename);
+      setWindowIcon(icon);
+    }
 
-     QDesktopWidget *desktop = QApplication::desktop();
+    //set the window's desired location
+    QDesktopWidget *desktop = QApplication::desktop();
 
-     int screenWidth, width;
-     int screenHeight, height;
-     int x, y;
-     QSize windowSize;
+    int screenWidth, width;
+    int screenHeight, height;
+    int x, y;
+    QSize windowSize;
 
-     screenWidth = desktop->width(); // get width of screen
-     screenHeight = desktop->height(); // get height of screen
+    screenWidth = desktop->width(); // get width of screen
+    screenHeight = desktop->height(); // get height of screen
 
-     windowSize = size(); // size of our application window
-     width = windowSize.width();
-     height = windowSize.height();
+    windowSize = size(); // size of our application window
+    width = windowSize.width();
+    height = windowSize.height();
 
-     // little computations
-     x = (screenWidth - width) / 2;
-     y = (screenHeight - height) / 2;
-     y -= 50;
+    // little computations
+    x = (screenWidth - width) / 2;
+    y = (screenHeight - height) / 2;
+    y -= 50;
 
-     // move window to desired coordinates
-     move ( x, y );
+    // move window to desired coordinates
+    move ( x, y );
 
-
-
-     //set the icon
-     //QString filename = "/usr/share/icons/hicolor/scalable/apps/fuelmanager.svg";
-     QString filename = ":fuelmanager.svg";
-     
-     QFileInfo iconFilename(filename);
-     if (iconFilename.exists())
-     {
-          QIcon icon(filename);
-          setWindowIcon(icon);
-     }
-     
-     //set up the basic info for qsettings
-     QCoreApplication::setOrganizationName("fuelmanager");
-     //QCoreApplication::setOrganizationDomain("homelinux.com");
-     QCoreApplication::setApplicationName("fuelmanager");
-     
-//     queries = new DatabaseQuery();
-     
-//     whichDatabase = "";
-//     username = "";
-//     password = "";
-//     alreadyLoggedIn = false;
+    //set up the action and select vehicle buttons
+    mw.actionLogin->setEnabled(false);
+    mw.actionSelect_Vehicle->setEnabled(false);
 
 
-     //check the settings
-     checkSettings();
+    //check the settings
+    checkSettings();
 
-     //link up the about qt button
-     connect(mw.actionAboutQt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
-     
-     //link up the help button
-     connect(mw.actionHelp,SIGNAL(triggered()), this, SLOT(help()));
-     
-     //assistant = new Assistant;
+    //add all the tabs
+    entry = new EntryForm();
+    alldata = new AllData();
+    stats = new Statistics();
 
 
-     qDebug()<<"this is a qdebug";
-     qWarning()<<"this is a qwarning";
-     
 
-     //this is test code, get rid of it
-     //connect(mw.pushButton,SIGNAL(clicked(bool)),this,SLOT(testbutton()));
+    //show the tabs only if they have a selected vehicle
+    QSettings settings;
+    QString savedVehicleId = settings.value("config/vehicle").toString();
+    if (savedVehicleId != "")
+    {
+        Query q;
+        QString name = q.getVehicleDescription(savedVehicleId.toInt());
+        setVehicleName(name);
+
+        //get all the tabs
+        for (int i=0;i<mw.tabWidget->count();i++)
+        {
+            QWidget *t = mw.tabWidget->widget(i);
+            if (t->objectName()=="instructionsTab")
+            {
+                //hide the instructions tab
+                mw.tabWidget->removeTab(mw.tabWidget->indexOf(t));
+                break;
+            }
+        }
+        //add the tabs
+        mw.tabWidget->addTab(entry,entry->windowTitle());
+        mw.tabWidget->addTab(alldata,alldata->windowTitle());
+        mw.tabWidget->addTab(stats,stats->windowTitle());
+    }
+
+    //set the vehicle name
+//    int savedVehicleId = settings.value("config/vehicle").toInt();
+    //setVehicleName(savedVehicleId);
+
+
+    //refresh the all data tab
+    alldata->refreshTable();
+
+    //link up the about qt button
+    connect(mw.actionAboutQt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+
+    //link up the help button
+    connect(mw.actionHelp,SIGNAL(triggered()), this, SLOT(help()));
+
+    //assistant = new Assistant;
+
+
+    qDebug()<<"this is a qdebug";
+    qWarning()<<"this is a qwarning";
+
+
+    //this is test code, get rid of it
+    //connect(mw.pushButton,SIGNAL(clicked(bool)),this,SLOT(testbutton()));
 }//end constructor
 
 //destructor
@@ -249,34 +278,20 @@ void MainWindow::checkSettings()
             }
         }
     }
+    qDebug()<<"checkSettings before showtabs";
+    //showTabs();
 
-
-
-
-
-         //do we have a datase connection?
-//         if (db.driverName() == "")
-//         {
-//             //QString location = settings.value("config/location").toString();
-//             //QString filename = settings.value("config/filename").toString();
-//             db = QSqlDatabase::addDatabase("QMYSQL");
-//             //db.setDatabaseName(location+"/"+filename);
-//             db.open();
-//         }
-
-     showTabs();
-
-     int savedVehicleId = settings.value("config/vehicle").toInt();
-     //setVehicleName(savedVehicleId);
-     Query q;
-     QString name = q.getVehicleDescription(savedVehicleId);
-     setVehicleName(name);
+//     int savedVehicleId = settings.value("config/vehicle").toInt();
+//     //setVehicleName(savedVehicleId);
+//     Query q;
+//     QString name = q.getVehicleDescription(savedVehicleId);
+//     setVehicleName(name);
      
-     //fix up the interface, enabling some of the actions
-     updateInterface();
+//     //fix up the interface, enabling some of the actions
+//     updateInterface();
 
-     //qDebug()<<"the mainwindow constructor, alldata refresh";
-     alldata->refreshTable();
+//     //qDebug()<<"the mainwindow constructor, alldata refresh";
+//     alldata->refreshTable();
 
 
 //     //qDebug()<<databaseType<<" "<<savedVehicleId;
@@ -428,6 +443,8 @@ void MainWindow::refreshAllData()
 
     //refresh the all data table
     alldata->refreshTable();
+    //refresh the statistics
+    stats->refreshAllStats();
 }
 
 

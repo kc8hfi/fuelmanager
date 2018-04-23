@@ -10,7 +10,6 @@ About::About(QWidget *parent) :
     ui(new Ui::About)
 {
     ui->setupUi(this);
-    owner = (MainWindow*)parent;
 
     QString name = "Fuel Manager";
     version = QApplication::applicationVersion();

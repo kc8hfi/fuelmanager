@@ -22,7 +22,6 @@ public slots:
 
 private:
     Ui::SelectVehicle *ui;
-    MainWindow *owner;
     VehicleDisplayModel *model;
 };
 

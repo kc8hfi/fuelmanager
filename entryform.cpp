@@ -6,6 +6,7 @@
 #include <QDoubleValidator>
 #include <QMessageBox>
 #include <QSettings>
+//#include <QDateTime>;
 #include "query.h"
 #include "mainwindow.h"
 
@@ -24,6 +25,7 @@ EntryForm::EntryForm(QWidget *parent) :
     ui->milesLineEdit->setFocus();
     //handlers for the ok and cancel buttons
     connect(ui->buttonBox->button(QDialogButtonBox::Ok),SIGNAL(clicked()),this,SLOT(okClicked()));
+    connect(ui->buttonBox->button(QDialogButtonBox::Cancel),SIGNAL(clicked()),this,SLOT(cancelClicked()));
 
 
 }
@@ -104,5 +106,14 @@ void EntryForm::okClicked()
         w->refreshAllData();
 
     }
+}
+
+void EntryForm::cancelClicked()
+{
+    ui->milesLineEdit->setText("");
+    ui->gallonsLineEdit->setText("");
+    ui->costLineEdit->setText("");
+    ui->calendarWidget->setSelectedDate(QDate::currentDate());
+
 }
 

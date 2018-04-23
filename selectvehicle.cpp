@@ -10,7 +10,6 @@ SelectVehicle::SelectVehicle(QWidget *parent) :
     ui(new Ui::SelectVehicle)
 {
     ui->setupUi(this);
-    owner = (MainWindow*)parent;
 
     //QSettings settings;
     //QString t = settings.value("config/databasetype").toString();
@@ -53,10 +52,14 @@ void SelectVehicle::clickme()
     QSettings settings;
     settings.setValue("config/vehicle",record.value("id").toInt());
 
+
+    MainWindow *w = qobject_cast<MainWindow*>(QApplication::activeWindow());
+
     //update the label on the form
-    owner->setVehicleName(n);
+    w->setVehicleName(n);
 
     //refresh the alldata table
-    owner->refreshAllData();
+    w->refreshAllData();
+
     emit accept();
 }

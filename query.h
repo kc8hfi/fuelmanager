@@ -23,6 +23,7 @@ public:
     bool insertFuelMileage(int,double,double,double,QString);
 
     QList<QVariant> lifetimeStats(int);
+    QList< QList<QVariant> > yearlyStats(int);
 
 private:
 

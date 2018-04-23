@@ -12,6 +12,7 @@ class EntryForm : public QWidget
     Q_OBJECT
 public slots:
     void okClicked();
+    void cancelClicked();
 public:
     explicit EntryForm(QWidget *parent = 0);
     ~EntryForm();

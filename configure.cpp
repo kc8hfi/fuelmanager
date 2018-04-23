@@ -9,12 +9,11 @@
 #include <QMessageBox>
 #include <QSqlDatabase>
 #include "login.h"
+#include "mainwindow.h"
 
-Configure::Configure(MainWindow *p)
+Configure::Configure(QWidget *parent) : QDialog(parent)
 {
     base.setupUi(this);
-
-    owner = p;
 
     vehicleui = new ConfigureVehicle();
     vehicleui->hide();
@@ -230,7 +229,9 @@ void Configure::saveChanges()
     }
     //enable the select vehicle action
     //update the interface
-    owner->updateInterface();
+    MainWindow *w = qobject_cast<MainWindow*>(QApplication::activeWindow());
+    w->updateInterface();
+    //owner->updateInterface();
 }
 
 void Configure::checkSettings()

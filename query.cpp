@@ -388,34 +388,29 @@ QList<QVariant> Query::lifetimeStats(int id)
             where vehicle_id = :id";
     QSqlDatabase db = QSqlDatabase::database();
     QSqlQuery query(db);
-    if (!db.isOpen())
-    {
-        qDebug()<<"database not open, so open it up";
-        if (!db.open())
-            qDebug()<<"lifetimestats query:"<<query.lastError().text();
-    }
     if (db.isOpen())
     {
-        qDebug()<<"db is open";
         query.prepare(q);
         query.bindValue(":id",id);
         if (query.exec())
         {
-            qDebug()<<"exec was ok";
             query.next();
             QSqlRecord record = query.record();
             for (int i=0; i<record.count();i++)
             {
                 stuff.append(record.value(i));
-                qDebug()<<record.value(i);
+                //qDebug()<<record.value(i);
             }
 
             if (stuff.at(1).toDouble() !=0.0)
                 stuff.append(stuff.at(0).toDouble()/stuff.at(1).toDouble());  //mpg
+            else
+                stuff.append("0");
+
             //miles,gallons,cost,mpg
         }
         else
-            qDebug()<<query.lastError().text();
+            qDebug()<<"lifetimeStats: "<<query.lastError().text();
 
         q = "select count(*)\
             from fuel_mileage \
@@ -424,21 +419,67 @@ QList<QVariant> Query::lifetimeStats(int id)
         query.bindValue(":id",id);
         if (query.exec())
         {
-            qDebug()<<"get the count exec ok";
+            query.next();
             stuff.prepend(query.value(0));
         }
     }
     else
     {
-        qDebug()<<"database is not open...";
+        qDebug()<<"lifetimeStats:  "<<db.lastError().text();
     }
-    for(int i=0;i<stuff.size();i++)
-    {
-        qDebug()<<stuff.at(i);
-    }
+//    for(int i=0;i<stuff.size();i++)
+//    {
+//        qDebug()<<"end lifetimeStats loop"<<stuff.at(i);
+//    }
 
     //fillups,miles,gallons,cost,mpg
     return stuff;
+}
 
+QList< QList<QVariant> > Query::yearlyStats(int id)
+{
+    QList< QList<QVariant>> everything;
+    QString q = "select strftime(\"%Y\",fillup_date) tyear,\
+            count(id) ,\
+               sum(miles) Miles,\
+               sum(gallons) Gallons,\
+               sum(cost) Cost\
+               from fuel_mileage\
+               where vehicle_id = :id\
+               and strftime(\"%Y\",fillup_date) != '0000'\
+               group by tyear\
+               order by tyear desc";
+    //qDebug()<<q;
 
+    QSqlDatabase db = QSqlDatabase::database();
+    QSqlQuery query(db);
+    if (db.isOpen())
+    {
+        query.prepare(q);
+        query.bindValue(":id",id);
+        if (query.exec())
+        {
+            while(query.next())
+            {
+                QList<QVariant> stuff;
+                QSqlRecord r = query.record();
+                stuff.append(r.value(0));   //year
+                stuff.append(r.value(1));   //fillups
+                stuff.append(r.value(2));   //miles
+                stuff.append(r.value(3));   //gallons
+                stuff.append(r.value(4));   //cost
+
+                if (stuff.at(3).toDouble()!= 0.0)
+                    stuff.append(stuff.at(2).toDouble()/stuff.at(3).toDouble());
+                else
+                    stuff.append("0");
+
+                //put this little qlist onto the big qlist
+                everything.append(stuff);
+            }//end while loop
+        }//query executed successfully
+    }//end db is open
+
+    //year,fillups,miles,gallons,cost,mpg
+    return everything;
 }

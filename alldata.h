@@ -4,10 +4,6 @@
 #include <QWidget>
 #include "alldatamodel.h"
 
-class MainWindow;
-//class AllDataModel;
-
-
 namespace Ui {
 class AllData;
 }
@@ -30,7 +26,6 @@ private:
     Ui::AllData *ui;
 
     AllDataModel *model;
-    MainWindow *owner;
 
     QList <Mileage> changedItems;
 };

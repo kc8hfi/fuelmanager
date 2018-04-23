@@ -3,14 +3,12 @@
 #include <QModelIndex>
 
 #include <QList>
+#include <QSettings>
 #include "alldata.h"
 #include "ui_alldata.h"
 #include "alldatamodel.h"
-#include "mainwindow.h"
 #include "datedelegate.h"
-
-
-
+#include "query.h"
 
 AllData::AllData(QWidget *parent) :
     QWidget(parent),
@@ -19,7 +17,6 @@ AllData::AllData(QWidget *parent) :
     ui->setupUi(this);
     ui->saveButton->setEnabled(false);
 
-    owner = (MainWindow*)parent;
     model = new AllDataModel();
 
     refreshTable();
