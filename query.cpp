@@ -483,3 +483,72 @@ QList< QList<QVariant> > Query::yearlyStats(int id)
     //year,fillups,miles,gallons,cost,mpg
     return everything;
 }
+
+QList<QVariant> Query::getDistinctYears(int id)
+{
+    QList<QVariant>stuff;
+    QString q = "select distinct(strftime(\"%Y\",fillup_date)) theyear \
+            from fuel_mileage \
+            where vehicle_id = :id \
+            and strftime(\"%Y\",fillup_date) != '0000'";
+    QSqlDatabase db = QSqlDatabase::database();
+    QSqlQuery query(db);
+    if (db.isOpen())
+    {
+        query.prepare(q);
+        query.bindValue(":id",id);
+        if (query.exec())
+        {
+            while(query.next())
+            {
+                stuff.append(query.record().value(0));
+            }
+        }
+    }
+    return stuff;
+}
+
+QList<QVariant> Query::monthlyStats(int id,QVariant year,QVariant month)
+{
+    QList<QVariant>stuff;
+    QString q = "select count(id),sum(miles),sum(gallons),sum(cost) from fuel_mileage where vehicle_id = :id \
+and strftime(\"%Y\",fillup_date) = :year and strftime(\"%m\",fillup_date) = :month ";
+
+    QSqlDatabase db = QSqlDatabase::database();
+    QSqlQuery query(db);
+    if (db.isOpen())
+    {
+        query.prepare(q);
+        query.bindValue(":id",id);
+        query.bindValue(":year",year.toString());
+        query.bindValue(":month",month.toString());
+        if(query.exec())
+        {
+            while(query.next())
+            {
+                QSqlRecord r = query.record();
+                int howmany = r.value(0).toInt();
+                if (howmany != 0)   //they have fillups
+                {
+                    stuff.append(r.value(0));   //fillups
+                    stuff.append(r.value(1));   //miles
+                    stuff.append(r.value(2));   //gallons
+                    stuff.append(r.value(3));   //cost
+                    if (r.value(2).toDouble() != 0.0)
+                        stuff.append(r.value(1).toDouble()/r.value(2).toDouble());  //mpg
+                    else
+                        stuff.append("0");  //mpg
+                }
+                else    //otherwise, nothing for this month/year combo
+                {
+                    stuff.append("0");  //fillups
+                    stuff.append("0");  //miles
+                    stuff.append("0");  //gallons
+                    stuff.append("0");  //cost
+                    stuff.append("0");  //mpg
+                }
+            }
+        }//end exec
+    }//end db is open
+    return stuff;
+}

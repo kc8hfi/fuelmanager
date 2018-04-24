@@ -116,4 +116,3 @@ void EntryForm::cancelClicked()
     ui->calendarWidget->setSelectedDate(QDate::currentDate());
 
 }
-

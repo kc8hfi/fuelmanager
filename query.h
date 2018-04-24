@@ -25,6 +25,12 @@ public:
     QList<QVariant> lifetimeStats(int);
     QList< QList<QVariant> > yearlyStats(int);
 
+
+    QList<QVariant> getDistinctYears(int);
+    QList<QVariant> monthlyStats(int,QVariant,QVariant);//vehicleId,years.at(i),i.key());
+
+    //monthlyStats(int);
+
 private:
 
 };

@@ -50,6 +50,38 @@ Statistics::Statistics(QWidget *parent) :
     ui->yearTable->setModel(yearlyModel);
 
 
+    monthNames["01"] = "January";
+    monthNames["02"] = "February";
+    monthNames["03"] = "March";
+    monthNames["04"] = "April";
+    monthNames["05"] = "May";
+    monthNames["06"] = "June";
+    monthNames["07"] = "July";
+    monthNames["08"] = "August";
+    monthNames["09"] = "September";
+    monthNames["10"] = "October";
+    monthNames["11"] = "November";
+    monthNames["12"] = "December";
+
+    QStringList monthlyColNames;
+
+    QMapIterator<QString,QString> i(monthNames);
+    while (i.hasNext())
+    {
+        i.next();
+        monthlyColNames.append(i.value());
+    }
+    monthlyModel = new QStandardItemModel(this);
+    monthlyModel->setHorizontalHeaderLabels(monthlyColNames);
+    monthlyModel->setRowCount(0);
+    monthlyModel->setColumnCount(monthlyColNames.size());
+
+    //make table not editable
+    ui->monthTable->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    //set the mode
+    ui->monthTable->setModel(monthlyModel);
+
 //    for(int i=0;i<columnNames.size();i++)
 //    {
 //        //ui->lifetimeTable->model()->setHeaderData(i,Qt::Horizontal,columnNames.at(i));
@@ -72,6 +104,7 @@ void Statistics::refreshAllStats()
 {
     lifetimeStats();
     yearlyStats();
+    monthlyStats();
 }
 
 void Statistics::lifetimeStats()
@@ -169,6 +202,71 @@ void Statistics::yearlyStats()
                 yearlyModel->setData(yearlyModel->index(i,j),QColor(Qt::white),Qt::BackgroundRole);
         }
     }
+}//end yearlyStats
+
+void Statistics::monthlyStats()
+{
+    //get vehicle id
+    QSettings settings;
+    int vehicleId = settings.value("config/vehicle").toInt();
+    Query query;
+
+    //get rid of all the current rows first
+    monthlyModel->removeRows(0,monthlyModel->rowCount());
 
 
-}
+    //get the years first
+    QList<QVariant> years = query.getDistinctYears(vehicleId);
+
+    //loop through the years
+    for(int i=0;i<years.count();i++)
+    {
+        QList<QStandardItem*> forModel;
+        QMapIterator<QString,QString> j(monthNames);
+        while (j.hasNext())
+        {
+            j.next();
+            //if (i==0 && j.key() == "02")
+            QList<QVariant> d = query.monthlyStats(vehicleId,years.at(i),j.key());
+            QString s = "";
+            if (d.at(0).toInt() != 0)
+            {
+                s += "Fillups: " + d.at(0).toString() + "\n";
+                s += "Miles: " + QLocale::system().toString(d.at(1).toDouble(),'f',2) + "\n";
+                s += "Gallons: " + QLocale::system().toString(d.at(2).toDouble(),'f',2) + "\n";
+                s += "Cost:" + QLocale::system().currencySymbol();
+                s += QLocale::system().toString(d.at(3).toDouble(),'f',2) + "\n";
+                s += "MPG: " + QLocale::system().toString(d.at(4).toDouble(),'f',2);
+            }
+            QStandardItem *item = new QStandardItem(s);
+            forModel.append(item);
+        }
+        monthlyModel->appendRow(forModel);
+    }//end year loop
+
+
+    QStringList rowNames;
+    for(int i=0;i<years.count();i++)
+    {
+        rowNames.append(years.at(i).toString());
+    }
+    monthlyModel->setVerticalHeaderLabels(rowNames);
+
+
+    //resize the columns to the contents
+    ui->monthTable->resizeColumnsToContents();
+    //resize rows to the contents
+    ui->monthTable->resizeRowsToContents();
+
+    //try to fix the row color...
+    for(int i=0;i<monthlyModel->rowCount();i++)
+    {
+        for (int j=0;j<monthlyModel->columnCount();j++)
+        {
+            if (i %2 ==0)
+                monthlyModel->setData(monthlyModel->index(i,j),QColor(224,229,233),Qt::BackgroundRole);
+            else
+                monthlyModel->setData(monthlyModel->index(i,j),QColor(Qt::white),Qt::BackgroundRole);
+        }
+    }
+}//end monthlyStats

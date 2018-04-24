@@ -2,6 +2,7 @@
 #define STATISTICS_H
 
 #include <QWidget>
+#include <QMap>
 
 class QStandardItemModel;
 
@@ -19,14 +20,20 @@ public:
 
     void lifetimeStats();
     void yearlyStats();
+    void monthlyStats();
 
     void refreshAllStats();
 
 private:
     Ui::Statistics *ui;
+
+    QMap<QString,QString> monthNames;
+
     QStandardItemModel *lifetimeModel;
 
     QStandardItemModel *yearlyModel;
+
+    QStandardItemModel *monthlyModel;
 };
 
 #endif // STATISTICS_H
