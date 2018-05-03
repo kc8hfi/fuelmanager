@@ -1,7 +1,11 @@
 <!DOCTYPE RCC><RCC version="1.0">
 <qresource>
-	<file>fuelmanager.svg</file>
-	<file>COPYING</file>
-	<file>authors</file>
+     <file>fuelmanager.svg</file>
+     <file>COPYING</file>
+     <file>authors</file>
+     <file>resources/about.svg</file>
+     <file>resources/config.svg</file>
+     <file>resources/help.svg</file>
+     <file>resources/text4680.png</file>
 </qresource>
 </RCC>

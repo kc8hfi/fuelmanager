@@ -13,6 +13,12 @@
   <property name="windowTitle">
    <string>Fuel Manager</string>
   </property>
+  <property name="iconSize">
+   <size>
+    <width>22</width>
+    <height>22</height>
+   </size>
+  </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
@@ -136,6 +142,10 @@
    <addaction name="actionAbout"/>
   </widget>
   <action name="actionAbout">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/resources/about.svg</normaloff>:/resources/about.svg</iconset>
+   </property>
    <property name="text">
     <string>&amp;About Fuel Manager</string>
    </property>
@@ -157,6 +167,10 @@
    </property>
   </action>
   <action name="actionConfigure_Fuel_Manager">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/resources/config.svg</normaloff>:/resources/config.svg</iconset>
+   </property>
    <property name="text">
     <string>&amp;Configure Fuel Manager...</string>
    </property>
@@ -180,6 +194,10 @@
    </property>
   </action>
   <action name="actionHelp">
+   <property name="icon">
+    <iconset resource="resources.qrc">
+     <normaloff>:/resources/text4680.png</normaloff>:/resources/text4680.png</iconset>
+   </property>
    <property name="text">
     <string>&amp;Contents</string>
    </property>
@@ -188,7 +206,9 @@
    </property>
   </action>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections>
   <connection>
    <sender>actionExit</sender>
