@@ -194,10 +194,6 @@
    </property>
   </action>
   <action name="actionHelp">
-   <property name="icon">
-    <iconset resource="resources.qrc">
-     <normaloff>:/resources/text4680.png</normaloff>:/resources/text4680.png</iconset>
-   </property>
    <property name="text">
     <string>&amp;Contents</string>
    </property>

@@ -26,6 +26,8 @@
 #include <QTableView>
 #include <QDesktopWidget>
 #include <QSqlDatabase>
+#include <QIcon>
+
 #include "configure.h"
 #include "selectvehicle.h"
 #include "entryform.h"
@@ -67,12 +69,17 @@ MainWindow::MainWindow(QMainWindow *parent)
     //QString filename = "/usr/share/icons/hicolor/scalable/apps/fuelmanager.svg";
     QString filename = ":fuelmanager.svg";
 
-    QFileInfo iconFilename(filename);
-    if (iconFilename.exists())
-    {
-      QIcon icon(filename);
-      setWindowIcon(icon);
-    }
+//    QFileInfo iconFilename(filename);
+//    if (iconFilename.exists())
+//    {
+//      QIcon icon(filename);
+//      setWindowIcon(icon);
+//    }
+
+    //load the icon from the resources file
+    QIcon icon(filename);
+    setWindowIcon(icon);
+
 
     //set the window's desired location
     QDesktopWidget *desktop = QApplication::desktop();
@@ -153,6 +160,17 @@ MainWindow::MainWindow(QMainWindow *parent)
     connect(mw.actionHelp,SIGNAL(triggered()), this, SLOT(help()));
 
     //assistant = new Assistant;
+
+
+    mw.actionLogin->setIcon(QIcon::fromTheme("format-join-node"));
+    mw.actionExport_Data->setIcon(QIcon::fromTheme("document-export-table"));
+    //mw.actionConfigure_Fuel_Manager->setIcon(QIcon::fromTheme("applications-system"));  //big gear
+    mw.actionConfigure_Fuel_Manager->setIcon(QIcon::fromTheme("preferences-other"));    //wrench with a gear
+    //mw.actionConfigure_Fuel_Manager->setIcon(QIcon::fromTheme("folder"));  //
+    mw.actionHelp->setIcon(QIcon::fromTheme("help-contents"));
+    mw.actionAbout->setIcon(QIcon::fromTheme("help-about"));
+
+
 
 
     qDebug()<<"this is a qdebug";
