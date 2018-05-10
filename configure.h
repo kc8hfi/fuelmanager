@@ -27,6 +27,7 @@ public slots:
     void buttonBoxOk();
 private:
     void checkSettings();
+    void connectToDatabase();
     Ui_configureBase base;
 
     ConfigureVehicle *vehicleui;

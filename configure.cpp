@@ -165,8 +165,11 @@ void Configure::selectDirectory()
 
 void Configure::buttonBoxApply()
 {
-    qDebug()<<"apply was clicked";
+    //qDebug()<<"apply was clicked";
     saveChanges();
+    connectToDatabase();
+
+
 }
 
 void Configure::buttonBoxOk()
@@ -227,12 +230,12 @@ void Configure::saveChanges()
             //qDebug()<<"dialog box for the empty fields";
         }
     }
-    qDebug()<<"right before updating the interface....";
+    //qDebug()<<"right before updating the interface....";
     //enable the select vehicle action
     //update the interface
     //MainWindow *w = qobject_cast<MainWindow*>(QApplication::activeWindow());
     //w->updateInterface();
-    qDebug()<<"after updating the interface";
+    //qDebug()<<"after updating the interface";
     //owner->updateInterface();
 }
 
@@ -255,25 +258,83 @@ void Configure::checkSettings()
         port->setValue(settings.value("config/port").toInt());
         mariadbWidget->show();
 
-        //login first?
-        //go ahead and login
-        QSettings settings;
-        QSqlDatabase db = QSqlDatabase::database();
-        if (db.driverName()== "QMYSQL")
+    }
+
+//        //login first?
+//        //go ahead and login
+//        QSettings settings;
+//        QSqlDatabase db = QSqlDatabase::database();
+//        if (db.driverName()== "QMYSQL")
+//        {
+//            if (!db.isOpen())
+//            {
+//                Login login;
+//                if (login.exec())
+//                {
+//                    db.setUserName(login.getUsername());
+//                    db.setPassword(login.getPassword());
+//                    if (!db.open())
+//                    {
+//                        qDebug()<<"couldn't open the database in configure checksettingss";
+//                    }
+//                }
+//            }
+//        }
+//    }
+}
+
+void Configure::connectToDatabase()
+{
+    QSettings settings;
+    QString databaseType = settings.value("config/databasetype").toString();
+
+    QSqlDatabase db = QSqlDatabase::database("qt_sql_default_connection",false);
+    if (databaseType == "sqlite")
+    {
+        qDebug()<<"configure driver name: "<<db.driverName();
+        if (db.driverName() == "" || db.driverName()=="QMYSQL")
         {
-            if (!db.isOpen())
+            if (db.driverName() == "QMYSQL")
             {
-                Login login;
-                if (login.exec())
+                QString n = db.connectionName();
+                db.close();
+                db = QSqlDatabase();
+                db.removeDatabase(n);
+            }
+            QString location = settings.value("config/location").toString();
+            QString filename = settings.value("config/filename").toString();
+            db = QSqlDatabase::addDatabase("QSQLITE");
+            db.setDatabaseName(location+"/"+filename);
+            db.open();
+        }
+    }
+    else if (databaseType == "mariadb")
+    {
+        if (db.driverName()=="" || db.driverName()=="QSQLITE")
+        {
+            if(db.driverName() == "QSQLITE")
+            {
+                QString n = db.connectionName();
+                db.close();
+                db = QSqlDatabase();
+                db.removeDatabase(n);
+            }
+            db = QSqlDatabase::addDatabase("QMYSQL");
+            db.setHostName(settings.value("config/hostname").toString());
+            db.setDatabaseName(settings.value("config/database").toString());
+            db.setPort(settings.value("config/port").toInt());
+            qDebug()<<"probably go ahead and login...";
+            Login login;
+            if (login.exec())
+            {
+                db.setUserName(login.getUsername());
+                db.setPassword(login.getPassword());
+                if (!db.open())
                 {
-                    db.setUserName(login.getUsername());
-                    db.setPassword(login.getPassword());
-                    if (!db.open())
-                    {
-                        qDebug()<<"couldn't open the database in configure checksettingss";
-                    }
+                    qDebug()<<"couldn't open the database in configure checksettingss";
+                    qDebug()<<db.lastError();
                 }
             }
         }
     }
-}
+}//end connectToDatabase
