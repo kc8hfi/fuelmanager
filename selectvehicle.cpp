@@ -1,5 +1,6 @@
 #include <QItemSelectionModel>
 #include <QSqlRecord>
+#include <QSqlDatabase>
 #include <QDebug>
 #include "selectvehicle.h"
 #include "mainwindow.h"
@@ -19,17 +20,27 @@ SelectVehicle::SelectVehicle(QWidget *parent) :
 
     model = new VehicleDisplayModel();
     ui->tableView->setModel(model);
+
+    QSqlDatabase db = QSqlDatabase::database();
+    qDebug()<<"dbase name in here:"<<db.connectionName();
+
+
     model->setTable("vehicles");
+    qDebug()<<"error after set table"<<model->lastError();
+
     model->select();
+    qDebug()<<"model select was ok";
 
     ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
     ui->tableView->setColumnHidden(0,true);
     ui->tableView->resizeColumnsToContents();
 
+    qDebug()<<"set up the tableView for the vehicle selection";
 
     //make the table clickable to select a vehicle
     connect(ui->tableView,SIGNAL(clicked(QModelIndex)),this,SLOT(clickme()));
 
+    qDebug()<<"well, selectvehicle constructor is good";
 }
 
 SelectVehicle::~SelectVehicle()
@@ -52,14 +63,15 @@ void SelectVehicle::clickme()
     QSettings settings;
     settings.setValue("config/vehicle",record.value("id").toInt());
 
+    qDebug()<<"bet it is crashing right here";
+    //MainWindow *w = qobject_cast<MainWindow*>(QApplication::activeWindow());
 
-    MainWindow *w = qobject_cast<MainWindow*>(QApplication::activeWindow());
 
     //update the label on the form
-    w->setVehicleName(n);
-
+    //w->setVehicleName(n);
+    //qDebug()<<"yep, crashed right about this line here";
     //refresh the alldata table
-    w->refreshAllData();
+    //w->refreshAllData();
 
     emit accept();
 }

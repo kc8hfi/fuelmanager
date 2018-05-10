@@ -165,7 +165,7 @@ void Configure::selectDirectory()
 
 void Configure::buttonBoxApply()
 {
-    //qDebug()<<"apply was clicked";
+    qDebug()<<"apply was clicked";
     saveChanges();
 }
 
@@ -227,10 +227,12 @@ void Configure::saveChanges()
             //qDebug()<<"dialog box for the empty fields";
         }
     }
+    qDebug()<<"right before updating the interface....";
     //enable the select vehicle action
     //update the interface
-    MainWindow *w = qobject_cast<MainWindow*>(QApplication::activeWindow());
-    w->updateInterface();
+    //MainWindow *w = qobject_cast<MainWindow*>(QApplication::activeWindow());
+    //w->updateInterface();
+    qDebug()<<"after updating the interface";
     //owner->updateInterface();
 }
 

@@ -112,69 +112,78 @@ MainWindow::MainWindow(QMainWindow *parent)
     //check the settings
     checkSettings();
 
+
+    qDebug()<<"check the database here";
+    QSqlDatabase db = QSqlDatabase::database();
+
+    qDebug()<<"what is the connection name:"<<db.connectionName();
+
     //add all the tabs
     entry = new EntryForm();
-    alldata = new AllData();
-    stats = new Statistics();
+    //alldata = new AllData();
+//    stats = new Statistics();
 
 
 
-    //show the tabs only if they have a selected vehicle
-    QSettings settings;
-    QString savedVehicleId = settings.value("config/vehicle").toString();
-    if (savedVehicleId != "")
-    {
-        Query q;
-        QString name = q.getVehicleDescription(savedVehicleId.toInt());
-        setVehicleName(name);
+//    //show the tabs only if they have a selected vehicle
+//    QSettings settings;
+//    QString savedVehicleId = settings.value("config/vehicle").toString();
+//    if (savedVehicleId != "")
+//    {
+//        qDebug()<<"can't get vehicle description";
+//        Query q;
+//        qDebug()<<"Query failed right here";
+//        QString name = q.getVehicleDescription(savedVehicleId.toInt());
+//        qDebug()<<"before setting the vehcile name";
+//        setVehicleName(name);
 
-        //get all the tabs
-        for (int i=0;i<mw.tabWidget->count();i++)
-        {
-            QWidget *t = mw.tabWidget->widget(i);
-            if (t->objectName()=="instructionsTab")
-            {
-                //hide the instructions tab
-                mw.tabWidget->removeTab(mw.tabWidget->indexOf(t));
-                break;
-            }
-        }
-        //add the tabs
-        mw.tabWidget->addTab(entry,entry->windowTitle());
-        mw.tabWidget->addTab(alldata,alldata->windowTitle());
-        mw.tabWidget->addTab(stats,stats->windowTitle());
-    }
+//        //get all the tabs
+//        for (int i=0;i<mw.tabWidget->count();i++)
+//        {
+//            QWidget *t = mw.tabWidget->widget(i);
+//            if (t->objectName()=="instructionsTab")
+//            {
+//                //hide the instructions tab
+//                mw.tabWidget->removeTab(mw.tabWidget->indexOf(t));
+//                break;
+//            }
+//        }
+//        //add the tabs
+//        mw.tabWidget->addTab(entry,entry->windowTitle());
+//        mw.tabWidget->addTab(alldata,alldata->windowTitle());
+//        mw.tabWidget->addTab(stats,stats->windowTitle());
+//    }
 
-    //set the vehicle name
-//    int savedVehicleId = settings.value("config/vehicle").toInt();
-    //setVehicleName(savedVehicleId);
-
-
-    //refresh the all data tab
-    alldata->refreshTable();
-
-    //link up the about qt button
-    connect(mw.actionAboutQt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
-
-    //link up the help button
-    connect(mw.actionHelp,SIGNAL(triggered()), this, SLOT(help()));
-
-    //assistant = new Assistant;
+//    //set the vehicle name
+//    //int savedVehicleId = settings.value("config/vehicle").toInt();
+//    //setVehicleName(savedVehicleId);
 
 
-    mw.actionLogin->setIcon(QIcon::fromTheme("format-join-node"));
-    mw.actionExport_Data->setIcon(QIcon::fromTheme("document-export-table"));
-    //mw.actionConfigure_Fuel_Manager->setIcon(QIcon::fromTheme("applications-system"));  //big gear
-    mw.actionConfigure_Fuel_Manager->setIcon(QIcon::fromTheme("preferences-other"));    //wrench with a gear
-    //mw.actionConfigure_Fuel_Manager->setIcon(QIcon::fromTheme("folder"));  //
-    mw.actionHelp->setIcon(QIcon::fromTheme("help-contents"));
-    mw.actionAbout->setIcon(QIcon::fromTheme("help-about"));
+//    //refresh the all data tab
+//    //alldata->refreshTable();
+
+//    //link up the about qt button
+//    connect(mw.actionAboutQt, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
+
+//    //link up the help button
+//    connect(mw.actionHelp,SIGNAL(triggered()), this, SLOT(help()));
+
+//    //assistant = new Assistant;
+
+
+//    mw.actionLogin->setIcon(QIcon::fromTheme("format-join-node"));
+//    mw.actionExport_Data->setIcon(QIcon::fromTheme("document-export-table"));
+//    //mw.actionConfigure_Fuel_Manager->setIcon(QIcon::fromTheme("applications-system"));  //big gear
+//    mw.actionConfigure_Fuel_Manager->setIcon(QIcon::fromTheme("preferences-other"));    //wrench with a gear
+//    //mw.actionConfigure_Fuel_Manager->setIcon(QIcon::fromTheme("folder"));  //
+//    mw.actionHelp->setIcon(QIcon::fromTheme("help-contents"));
+//    mw.actionAbout->setIcon(QIcon::fromTheme("help-about"));
 
 
 
 
-    qDebug()<<"this is a qdebug";
-    qWarning()<<"this is a qwarning";
+//    qDebug()<<"this is a qdebug";
+//    qWarning()<<"this is a qwarning";
 
 
     //this is test code, get rid of it
@@ -199,36 +208,48 @@ void MainWindow::configure()
 {
 //    Configure c;
 //    c.exec();
-    Configure *c = new Configure(this);
-    c->show();
+    Configure *c = new Configure();
+    //c->show();
+    int returnVal = c->exec();
+    qDebug()<<"what is the return value:"<<returnVal;
+    if (returnVal == 1)
+    {
+        //updateInterface();
+        checkSettings();
+    }
 
 //    TestWidget *t = new TestWidget();
 //    t->setParent(this);
 //    t->show();
 } //end configuration
 
-void MainWindow::updateInterface()
-{
-    //qDebug()<<"update interface since ok was clicked";
-    QSettings settings;
-    QString dbaseType = settings.value("config/databasetype").toString();
-    if (dbaseType == "sqlite")
-    {
-        mw.actionLogin->setEnabled(false);
-        mw.actionSelect_Vehicle->setEnabled(true);
-    }
-    else if(dbaseType =="mariadb")
-    {
-        mw.actionLogin->setEnabled(true);
-        mw.actionSelect_Vehicle->setEnabled(true);
-    }
-}
+//void MainWindow::updateInterface()
+//{
+//    QSettings settings;
+//    QString dbaseType = settings.value("config/databasetype").toString();
+//    if (dbaseType == "sqlite")
+//    {
+//        mw.actionLogin->setEnabled(false);
+//        mw.actionSelect_Vehicle->setEnabled(true);
+//    }
+//    else if(dbaseType =="mariadb")
+//    {
+//        mw.actionLogin->setEnabled(true);
+//        mw.actionSelect_Vehicle->setEnabled(true);
+//    }
+//}
 
 void MainWindow::selectVehicle()
 {
     //qDebug()<<"show the select vehicle dialog box";
-    SelectVehicle *s = new SelectVehicle(this);
-    s->show();
+    SelectVehicle *s = new SelectVehicle();
+    //s->show();
+    if (s->exec() == 1)
+    {
+        qDebug()<<"now we refresh all the data since they chose a vehicle";
+        checkSettings();
+        refreshAllData();
+    }
 }
 
 void MainWindow::setVehicleName(QString s)
@@ -255,6 +276,10 @@ void MainWindow::checkSettings()
 {
 
     QSettings settings;
+    if (settings.contains("config/databasetype"))
+    {
+        mw.actionSelect_Vehicle->setEnabled(true);
+    }
     QString databaseType = settings.value("config/databasetype").toString();
     QSqlDatabase db = QSqlDatabase::database();
     if (databaseType == "sqlite")
@@ -274,29 +299,55 @@ void MainWindow::checkSettings()
     else if (databaseType == "mariadb")
     {
         mw.actionLogin->setEnabled(true);
-        db = QSqlDatabase::addDatabase("QMYSQL");
-        db.setHostName(settings.value("config/hostname").toString());
-        db.setDatabaseName(settings.value("config/database").toString());
-        db.setPort(settings.value("config/port").toInt());
-        Login login;
-        if (login.exec())
+
+        //get the
+        qDebug()<<"here, connection has a name:"<<db.connectionName();
+        if(db.connectionName() == "")
         {
-            db.setUserName(login.getUsername());
-            db.setPassword(login.getPassword());
-            if (!db.open())
+            db = QSqlDatabase::addDatabase("QMYSQL");
+            db.setHostName(settings.value("config/hostname").toString());
+            db.setDatabaseName(settings.value("config/database").toString());
+            db.setPort(settings.value("config/port").toInt());
+            Login login;
+            if (login.exec())
             {
-                qDebug()<<"couldn't open the database in mainwindow";
-                qDebug()<<db.lastError().text();
+                qDebug()<<"we are inside the if login exec if statement";
+                db.setUserName(login.getUsername());
+                db.setPassword(login.getPassword());
+                if (!db.open())
+                {
+                    qDebug()<<"couldn't open the database in mainwindow";
+                    qDebug()<<db.lastError().text();
+                }
+                else
+                {
+                    Query q;
+                    q.createVehicleTable();
+                    q.createMileageTable();
+                }
             }
             else
             {
-                Query q;
-                q.createVehicleTable();
-                q.createMileageTable();
+                qDebug()<<"login was canceled";
             }
         }
     }
     qDebug()<<"checkSettings before showtabs";
+    if (settings.contains("config/vehicle"))
+    {
+        int savedVehicleId = settings.value("config/vehicle").toInt();
+        if (db.isOpen())
+        {
+            Query q;
+            QString name = q.getVehicleDescription(savedVehicleId);
+            setVehicleName(name);
+        }
+        else
+        {
+            qDebug()<<"database is not open";
+        }
+    }
+
     //showTabs();
 
 //     int savedVehicleId = settings.value("config/vehicle").toInt();

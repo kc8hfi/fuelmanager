@@ -42,7 +42,7 @@ class MainWindow : public QMainWindow, private Ui_MainWindowBase
 
           void refreshAllData();
 
-          void updateInterface();
+          //void updateInterface();
 
           //QSqlDatabase getConnection();
           //QSqlRecord getVehicleRecord();

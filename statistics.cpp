@@ -89,7 +89,11 @@ Statistics::Statistics(QWidget *parent) :
 
 //    }
 
+    //it may crash right here.....
     refreshAllStats();
+
+
+
     //lifetimeStats();
 
 
@@ -102,9 +106,14 @@ Statistics::~Statistics()
 
 void Statistics::refreshAllStats()
 {
-    lifetimeStats();
-    yearlyStats();
-    monthlyStats();
+    QSettings settings;
+    //if anything is out of place from the settings configuration, then we will not do anything
+    if (settings.contains("config/vehicle"))
+    {
+        lifetimeStats();
+        yearlyStats();
+        monthlyStats();
+    }
 }
 
 void Statistics::lifetimeStats()

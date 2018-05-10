@@ -27,7 +27,12 @@ EntryForm::EntryForm(QWidget *parent) :
     connect(ui->buttonBox->button(QDialogButtonBox::Ok),SIGNAL(clicked()),this,SLOT(okClicked()));
     connect(ui->buttonBox->button(QDialogButtonBox::Cancel),SIGNAL(clicked()),this,SLOT(cancelClicked()));
 
-
+    //check to see if the database is open
+    QSqlDatabase db = QSqlDatabase::database();
+    if (!db.isOpen())
+    {
+        qDebug()<<"db is NOT OPEN!";
+    }
 }
 
 EntryForm::~EntryForm()
