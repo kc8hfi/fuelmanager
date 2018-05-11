@@ -38,7 +38,7 @@ class MainWindow : public QMainWindow, private Ui_MainWindowBase
           void checkSettings();
 
           //Query* getQuery();
-          void setVehicleName(QString);
+
 
           void refreshAllData();
 
@@ -70,7 +70,9 @@ class MainWindow : public QMainWindow, private Ui_MainWindowBase
           //void help();
      private:
           void showTabs();
-          void vehicleName(int);
+          void setVehicleName();
+
+//          void vehicleName(int);
           //void showEverything();
           //void writeData(QString f);
            Ui_MainWindowBase mw;

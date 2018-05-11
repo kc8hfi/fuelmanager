@@ -21,22 +21,28 @@ SelectVehicle::SelectVehicle(QWidget *parent) :
     model = new VehicleDisplayModel();
     ui->tableView->setModel(model);
 
-    QSqlDatabase db = QSqlDatabase::database();
-    qDebug()<<"dbase name in here:"<<db.connectionName();
+    QSqlDatabase db = QSqlDatabase::database("qt_sql_default_connection", false);
+    if (db.isOpen())
+    {
+        qDebug()<<"dbase name in here:"<<db.driverName();
 
 
-    model->setTable("vehicles");
-    qDebug()<<"error after set table"<<model->lastError();
+        model->setTable("vehicles");
+        qDebug()<<"error after set table"<<model->lastError();
 
-    model->select();
-    qDebug()<<"model select was ok";
+        model->select();
+        qDebug()<<"model select was ok";
 
-    ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-    ui->tableView->setColumnHidden(0,true);
-    ui->tableView->resizeColumnsToContents();
+        ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+        ui->tableView->setColumnHidden(0,true);
+        ui->tableView->resizeColumnsToContents();
 
-    qDebug()<<"set up the tableView for the vehicle selection";
-
+        qDebug()<<"set up the tableView for the vehicle selection";
+    }
+    else
+    {
+        qDebug()<<"databse isn't open to select vehicle";
+    }
     //make the table clickable to select a vehicle
     connect(ui->tableView,SIGNAL(clicked(QModelIndex)),this,SLOT(clickme()));
 

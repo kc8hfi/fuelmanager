@@ -119,9 +119,9 @@ MainWindow::MainWindow(QMainWindow *parent)
 //    qDebug()<<"what is the connection name:"<<db.connectionName();
 
     //add all the tabs
-    //entry = new EntryForm();
+    entry = new EntryForm();
     //alldata = new AllData();
-//    stats = new Statistics();
+    //stats = new Statistics();
 
 
 
@@ -148,15 +148,27 @@ MainWindow::MainWindow(QMainWindow *parent)
 //                break;
 //            }
 //        }
-//        //add the tabs
-//        mw.tabWidget->addTab(entry,entry->windowTitle());
+    QSettings settings;
+    if (settings.contains("config/vehicle"))
+    {
+        //add the tabs
+        mw.tabWidget->addTab(entry,entry->windowTitle());
 //        mw.tabWidget->addTab(alldata,alldata->windowTitle());
 //        mw.tabWidget->addTab(stats,stats->windowTitle());
-//    }
 
-//    //set the vehicle name
-//    //int savedVehicleId = settings.value("config/vehicle").toInt();
-//    //setVehicleName(savedVehicleId);
+
+        for (int i=0;i<mw.tabWidget->count();i++)
+        {
+            QWidget *t = mw.tabWidget->widget(i);
+            if (t->objectName()=="instructionsTab")
+            {
+                //hide the instructions tab
+                mw.tabWidget->removeTab(mw.tabWidget->indexOf(t));
+                break;
+            }
+        }
+    }
+
 
 
 //    //refresh the all data tab
@@ -171,13 +183,13 @@ MainWindow::MainWindow(QMainWindow *parent)
 //    //assistant = new Assistant;
 
 
-//    mw.actionLogin->setIcon(QIcon::fromTheme("format-join-node"));
-//    mw.actionExport_Data->setIcon(QIcon::fromTheme("document-export-table"));
-//    //mw.actionConfigure_Fuel_Manager->setIcon(QIcon::fromTheme("applications-system"));  //big gear
-//    mw.actionConfigure_Fuel_Manager->setIcon(QIcon::fromTheme("preferences-other"));    //wrench with a gear
-//    //mw.actionConfigure_Fuel_Manager->setIcon(QIcon::fromTheme("folder"));  //
-//    mw.actionHelp->setIcon(QIcon::fromTheme("help-contents"));
-//    mw.actionAbout->setIcon(QIcon::fromTheme("help-about"));
+    mw.actionLogin->setIcon(QIcon::fromTheme("format-join-node"));
+    mw.actionExport_Data->setIcon(QIcon::fromTheme("document-export-table"));
+    //mw.actionConfigure_Fuel_Manager->setIcon(QIcon::fromTheme("applications-system"));  //big gear
+    mw.actionConfigure_Fuel_Manager->setIcon(QIcon::fromTheme("preferences-other"));    //wrench with a gear
+    //mw.actionConfigure_Fuel_Manager->setIcon(QIcon::fromTheme("folder"));  //
+    mw.actionHelp->setIcon(QIcon::fromTheme("help-contents"));
+    mw.actionAbout->setIcon(QIcon::fromTheme("help-about"));
 
 
 
@@ -247,30 +259,48 @@ void MainWindow::selectVehicle()
     if (s->exec() == 1)
     {
         qDebug()<<"now we refresh all the data since they chose a vehicle";
-        checkSettings();
-        refreshAllData();
+        setVehicleName();
+        //checkSettings();
+        //refreshAllData();
     }
 }
 
-void MainWindow::setVehicleName(QString s)
+void MainWindow::setVehicleName()
 {
-    mw.vehicleLabel->setText(s);
+    QSettings settings;
+    if (settings.contains("config/vehicle"))
+    {
+        int id = settings.value("config/vehicle").toInt();
+        QSqlDatabase db = QSqlDatabase::database("qt_sql_default_connection",false);
+        if (db.isOpen())
+        {
+            qDebug()<<"setvehiclename db is open, and we need to get the desc";
+            Query q;
+            QString name = q.getVehicleDescription(id);
+            mw.vehicleLabel->setText(name);
+        }
+        else
+        {
+            qDebug()<<"setvehiclename db is NOT open";
+        }
+    }
+    //mw.vehicleLabel->setText(s);
     //qDebug()<<"set the vehicle label to "<<s;
 }
 
-void MainWindow::vehicleName(int i)
-{
-    QSettings settings;
-    QString t = settings.value("config/databasetype").toString();
-    if (t == "sqlite")
-    {
-        //Sqlite *c = (Sqlite*)con;
-        Query q;
-        QString name = q.getVehicleDescription(i);
-        //QString name = con->getVehicleDescription(i);
-        setVehicleName(name);
-    }
-}
+//void MainWindow::vehicleName(int i)
+//{
+//    QSettings settings;
+//    QString t = settings.value("config/databasetype").toString();
+//    if (t == "sqlite")
+//    {
+//        //Sqlite *c = (Sqlite*)con;
+//        Query q;
+//        QString name = q.getVehicleDescription(i);
+//        //QString name = con->getVehicleDescription(i);
+//        setVehicleName(name);
+//    }
+//}
 //read the config file
 void MainWindow::checkSettings()
 {
@@ -285,15 +315,16 @@ void MainWindow::checkSettings()
             //make db be an sqlite
             mw.actionLogin->setEnabled(false);
             //do we have a datase connection?
-            qDebug()<<"first time through:"<<db.driverName();
+            //qDebug()<<"first time through:"<<db.driverName();
             if (db.driverName() == "")
             {
                 QString location = settings.value("config/location").toString();
                 QString filename = settings.value("config/filename").toString();
                 db = QSqlDatabase::addDatabase("QSQLITE");
                 db.setDatabaseName(location+"/"+filename);
+                //@here put this back later
                 db.open();
-                qDebug()<<"database is open, driverName:"<<db.driverName();
+                //qDebug()<<"database is open, driverName:"<<db.driverName();
             }
             //qDebug()<<"dbase driver name: "<<db.driverName();
 
@@ -308,15 +339,26 @@ void MainWindow::checkSettings()
                 db.setHostName(settings.value("config/hostname").toString());
                 db.setDatabaseName(settings.value("config/database").toString());
                 db.setPort(settings.value("config/port").toInt());
-                qDebug()<<"dbase driver name: "<<db.driverName();
+                qDebug()<<"login since "<<db.driverName();
 
+                Login login;
+                if (login.exec())
+                {
+                    db.setUserName(login.getUsername());
+                    db.setPassword(login.getPassword());
+                    if (!db.open())
+                    {
+                        qDebug()<<"couldn't open the database in configure checksettingss";
+                        qDebug()<<db.lastError();
+                    }
+                }
 
 
 
             }
         }
-
-
+        //put the vehicle name now
+        setVehicleName();
 
 
 
