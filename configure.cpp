@@ -149,7 +149,7 @@ void Configure::switchPage(QListWidgetItem* current)
     {
         dbaseSelection->hide();
         vehicleui->show();
-        qDebug()<<"need to refresh the vehicles from the add/edit vehicles";
+        //qDebug()<<"need to refresh the vehicles from the add/edit vehicles";
         vehicleui->refreshTable();
     }
 

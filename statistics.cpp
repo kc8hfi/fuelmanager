@@ -129,10 +129,10 @@ void Statistics::lifetimeStats(int vehicleId)
     QStandardItem *fillups = new QStandardItem(data.at(0).toString());
     items.append(fillups);
 
-    QStandardItem *miles = new QStandardItem(data.at(1).toString());
+    QStandardItem *miles = new QStandardItem(QLocale::system().toString(data.at(1).toDouble(),'f',2));
     items.append(miles);
 
-    QStandardItem *gallons = new QStandardItem(data.at(2).toString());
+    QStandardItem *gallons = new QStandardItem(QLocale::system().toString(data.at(2).toDouble(),'f',2));
     items.append(gallons);
 
     QString f = QLocale::system().currencySymbol();
@@ -166,9 +166,16 @@ void Statistics::yearlyStats(int vehicleId)
         QList<QVariant> row = data.at(i);
         QList<QStandardItem*> forModel;
         QString year = row.at(0).toString();
+//        s += "Fillups: " + d.at(0).toString() + "\n";
+//        s += "Miles: " + QLocale::system().toString(d.at(1).toDouble(),'f',2) + "\n";
+//        s += "Gallons: " + QLocale::system().toString(d.at(2).toDouble(),'f',2) + "\n";
+//        s += "Cost:" + QLocale::system().currencySymbol();
+//        s += QLocale::system().toString(d.at(3).toDouble(),'f',2) + "\n";
+//        s += "MPG: " + QLocale::system().toString(d.at(4).toDouble(),'f',2);
+
         QStandardItem *fillups = new QStandardItem(row.at(1).toString());
-        QStandardItem *miles = new QStandardItem(row.at(2).toString());
-        QStandardItem *gallons = new QStandardItem(row.at(3).toString());
+        QStandardItem *miles = new QStandardItem(QLocale::system().toString(row.at(2).toDouble(),'f',2));
+        QStandardItem *gallons = new QStandardItem(QLocale::system().toString(row.at(3).toDouble(),'f',2));
         QString f = QLocale::system().currencySymbol();
         f.append((QLocale::system().toString(row.at(4).toDouble(),'f',2)));
         QStandardItem *cost = new QStandardItem(f);
@@ -209,7 +216,6 @@ void Statistics::monthlyStats(int vehicleId)
 
     //get rid of all the current rows first
     monthlyModel->removeRows(0,monthlyModel->rowCount());
-
 
     //get the years first
     QList<QVariant> years = query.getDistinctYears(vehicleId);

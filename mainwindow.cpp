@@ -182,7 +182,7 @@ void MainWindow::setVehicleName()
     {
         int id = settings.value("config/vehicle").toInt();
         QString dbaseType = settings.value("config/databasetype").toString();
-        QSqlDatabase db = QSqlDatabase::database(dbaseType);
+        QSqlDatabase db = QSqlDatabase::database(dbaseType,false);
 
         if (db.open())
         {
@@ -191,13 +191,7 @@ void MainWindow::setVehicleName()
             QString name = q.getVehicleDescription(id);
             mw.vehicleLabel->setText(name);
         }
-        else
-        {
-            qDebug()<<"setvehiclename db is NOT open";
-        }
     }
-    //mw.vehicleLabel->setText(s);
-    //qDebug()<<"set the vehicle label to "<<s;
 }
 
 //read the config file
@@ -208,7 +202,7 @@ void MainWindow::checkSettings()
     {
         mw.actionSelect_Vehicle->setEnabled(true);
         QString dbaseType = settings.value("config/databasetype").toString();
-        QSqlDatabase db = QSqlDatabase::database(dbaseType);
+        QSqlDatabase db = QSqlDatabase::database(dbaseType,false);
         if (dbaseType == "sqlite")
         {
             mw.actionLogin->setEnabled(false);
@@ -216,6 +210,11 @@ void MainWindow::checkSettings()
             QString location = settings.value("config/location").toString();
             QString filename = settings.value("config/filename").toString();
             db.setDatabaseName(location+"/"+filename);
+            db.open();
+            //create tables just in case
+            Query q;
+            q.createVehicleTable();
+            q.createMileageTable();
         }
         else if (dbaseType == "mariadb")
         {
@@ -223,15 +222,30 @@ void MainWindow::checkSettings()
             db.setHostName(settings.value("config/hostname").toString());
             db.setDatabaseName(settings.value("config/database").toString());
             db.setPort(settings.value("config/port").toInt());
-            Login login;
-            if (login.exec())
+            if (!db.isOpen())
             {
-                db.setUserName(login.getUsername());
-                db.setPassword(login.getPassword());
-                if (!db.open())
+                Login login;
+                if (login.exec())
                 {
-                    QMessageBox mBox (QMessageBox::Critical, "Error opening database!",
-                    db.lastError().text(), QMessageBox::Ok, this,Qt::Dialog);
+                    db.setUserName(login.getUsername());
+                    db.setPassword(login.getPassword());
+                    if (!db.open())
+                    {
+                        QMessageBox mBox (QMessageBox::Critical, "Error opening database!",
+                        db.lastError().text(), QMessageBox::Ok, this,Qt::Dialog);
+                        mBox.exec();
+                    }
+                    else
+                    {
+                        Query q;
+                        q.createVehicleTable();
+                        q.createMileageTable();
+                    }
+                }
+                else
+                {
+                    QMessageBox mBox (QMessageBox::Critical, "No login",
+                    "You didn't log in!  Click Login to login.", QMessageBox::Ok, this,Qt::Dialog);
                     mBox.exec();
                 }
             }
@@ -243,23 +257,31 @@ void MainWindow::updateInterface()
 {
     //hide all the tabs except for the instructions if they haven't selected a vehicle
     QSettings settings;
+    QString dbaseType = settings.value("config/databasetype").toString();
+    QSqlDatabase db = QSqlDatabase::database(dbaseType);
+
+
     if (!settings.contains("config/vehicle"))
     {
         //only show the instructions tab;
-        mw.tabWidget->addTab(instructionsTab,instructionsTab->windowTitle());
+        if (!db.isOpen())
+            mw.tabWidget->addTab(instructionsTab,instructionsTab->windowTitle());
     }
     else    //hide the instructions tab
     {
-        //get rid of all the tabs first
-        for (int i=0;i<mw.tabWidget->count();i++)
+        if (db.isOpen())
         {
-            QWidget *t = mw.tabWidget->widget(i);
-            mw.tabWidget->removeTab(mw.tabWidget->indexOf(t));
+            //get rid of all the tabs first
+            for (int i=0;i<mw.tabWidget->count();i++)
+            {
+                QWidget *t = mw.tabWidget->widget(i);
+                mw.tabWidget->removeTab(mw.tabWidget->indexOf(t));
+            }
+            //add all the tabs
+            mw.tabWidget->addTab(entry,entry->windowTitle());
+            mw.tabWidget->addTab(alldata,alldata->windowTitle());
+            mw.tabWidget->addTab(stats,stats->windowTitle());
         }
-        //add all the tabs
-        mw.tabWidget->addTab(entry,entry->windowTitle());
-        mw.tabWidget->addTab(alldata,alldata->windowTitle());
-        mw.tabWidget->addTab(stats,stats->windowTitle());
     }
 }
 
@@ -268,11 +290,16 @@ void MainWindow::refreshAllData()
     QSettings settings;
     if(settings.contains("config/vehicle"))
     {
-        int id = settings.value("config/vehicle").toInt();
-        //refresh the all data table
-        alldata->refreshTable(id);
-        //refresh the statistics
-        stats->refreshAllStats(id);
+        QString dbaseType = settings.value("config/databasetype").toString();
+        QSqlDatabase db = QSqlDatabase::database(dbaseType,false);
+        if (db.isOpen())
+        {
+            int id = settings.value("config/vehicle").toInt();
+            //refresh the all data table
+            alldata->refreshTable(id);
+            //refresh the statistics
+            stats->refreshAllStats(id);
+        }
     }
 }
 
@@ -281,11 +308,47 @@ void MainWindow::about()
 {
     About *a = new About(this);
     a->show();
+}
+
+void MainWindow::help()
+{
 
 }
 
+
 void MainWindow::login()
 {
+    QSettings settings;
+    QString dbaseType = settings.value("config/databasetype").toString();
+    QSqlDatabase db = QSqlDatabase::database(dbaseType,false);
+    Login login;
+    if (login.exec())
+    {
+        db.setUserName(login.getUsername());
+        db.setPassword(login.getPassword());
+        if (!db.open())
+        {
+            QMessageBox mBox (QMessageBox::Critical, "Error opening database!",
+            db.lastError().text(), QMessageBox::Ok, this,Qt::Dialog);
+            mBox.exec();
+        }
+        else
+        {
+            Query q;
+            q.createVehicleTable();
+            q.createMileageTable();
+
+            setVehicleName();
+            updateInterface();
+            refreshAllData();
+        }
+    }
+    else
+    {
+        QMessageBox mBox (QMessageBox::Critical, "No Login",
+        "You didn't log in!  Click Login to login.", QMessageBox::Ok, this,Qt::Dialog);
+        mBox.exec();
+    }
 
 }
 
@@ -311,10 +374,6 @@ void MainWindow::exportData()
 
 }
 
-void MainWindow::help()
-{
-
-}
 
 
 
@@ -324,40 +383,6 @@ void MainWindow::help()
 //     assistant->showDocs("index.html");
 //}
 
-//login dialog box
-//bool MainWindow:: login ()
-//{
-//     bool loginOk = false;
-     
-//     QSettings settings;
-//     //read the config file
-//     connection.setHostName(settings.value("config/hostname").toString());
-//     connection.setDatabaseName(settings.value("config/dbasename").toString());
-//     connection.setPort(settings.value("config/port").toInt());
-//     Login mylogin;
-//     if (mylogin.exec())
-//     {
-//          username = mylogin.getUsername();
-//          password = mylogin.getPassword();
-//          //open the mysql dbase connection
-//          if (connection.open(username,password))
-//          {
-//               loginOk = true;
-//               alreadyLoggedIn = true;
-//          }
-//          else
-//          {
-//               loginOk = false;
-//               QMessageBox::warning(this,"Login Failed!", connection.lastError().text(),QMessageBox::Ok,0,0);
-//          }
-//     }
-//     else
-//     {
-//          loginOk = false;
-//     }
-//     return loginOk;
-//} //end login
- 
 // 
 // 
 //void MainWindow::exportData()

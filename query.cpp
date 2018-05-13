@@ -497,7 +497,14 @@ QList<QVariant> Query::lifetimeStats(int id)
 QList< QList<QVariant> > Query::yearlyStats(int id)
 {
     QList< QList<QVariant>> everything;
-    QString q = "select strftime(\"%Y\",fillup_date) tyear,\
+    QString q = "";
+    QSettings settings;
+    QString dbaseType = settings.value("config/databasetype").toString();
+    QSqlDatabase db = QSqlDatabase::database(dbaseType);
+
+    if (dbaseType == "sqlite")
+    {
+        q = "select strftime(\"%Y\",fillup_date) tyear,\
             count(id) ,\
                sum(miles) Miles,\
                sum(gallons) Gallons,\
@@ -508,10 +515,21 @@ QList< QList<QVariant> > Query::yearlyStats(int id)
                group by tyear\
                order by tyear desc";
     //qDebug()<<q;
-
-    QSettings settings;
-    QString dbaseType = settings.value("config/databasetype").toString();
-    QSqlDatabase db = QSqlDatabase::database(dbaseType);
+    }
+    else if (dbaseType == "mariadb")
+    {
+        q = "select year(fillup_date) tyear,\
+                    count(id) ,\
+                       sum(miles) Miles,\
+                       sum(gallons) Gallons,\
+                       sum(cost) Cost\
+                       from fuel_mileage\
+                       where vehicle_id = :id\
+                       and year(fillup_date) != '0000'\
+                       group by tyear\
+                       order by tyear desc";
+            //qDebug()<<q;
+    }
 
     QSqlQuery query(q,db);
 
@@ -519,6 +537,7 @@ QList< QList<QVariant> > Query::yearlyStats(int id)
     {
         query.prepare(q);
         query.bindValue(":id",id);
+        //qDebug()<<query.executedQuery();
         if (query.exec())
         {
             while(query.next())
@@ -549,7 +568,8 @@ QList< QList<QVariant> > Query::yearlyStats(int id)
     {
         errorMessage = "yearlyStats db problem: " + db.lastError().text();
     }
-
+    //qDebug()<<"query yearlystats at the end";
+    //qDebug()<<"num records:"<<everything.count();
     //year,fillups,miles,gallons,cost,mpg
     return everything;
 }
@@ -557,13 +577,26 @@ QList< QList<QVariant> > Query::yearlyStats(int id)
 QList<QVariant> Query::getDistinctYears(int id)
 {
     QList<QVariant>stuff;
-    QString q = "select distinct(strftime(\"%Y\",fillup_date)) theyear \
-            from fuel_mileage \
-            where vehicle_id = :id \
-            and strftime(\"%Y\",fillup_date) != '0000'";
     QSettings settings;
     QString dbaseType = settings.value("config/databasetype").toString();
     QSqlDatabase db = QSqlDatabase::database(dbaseType);
+
+    QString q = "";
+    if (dbaseType == "sqlite")
+    {
+        q = "select distinct(strftime(\"%Y\",fillup_date)) theyear \
+                from fuel_mileage \
+                where vehicle_id = :id \
+                and strftime(\"%Y\",fillup_date) != '0000'";
+    }
+    else if (dbaseType == "mariadb")
+    {
+        q = "select distinct(year(fillup_date)) theyear \
+                from fuel_mileage \
+                where vehicle_id = :id \
+                and year(fillup_date) != '0000'";
+    }
+
 
     QSqlQuery query(q,db);
 
@@ -585,12 +618,23 @@ QList<QVariant> Query::getDistinctYears(int id)
 QList<QVariant> Query::monthlyStats(int id,QVariant year,QVariant month)
 {
     QList<QVariant>stuff;
-    QString q = "select count(id),sum(miles),sum(gallons),sum(cost) from fuel_mileage where vehicle_id = :id \
-and strftime(\"%Y\",fillup_date) = :year and strftime(\"%m\",fillup_date) = :month ";
 
     QSettings settings;
     QString dbaseType = settings.value("config/databasetype").toString();
     QSqlDatabase db = QSqlDatabase::database(dbaseType);
+
+    QString q = "";
+    if(dbaseType == "sqlite")
+    {
+        q = "select count(id),sum(miles),sum(gallons),sum(cost) from fuel_mileage where vehicle_id = :id \
+        and strftime(\"%Y\",fillup_date) = :year and strftime(\"%m\",fillup_date) = :month ";
+    }
+    else if (dbaseType == "mariadb")
+    {
+        q = "select count(id),sum(miles),sum(gallons),sum(cost) from fuel_mileage where vehicle_id = :id \
+        and year(fillup_date) = :year and month(fillup_date) = :month ";
+
+    }
 
     QSqlQuery query(q,db);
 

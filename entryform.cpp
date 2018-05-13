@@ -111,6 +111,20 @@ void EntryForm::okClicked()
 //        w->refreshAllData();
 
     }
+    else
+    {
+        QString message = "Please fill in the following:\n";
+        if (!milesok)
+            message += "*miles\n";
+        if (!gallonsok)
+            message += "*gallons\n";
+        if(!costok)
+            message += "*cost\n";
+        QMessageBox mBox (QMessageBox::Critical, "Error inserting record",
+        message, QMessageBox::Ok, this,Qt::Dialog);
+        mBox.exec();
+
+    }
 }
 
 void EntryForm::cancelClicked()
