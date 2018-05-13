@@ -19,7 +19,7 @@ AllData::AllData(QWidget *parent) :
 
     model = new AllDataModel();
 
-    refreshTable();
+    //refreshTable();
     //testData();
     //see if the data shows up now
     ui->tableView->setModel(model);
@@ -78,16 +78,14 @@ void AllData::testData()
 
 }
 
-void AllData::refreshTable()
+void AllData::refreshTable(int id)
 {
     //get vehicle id
-    QSettings settings;
-    int vehicleId = settings.value("config/vehicle").toInt();
     //clean out the model first
     model->removeRows(0,model->rowCount(QModelIndex()));
     model->clearColor();
     Query queries;
-    queries.selectFuelMileage(vehicleId,model);
+    queries.selectFuelMileage(id,model);
 
     //set the information field
     ui->informationLabel->setText(QString::number(model->rowCount(QModelIndex())) + " records.");
@@ -131,12 +129,14 @@ void AllData::saveData()
 //        auto m = changedItems.at(i);
 //        qDebug()<<"id:"<<m.id<<" miles:"<<m.miles<<" gallons:"<<m.gallons;
 //    }
+    QSettings settings;
+    int id = settings.value("config/vehicle").toInt();
     Query q;
     if (q.updateFuelMileage(changedItems))
     {
         //save was ok, clear the list
         changedItems.clear();
         ui->saveButton->setEnabled(false);
-        refreshTable();
+        refreshTable(id);
     }
 }

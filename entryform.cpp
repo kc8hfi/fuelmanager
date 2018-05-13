@@ -27,12 +27,12 @@ EntryForm::EntryForm(QWidget *parent) :
     connect(ui->buttonBox->button(QDialogButtonBox::Ok),SIGNAL(clicked()),this,SLOT(okClicked()));
     connect(ui->buttonBox->button(QDialogButtonBox::Cancel),SIGNAL(clicked()),this,SLOT(cancelClicked()));
 
-    //check to see if the database is open
-    QSqlDatabase db = QSqlDatabase::database();
-    if (!db.isOpen())
-    {
-        qDebug()<<"db is NOT OPEN!";
-    }
+//    //check to see if the database is open
+//    QSqlDatabase db = QSqlDatabase::database();
+//    if (!db.isOpen())
+//    {
+//        qDebug()<<"db is NOT OPEN!";
+//    }
 }
 
 EntryForm::~EntryForm()
@@ -106,9 +106,9 @@ void EntryForm::okClicked()
         ui->milesLineEdit->setFocus();
 
 
-        qDebug()<<"refresh the alldata table";
-        MainWindow *w = qobject_cast<MainWindow*>(QApplication::activeWindow());
-        w->refreshAllData();
+//        qDebug()<<"refresh the alldata table";
+//        MainWindow *w = qobject_cast<MainWindow*>(QApplication::activeWindow());
+//        w->refreshAllData();
 
     }
 }

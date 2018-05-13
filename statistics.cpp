@@ -90,7 +90,7 @@ Statistics::Statistics(QWidget *parent) :
 //    }
 
     //it may crash right here.....
-    refreshAllStats();
+    //refreshAllStats();
 
 
 
@@ -104,23 +104,16 @@ Statistics::~Statistics()
     delete ui;
 }
 
-void Statistics::refreshAllStats()
+void Statistics::refreshAllStats(int id)
 {
-    QSettings settings;
-    //if anything is out of place from the settings configuration, then we will not do anything
-    if (settings.contains("config/vehicle"))
-    {
-        lifetimeStats();
-        yearlyStats();
-        monthlyStats();
-    }
+    lifetimeStats(id);
+    yearlyStats(id);
+    monthlyStats(id);
 }
 
-void Statistics::lifetimeStats()
+void Statistics::lifetimeStats(int vehicleId)
 {
     //get vehicle id
-    QSettings settings;
-    int vehicleId = settings.value("config/vehicle").toInt();
     Query query;
     //fillups,miles,gallons,cost,mpg
     QList<QVariant> data = query.lifetimeStats(vehicleId);
@@ -156,11 +149,8 @@ void Statistics::lifetimeStats()
 
 }
 
-void Statistics::yearlyStats()
+void Statistics::yearlyStats(int vehicleId)
 {
-    //get vehicle id
-    QSettings settings;
-    int vehicleId = settings.value("config/vehicle").toInt();
     Query query;
     //fillups,miles,gallons,cost,mpg
     QList< QList<QVariant> > data = query.yearlyStats(vehicleId);
@@ -213,11 +203,8 @@ void Statistics::yearlyStats()
     }
 }//end yearlyStats
 
-void Statistics::monthlyStats()
+void Statistics::monthlyStats(int vehicleId)
 {
-    //get vehicle id
-    QSettings settings;
-    int vehicleId = settings.value("config/vehicle").toInt();
     Query query;
 
     //get rid of all the current rows first

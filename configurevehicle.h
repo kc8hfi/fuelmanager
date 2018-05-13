@@ -21,7 +21,9 @@ public slots:
     void saveVehicle();
     void refreshTable();
 
-
+//public:
+    //void createModel();
+    //void deleteModel();
 private:
     Ui_configureVehicleBase vehicleBase;
     VehicleModel *model;

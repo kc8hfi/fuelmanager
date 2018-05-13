@@ -28,6 +28,7 @@ public slots:
 private:
     void checkSettings();
     void connectToDatabase();
+    void createTables();
     Ui_configureBase base;
 
     ConfigureVehicle *vehicleui;

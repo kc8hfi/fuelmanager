@@ -31,7 +31,10 @@ public:
 
     //monthlyStats(int);
 
+    QString error();
+
 private:
+    QString errorMessage;
 
 };
 

@@ -16,7 +16,7 @@ public:
     explicit AllData(QWidget *parent = 0);
     ~AllData();
 
-    void refreshTable();
+    void refreshTable(int);
     void testData();
 
 public slots:

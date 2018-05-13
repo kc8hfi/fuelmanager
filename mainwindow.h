@@ -40,7 +40,7 @@ class MainWindow : public QMainWindow, private Ui_MainWindowBase
           //Query* getQuery();
 
 
-          void refreshAllData();
+
 
           //void updateInterface();
 
@@ -53,14 +53,12 @@ class MainWindow : public QMainWindow, private Ui_MainWindowBase
           void selectVehicle();
           void about();
 
-
           void login();
           void updateAllData();
           void exportData();
           void help();
 
 
-          //void testbutton();
 
           //void about();
           //bool login ();
@@ -69,34 +67,22 @@ class MainWindow : public QMainWindow, private Ui_MainWindowBase
           //void exportData();
           //void help();
      private:
-          void showTabs();
-          void setVehicleName();
+          //void showTabs();
+            void setVehicleName();
+            void updateInterface();
+            void refreshAllData();
 
 //          void vehicleName(int);
-          //void showEverything();
           //void writeData(QString f);
-           Ui_MainWindowBase mw;
+            Ui_MainWindowBase mw;
 
-           EntryForm *entry;
-           AllData *alldata;
+            QWidget *instructionsTab;
 
-           Statistics *stats;
+            EntryForm *entry;
+            AllData *alldata;
 
+            Statistics *stats;
 
-
-
-          //QSqlDatabase connection;
-          //DatabaseQuery *queries;
-//          QString whichDatabase;
-//          QString username;
-//          QString password;
-//          bool alreadyLoggedIn;
-
-//          QSqlRecord record;
-
-//          AllData *everything;
-//          Statistics *stats;
-          
 //          Assistant *assistant;
 
 };

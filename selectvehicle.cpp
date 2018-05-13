@@ -1,6 +1,7 @@
 #include <QItemSelectionModel>
 #include <QSqlRecord>
 #include <QSqlDatabase>
+#include <QMessageBox>
 #include <QDebug>
 #include "selectvehicle.h"
 #include "mainwindow.h"
@@ -12,41 +13,37 @@ SelectVehicle::SelectVehicle(QWidget *parent) :
 {
     ui->setupUi(this);
 
-    //QSettings settings;
-    //QString t = settings.value("config/databasetype").toString();
-
-    //QSqlDatabase db = QSqlDatabase::database();
-    //qDebug()<<"selectvehicle constructor driver name:"<<db.driverName();
-
-    model = new VehicleDisplayModel();
-    ui->tableView->setModel(model);
-
-    QSqlDatabase db = QSqlDatabase::database("qt_sql_default_connection", false);
-    if (db.isOpen())
+    QSettings settings;
+    if(settings.contains("config/databasetype"))
     {
-        qDebug()<<"dbase name in here:"<<db.driverName();
+        QString dbaseType = settings.value("config/databasetype").toString();
+        QSqlDatabase db = QSqlDatabase::database(dbaseType);
 
+        if (db.open())
+        {
+            model = new VehicleDisplayModel(Q_NULLPTR,db);
+            ui->tableView->setModel(model);
 
-        model->setTable("vehicles");
-        qDebug()<<"error after set table"<<model->lastError();
+            model->setTable("vehicles");
+            model->select();
 
-        model->select();
-        qDebug()<<"model select was ok";
-
-        ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
-        ui->tableView->setColumnHidden(0,true);
-        ui->tableView->resizeColumnsToContents();
-
-        qDebug()<<"set up the tableView for the vehicle selection";
+            ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers);
+            ui->tableView->setColumnHidden(0,true);
+            ui->tableView->resizeColumnsToContents();
+        }
+        else
+        {
+            //qDebug()<<"database is not open";
+            QMessageBox mBox (QMessageBox::Critical, "Error in selecting a vehicle",
+            db.lastError().text(), QMessageBox::Ok, this,Qt::Dialog);
+            mBox.exec();
+        }
     }
-    else
-    {
-        qDebug()<<"databse isn't open to select vehicle";
-    }
+
     //make the table clickable to select a vehicle
     connect(ui->tableView,SIGNAL(clicked(QModelIndex)),this,SLOT(clickme()));
 
-    qDebug()<<"well, selectvehicle constructor is good";
+    //qDebug()<<"well, selectvehicle constructor is good";
 }
 
 SelectVehicle::~SelectVehicle()
@@ -69,7 +66,7 @@ void SelectVehicle::clickme()
     QSettings settings;
     settings.setValue("config/vehicle",record.value("id").toInt());
 
-    qDebug()<<"bet it is crashing right here";
+    //qDebug()<<"bet it is crashing right here";
     //MainWindow *w = qobject_cast<MainWindow*>(QApplication::activeWindow());
 
 

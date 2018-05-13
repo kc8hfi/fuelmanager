@@ -1,7 +1,8 @@
 #include "vehicledisplaymodel.h"
 #include <QDebug>
 
-VehicleDisplayModel::VehicleDisplayModel()
+VehicleDisplayModel::VehicleDisplayModel(QObject *parent,QSqlDatabase db)
+    :QSqlTableModel(parent,db)
 {
 }
 

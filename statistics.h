@@ -18,11 +18,11 @@ public:
     explicit Statistics(QWidget *parent = 0);
     ~Statistics();
 
-    void lifetimeStats();
-    void yearlyStats();
-    void monthlyStats();
+    void lifetimeStats(int);
+    void yearlyStats(int);
+    void monthlyStats(int);
 
-    void refreshAllStats();
+    void refreshAllStats(int);
 
 private:
     Ui::Statistics *ui;

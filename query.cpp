@@ -9,8 +9,8 @@
 
 Query::Query()
 {
-    createVehicleTable();
-    createMileageTable();
+    //createVehicleTable();
+    //createMileageTable();
 }
 
 void Query::createVehicleTable()
@@ -32,16 +32,21 @@ void Query::createVehicleTable()
             primary key (id) \
             ) engine=innodb default charset=latin1 \
             ";
-
     }
-    if (queryString!="")
+    QSqlDatabase db = QSqlDatabase::database(type);
+    if (db.isOpen())
     {
-        QSqlQuery query(queryString);
+        QSqlQuery query(queryString,db);
         if (!query.isActive())
         {
-            qDebug()<<"create vehicle table failed:"<<query.lastError().text()
+            qDebug()<<"create vehicle table failed:"<<"dbase type:"<<type<<":"<<query.lastError().text()
                    <<query.lastQuery();
+            errorMessage = "createVehicleTable query problem: " + query.lastError().text();
         }
+    }
+    else
+    {
+        errorMessage = "createVehicleTable db problem: " + db.lastError().text();
     }
 }
 
@@ -77,32 +82,35 @@ void Query::createMileageTable()
             references vehicles(id) on delete no action on update no action )\
             engine=innodb default charset=latin1 \
             ";
-
     }
-    if (queryString!="")
+    QSqlDatabase db = QSqlDatabase::database(type);
+    if (db.isOpen())
     {
-        QSqlQuery query(queryString);
+        QSqlQuery query(queryString,db);
         if (!query.isActive())
         {
             qDebug()<<"create fuel_mileage table failed:"<<query.lastError().text()
                    <<query.lastQuery();
+            errorMessage = "createMileageTable query problem: " + query.lastError().text();
         }
+    }
+    else
+    {
+        errorMessage = "createMileageTable db problem: " + db.lastError().text();
     }
 }
 
 
 bool Query::insertVehicle(QString n)
 {
-    QString str = "insert into vehicles (description) values (:description)";
-    QSqlDatabase db = QSqlDatabase::database();
     bool ok = false;
-    if (!db.isOpen())
+    QString str = "insert into vehicles (description) values (:description)";
+    QSettings settings;
+    QString type = settings.value("config/databasetype").toString();
+    QSqlDatabase db = QSqlDatabase::database(type);
+    if (db.isOpen())
     {
-        db.open();
-    }
-    else
-    {
-        QSqlQuery q(db);
+        QSqlQuery q(str, db);
         q.prepare(str);
         q.bindValue(":description",n);
         if (q.exec())
@@ -111,8 +119,13 @@ bool Query::insertVehicle(QString n)
         }
         else
         {
-            qDebug()<<q.lastError().text();
+            //qDebug()<<q.lastError().text();
+            errorMessage = "insertVehicle query problem: " + q.lastError().text();
         }
+    }
+    else
+    {
+        errorMessage = "insertVehicle db problem: " + db.lastError().text();
     }
     return ok;
 }
@@ -129,8 +142,13 @@ void Query::updateVehicle(Vehicle v)
         q.bindValue(":id",v.id);
         if(!q.exec())
         {
-            qDebug()<<"couldn't update vehicle!";
+            qDebug()<<"updateVehicle query problem:  " + q.lastError().text();
+            errorMessage = "updateVehicle query problem:  " + q.lastError().text();
         }
+    }
+    else
+    {
+        errorMessage = "updateVehicle db problem: " + db.lastError().text();
     }
 }
 
@@ -140,8 +158,11 @@ bool Query::selectVehicle(VehicleModel *model)
     //empty out the model first
     model->removeRows(0,model->rowCount(QModelIndex()));
     QString s = "select id,description from vehicles";
-    QSqlDatabase db = QSqlDatabase::database();
-    QSqlQuery q(db);
+
+    QSettings settings;
+    QString dbaseType = settings.value("config/databasetype").toString();
+    QSqlDatabase db = QSqlDatabase::database(dbaseType);
+    QSqlQuery q(s,db);
     if (db.isOpen())
     {
         q.prepare(s);
@@ -172,7 +193,14 @@ bool Query::selectVehicle(VehicleModel *model)
             }
         }
         else
-            qDebug()<<"error trying to exec selectvehicle: "<<q.lastError().text();
+        {
+            //qDebug()<<"error trying to exec selectvehicle: "<<q.lastError().text();
+            errorMessage = "selectVehicle query problem:  " + q.lastError().text();
+        }
+    }
+    else
+    {
+        errorMessage = "selectVehicle db problem: " + db.lastError().text();
     }
     return ok;
 }
@@ -180,13 +208,17 @@ bool Query::selectVehicle(VehicleModel *model)
 bool Query::selectFuelMileage(int vehicleId, AllDataModel *model)
 {
     bool ok = false;
+    QSettings settings;
+    QString dbaseType = settings.value("config/databasetype").toString();
+    QSqlDatabase db = QSqlDatabase::database(dbaseType);
+
     QString s = "select id,fillup_date,miles,gallons,cost,miles/gallons as mpg \
             from fuel_mileage \
             where vehicle_id = :id \
             order by fillup_date desc ";
 
-    QSqlQuery query(QSqlDatabase::database());
-    if (QSqlDatabase::database().isOpen())
+    QSqlQuery query(s,db);
+    if (db.isOpen())
     {
         query.prepare(s);
         query.bindValue(":id",vehicleId);
@@ -264,24 +296,27 @@ bool Query::selectFuelMileage(int vehicleId, AllDataModel *model)
         }
         else
         {
-            qDebug()<<"problemhere:"<<query.lastError().text();
+            //qDebug()<<"problemhere:"<<query.lastError().text();
+            errorMessage = "selectFuelMileage query problem: " + query.lastError().text();
         }
+    }
+    else
+    {
+        errorMessage = "selectFuelMileage db problem: " + db.lastError().text();
     }
     return ok;
 }
 
 QString Query::getVehicleDescription(int i)
 {
+    QSettings settings;
+    QString dbaseType = settings.value("config/databasetype").toString();
+    QSqlDatabase db = QSqlDatabase::database(dbaseType);
 
-//    QSqlQuery query(QSqlDatabase::database());
-
-//    query.prepare(s);
-//    query.bindValue(":id",vehicleId);
-//    bool ok = false;
     QString desc = "";
     QString s = "select description from vehicles where id = :id";
-    QSqlQuery q(QSqlDatabase::database());
-    if (QSqlDatabase::database().isOpen())
+    QSqlQuery q(s,db);
+    if (db.isOpen())
     {
         //qDebug()<<"i'm guessing theres no database connection here";
         q.prepare(s);
@@ -295,11 +330,15 @@ QString Query::getVehicleDescription(int i)
         }
         else
         {
+            errorMessage = "getVehicleDescription query problem: " + q.lastError().text();
             //QString error = q.lastError().text();
             //QMessageBox message(QMessageBox::Critical,"Problem!",error,QMessageBox::Ok,this,Qt::Dialog);
             //message.exec();
         }
-        //qDebug()<<"returning:"<<desc;
+    }
+    else
+    {
+        errorMessage = "getVehicleDescription db problem: " + db.lastError().text();
     }
     return desc;
 }
@@ -310,8 +349,13 @@ bool Query::insertFuelMileage(int id,double miles,double gallons,double cost,QSt
     bool ok = false;
     QString s = "insert into fuel_mileage (miles,gallons,cost,fillup_date,vehicle_id)\
         values(:miles,:gallons,:cost,:date,:id) ";
-    QSqlQuery query(QSqlDatabase::database());
-    if (QSqlDatabase::database().isOpen())
+
+    QSettings settings;
+    QString dbaseType = settings.value("config/databasetype").toString();
+    QSqlDatabase db = QSqlDatabase::database(dbaseType);
+
+    QSqlQuery query(s,db);
+    if (db.isOpen())
     {
         query.prepare(s);
         query.bindValue(":id",id);
@@ -325,6 +369,7 @@ bool Query::insertFuelMileage(int id,double miles,double gallons,double cost,QSt
         }
         else
         {
+            errorMessage = "insertFuelMileage query problem: " + query.lastError().text();
             //qDebug()<<"insertFuelMileage:"<<query.lastError().text();
     //        QString error = "insertFuelMileage\n"+query.lastError().text();
     //        QMessageBox message(QMessageBox::Critical,"Problem!",error,QMessageBox::Ok,(QWidget*)owner,Qt::Dialog);
@@ -332,6 +377,10 @@ bool Query::insertFuelMileage(int id,double miles,double gallons,double cost,QSt
             //QMessageBox::warning(owner,"getVehidledesc","something bad",QMessageBox::Ok);
 
         }
+    }
+    else
+    {
+        errorMessage = "insertFuelMileage db problem: " + db.lastError().text();
     }
     return ok;
 }
@@ -347,9 +396,11 @@ bool Query::updateFuelMileage(QList<Mileage>t)
                        fillup_date = :fillup_date \
                        where id = :id \
                        ";
+    QSettings settings;
+    QString dbaseType = settings.value("config/databasetype").toString();
+    QSqlDatabase db = QSqlDatabase::database(dbaseType);
+    QSqlQuery query(q,db);
 
-    QSqlDatabase db = QSqlDatabase::database();
-    QSqlQuery query(db);
     if (db.isOpen())
     {
         query.prepare(q);
@@ -363,7 +414,9 @@ bool Query::updateFuelMileage(QList<Mileage>t)
             query.bindValue(":cost",m.cost);
             query.bindValue(":fillup_date",m.date.toString("yyyy-MM-dd"));
             if (!query.exec())
-                qDebug()<<query.lastError().text();
+            {
+                errorMessage = "updateFuelMileage query problem: " + query.lastError().text();
+            }
 //            else
 //            {
 //                qDebug()<<"id:"<<m.id<<" miles:"<<m.miles<<" gallons:"<<m.gallons<<" cost:"<<m.cost<<" date:"<<m.date.toString("yyyy-MM-dd");
@@ -373,7 +426,8 @@ bool Query::updateFuelMileage(QList<Mileage>t)
     }
     else
     {
-        qDebug()<<"something wrong in updateFuelMileage";
+        //qDebug()<<"something wrong in updateFuelMileage";
+        errorMessage = "updateFuelMileage db problem: " + db.lastError().text();
     }
     return ok;
 }
@@ -386,8 +440,11 @@ QList<QVariant> Query::lifetimeStats(int id)
             sum(cost) \
             from fuel_mileage \
             where vehicle_id = :id";
-    QSqlDatabase db = QSqlDatabase::database();
-    QSqlQuery query(db);
+    QSettings settings;
+    QString dbaseType = settings.value("config/databasetype").toString();
+    QSqlDatabase db = QSqlDatabase::database(dbaseType);
+    QSqlQuery query(q,db);
+
     if (db.isOpen())
     {
         query.prepare(q);
@@ -426,6 +483,7 @@ QList<QVariant> Query::lifetimeStats(int id)
     else
     {
         qDebug()<<"lifetimeStats:  "<<db.lastError().text();
+        errorMessage = "lifetimeStats db problem:" + db.lastError().text();
     }
 //    for(int i=0;i<stuff.size();i++)
 //    {
@@ -451,8 +509,12 @@ QList< QList<QVariant> > Query::yearlyStats(int id)
                order by tyear desc";
     //qDebug()<<q;
 
-    QSqlDatabase db = QSqlDatabase::database();
-    QSqlQuery query(db);
+    QSettings settings;
+    QString dbaseType = settings.value("config/databasetype").toString();
+    QSqlDatabase db = QSqlDatabase::database(dbaseType);
+
+    QSqlQuery query(q,db);
+
     if (db.isOpen())
     {
         query.prepare(q);
@@ -478,7 +540,15 @@ QList< QList<QVariant> > Query::yearlyStats(int id)
                 everything.append(stuff);
             }//end while loop
         }//query executed successfully
+        else
+        {
+            errorMessage = "yearlyStats query problem: " + query.lastError().text();
+        }
     }//end db is open
+    else
+    {
+        errorMessage = "yearlyStats db problem: " + db.lastError().text();
+    }
 
     //year,fillups,miles,gallons,cost,mpg
     return everything;
@@ -491,8 +561,12 @@ QList<QVariant> Query::getDistinctYears(int id)
             from fuel_mileage \
             where vehicle_id = :id \
             and strftime(\"%Y\",fillup_date) != '0000'";
-    QSqlDatabase db = QSqlDatabase::database();
-    QSqlQuery query(db);
+    QSettings settings;
+    QString dbaseType = settings.value("config/databasetype").toString();
+    QSqlDatabase db = QSqlDatabase::database(dbaseType);
+
+    QSqlQuery query(q,db);
+
     if (db.isOpen())
     {
         query.prepare(q);
@@ -514,8 +588,12 @@ QList<QVariant> Query::monthlyStats(int id,QVariant year,QVariant month)
     QString q = "select count(id),sum(miles),sum(gallons),sum(cost) from fuel_mileage where vehicle_id = :id \
 and strftime(\"%Y\",fillup_date) = :year and strftime(\"%m\",fillup_date) = :month ";
 
-    QSqlDatabase db = QSqlDatabase::database();
-    QSqlQuery query(db);
+    QSettings settings;
+    QString dbaseType = settings.value("config/databasetype").toString();
+    QSqlDatabase db = QSqlDatabase::database(dbaseType);
+
+    QSqlQuery query(q,db);
+
     if (db.isOpen())
     {
         query.prepare(q);
@@ -551,4 +629,10 @@ and strftime(\"%Y\",fillup_date) = :year and strftime(\"%m\",fillup_date) = :mon
         }//end exec
     }//end db is open
     return stuff;
+}
+
+
+QString Query::error()
+{
+    return errorMessage;
 }

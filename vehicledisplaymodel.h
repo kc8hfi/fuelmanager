@@ -7,7 +7,7 @@ class VehicleDisplayModel : public QSqlTableModel
 {
     Q_OBJECT
 public:
-    VehicleDisplayModel();
+    explicit VehicleDisplayModel(QObject *parent=0,QSqlDatabase db=QSqlDatabase());
     Qt::ItemFlags flags(const QModelIndex &index) const;
 
 

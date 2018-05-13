@@ -10,10 +10,6 @@ ConfigureVehicle::ConfigureVehicle(QWidget *parent) : QWidget(parent)
 {
     vehicleBase.setupUi(this);
 
-    QSettings settings;
-    //QString t = settings.value("config/databasetype").toString();
-    //qDebug()<<t;
-
     model = new VehicleModel();
 
     vehicleBase.tableView->setModel(model);
@@ -22,21 +18,9 @@ ConfigureVehicle::ConfigureVehicle(QWidget *parent) : QWidget(parent)
     vehicleBase.tableView->setColumnHidden(0,true);
     vehicleBase.tableView->resizeColumnsToContents();
 
+    connect(vehicleBase.saveButton,SIGNAL(clicked()),this,SLOT(saveVehicle()));
 
     //refreshTable();
-
-//    if(t == "sqlite")
-//    {
-//        model = new VehicleDisplayModel(owner);
-//        vehicleBase.tableView->setModel(model);
-//        model->setTable("vehicles");
-//        model->select();
-
-//        vehicleBase.tableView->setColumnHidden(0,true);
-//        vehicleBase.tableView->resizeColumnsToContents();
-//    }
-
-    connect(vehicleBase.saveButton,SIGNAL(clicked()),this,SLOT(saveVehicle()));
 }
 
 ConfigureVehicle::~ConfigureVehicle()
@@ -81,23 +65,26 @@ void ConfigureVehicle::saveVehicle()
 
 void ConfigureVehicle::refreshTable()
 {
-    QSqlDatabase db = QSqlDatabase::database();
-    if (db.isOpen())
+    //qDebug()<<"refresh the configurevehicle table";
+    Query q;
+    if (!q.selectVehicle(model))
     {
-        qDebug()<<"configurevehicle refreshtable  database is open";
-        Query q;
-        if(!q.selectVehicle(model))
-        {
-            QString error = "Couldn't get the vehicles!";
-            QMessageBox message(QMessageBox::Critical,"Problem!",error,QMessageBox::Ok,this,Qt::Dialog);
-            message.exec();
-        }
-    }
-    else
-    {
-        qDebug()<<"configurevehicle refreshtable database IS NOT OPEN!";
+        //qDebug()<<"something happened with selectVehicle";
+        QString p = "somethign happened with refreshTable selectVehicle: " + q.error();
+        QMessageBox message(QMessageBox::Critical,"Problem!",p,QMessageBox::Ok,this,Qt::Dialog);
+        message.exec();
     }
 }
+
+//void ConfigureVehicle::createModel()
+//{
+//    model = new VehicleModel();
+//}
+
+//void ConfigureVehicle::deleteModel()
+//{
+//    delete model;
+//}
     //qDebug()<<"gonna call select";
     //reread the config file
     //QSqlDatabase db = QSqlDatabase::database();
