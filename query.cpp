@@ -587,14 +587,16 @@ QList<QVariant> Query::getDistinctYears(int id)
         q = "select distinct(strftime(\"%Y\",fillup_date)) theyear \
                 from fuel_mileage \
                 where vehicle_id = :id \
-                and strftime(\"%Y\",fillup_date) != '0000'";
+                and strftime(\"%Y\",fillup_date) != '0000' \
+                order by theyear desc";
     }
     else if (dbaseType == "mariadb")
     {
         q = "select distinct(year(fillup_date)) theyear \
                 from fuel_mileage \
                 where vehicle_id = :id \
-                and year(fillup_date) != '0000'";
+                and year(fillup_date) != '0000' \
+                order by theyear desc";
     }
 
 
